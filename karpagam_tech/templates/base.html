@@ -1,0 +1,35 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap-5 CSS cdn Link  -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <!-- Custom css Link  -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <!-- Fontawesome cdn link  -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>Events</title>
+
+</head>
+<body>
+
+    {% block content %}
+        
+    {% endblock content %}
+    
+    <!-- Bootstrap-5 Javascript cdn Link  -->
+    <script src="../static/script/bootstrap.bundle.js"></script>
+
+    <!-- Custom Javascript cdn link  -->
+    <script src="{% static 'script/script.js' %}"></script>
+
+</body>
+</html>
