@@ -1,7 +1,0 @@
-{
-    "python.testing.pytestArgs": [
-        "karpagam_tech"
-    ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true
-}
