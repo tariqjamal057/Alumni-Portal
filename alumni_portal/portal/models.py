@@ -1,3 +1,6 @@
+from operator import truediv
+from tkinter import CASCADE
+from turtle import title
 from unicodedata import category
 from django.db import models
 # from django.contrib.auth.models import 
@@ -9,7 +12,8 @@ import datetime
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin 
+from ckeditor.fields import RichTextField
 
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
 
@@ -137,119 +141,59 @@ class Experience_Detail(models.Model):
         return self.user.first_name + self.designation
 
 
-
-# # Added codes 
-
-# class Content(models.Model):
-#     title = models.CharField(max_length=200 , blank=True ,null=True)
-#     content = models.CharField(max_length=1000)
-
-# class Req(models.Model):
-#     title = models.CharField(max_length=200 , blank=True ,null=True)
-#     content = models.CharField(max_length=200)
-
-# class Post(models.Model):
-#     user = models.ForeignKey(User,on_delete=models.CASCADE)
-#     photo = models.ImageField(blank=True,null=True,upload_to="post_image")
-#     title = models.CharField(max_length=200)
-#     timestamp = models.DateTimeField(auto_now=True)
-#     content = models.ForeignKey(Content,on_delete=models.CASCADE)
-#     requirement = models.ForeignKey(Req , blank=True ,null=True  ,on_delete=models.CASCADE)
-#     category = models.CharField(max_length=100)
-
-
-# class Chat(models.Model):
-#     user = models.ForeignKey(User,on_delete=models.CASCADE)
-#     postname = models.ForeignKey(Post,on_delete=models.CASCADE)
-#     content = models.CharField(max_length=1000)
-#     timestamp = models.DateTimeField(auto_now = True)
-
-
-class chat(models.Model):
-    name = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField(auto_now_add=True)
-    content = models.TextField(blank=True,null=True)
-    def __str__(self):
-        return self.name.User.username+ self.date
-
-class Content(models.Model):
-    title = models.CharField(max_length=200 , blank=True ,null=True)
-    content = models.CharField(max_length=1000)
-
+post_type_options = (
+    ('O','Opportunity') , ('S','Seeking Job') , ('I','Internship')
+)
 class Post(models.Model):
-    title = models.CharField(max_length=30, blank=True, null=True) 
-    description = models.ForeignKey(Content, on_delete=models.CASCADE)
-    createdby = models.ForeignKey(User, on_delete=models.CASCADE)
-    createdon = models.DateTimeField(auto_now_add=True)
-    categories = models.CharField(max_length=100, choices=categories_options,default='select_type')
-    archives = models.CharField(max_length=100, choices=archives_options,default='select_type')
-    photos = models.ImageField(upload_to='photo')
-    tags = models.CharField(max_length=100, choices=tags_options,default='select_type')
-    
-    slug = models.SlugField(unique=True, max_length=255)
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    content = RichTextField()
+    timeStamp = models.DateTimeField(auto_now_add=True)
+    postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
+    deadLine = models.DateField(null=True)
 
+class Post_Response(models.Model):
+    post = models.ForeignKey(Post , on_delete=models.CASCADE)
+    user = models.ForeignKey(Post , on_delete=models.CASCADE)
 
-    def get_absolute_url(self):
-        return reverse('portal_post_detail', args=[self.slug])
-    
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.title)
-        super(Post, self).save(*args, **kwargs)
-
-    class Meta:
-        ordering = ['created_on']
-
-        def _unicode_(self):
-            return self.title
-
-
-    def __str__(self):
-        return self.title +self.createdby
-    
-
-
-class alumniasmentor(models.Model):
-    title = models.ForeignKey(Post, on_delete=models.CASCADE)
-    createdby = models.ForeignKey(Post, on_delete=models.CASCADE)
-    categories = models.ForeignKey(Post, on_delete=models.CASCADE)
-    archives = models.ForeignKey(Post, on_delete=models.CASCADE)
-    tags = models.ForeignKey(Post, on_delete=models.CASCADE)
-    #share = 
-    commit = models.BooleanField(default=False)
-    photos = models.ForeignKey(Post, on_delete=models.CASCADE)
-    createdon = models.ForeignKey(Post, on_delete=models.CASCADE)
-
-class comments(models.Model):
-    name = models.CharField(max_length=42, blank=True, null=True)
-    createdon = models.DateTimeField(auto_now=True)
-    text = models.TextField(blank=True,null=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
-
-class Sponsers_Details(models.Model):
-    firstname = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
-    dateTime = models.DateTimeField()
-    workOrganization = models.CharField(max_length=100)
-    amount = models.IntegerField()
+class Response_Message(models.Model):
+    user = models.ForeignKey(Post , on_delete=models.CASCADE)
+    postResponse = models.ForeignKey(Post_Response , on_delete= models.CASCADE)
     message = models.TextField()
-    phoneNumber = models.IntegerField(max_length=10)
-    email = models.EmailField(max_length=250)
+    timeStamp = models.DateTimeField()
 
 
-class student_detail(models.Model):
-    user = models.ForeignKey(User,on_delete=CASCADE)
-    title = models.CharField(max_length=100)
-    content = models.TextField()
-    fatherOccupation = models.CharField(max_length=50)
-    motherOccupation = models.CharField(max_length=50)
-    familyAnnual_income = models.CharField()
-    sslcPercentage = models.CharField()
-    hscPercentage = models.CharField()
-    cgpa = models.CharField()
-    totalFee = models.CharField(max_length=50)
-    amount = models.DecimalField(max_digits=10,decimal_places=2)
+categories_type = (
+    ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English')
+)
+class SPost(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    content = RichTextField()
+    timeStamp = models.DateTimeField(auto_now_add=True)
+    category = models.CharField(choices= categories_type,max_length=2,null=True)
+
+class Mentor_Post_Response(models.Model):
+    post = models.ForeignKey(SPost , on_delete=models.CASCADE)
+    user = models.ForeignKey(SPost , on_delete=models.CASCADE)
+
+class Mentor_Response_Message(models.Model):
+    user = models.ForeignKey(SPost , on_delete=models.CASCADE)
+    postResponse = models.ForeignKey(Mentor_Post_Response , on_delete= models.CASCADE)
+    message = models.TextField()
+    timeStamp = models.DateTimeField()
+
+type_of_sponsership = (
+    ('E','Education Sponsership') , ('S','Culturals Sponsership') , ('I','InKind Sponsership') , ('P','Promotional Sponsership')
+)
+class Student_Support(models.Model):
+    user = models.ForeignKey(User ,on_delete=models.CASCADE)
+    desc = models.TextField(blank=True,null=True)
+    typeOfSponser = models.CharField(choices=type_of_sponsership , max_length=1)
+
+    # postedby
+
+    
+# class Sponser(models.Model):
 
 
-        
