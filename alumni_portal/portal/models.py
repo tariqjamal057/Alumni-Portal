@@ -190,10 +190,11 @@ class Student_Support(models.Model):
     user = models.ForeignKey(User ,on_delete=models.CASCADE)
     desc = models.TextField(blank=True,null=True)
     typeOfSponser = models.CharField(choices=type_of_sponsership , max_length=1)
-
+    amount = models.DecimalField(max_digits=10,decimal_places=2)
+    paid = models.BooleanField(default=False)
+    timeStamp = models.DateField(auto_now_add=True)
     # postedby
 
-    
-# class Sponser(models.Model):
 
-
+class Sponser(models.Model):
+    user = models.ForeignKey(Student_Support,on_delete=models.CASCADE)
