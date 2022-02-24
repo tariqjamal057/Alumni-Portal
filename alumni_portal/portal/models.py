@@ -1,18 +1,18 @@
-from operator import truediv
-from tkinter import CASCADE
-from turtle import title
-from unicodedata import category
+# from operator import truediv
+# from tkinter import CASCADE
+# from turtle import title
+# from unicodedata import category
+from datetime import datetime
 from django.db import models
 # from django.contrib.auth.models import 
 # from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
-from django.core.exceptions import ValidationError
-import datetime
-from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models import Q
+# from django.core.exceptions import ValidationError
+# from django.core.validators import MinValueValidator, MaxValueValidator
+# from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin 
+from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
 from ckeditor.fields import RichTextField
 
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
@@ -52,6 +52,26 @@ class Department(models.Model):
     def __str__(self):
         return self.short_name
 
+class UserManager(BaseUserManager):
+
+    def create_superuser(self,email,username,password,**other_fields):
+        other_fields.setdefault('is_staff', True)
+        other_fields.setdefault('is_superuser', True)
+        other_fields.setdefault('is_active', True)
+        if other_fields.get('is_staff') is not True:
+            raise ValueError(_('SuperUser must be assingned as Staff status to true'))
+
+        return self.create_user(email , username , password , **other_fields)
+
+        
+
+    def create_user(self,email,username,password,**other_fields):
+        email = self.normalize_email(email)
+        user = self.model(email = email , username = username , **other_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
 class User(AbstractBaseUser , PermissionsMixin):
     username = models.CharField(max_length=30, blank=True, null=True)
     email = models.EmailField(_('email address'),unique=True )
@@ -61,9 +81,9 @@ class User(AbstractBaseUser , PermissionsMixin):
     dob = models.DateField(blank=True,null=True)    
     mobile_no=models.CharField(max_length=10,blank=True,null=True)
     profile_photo=models.ImageField(blank=True,null=True,upload_to="profile_picture")
-    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,null=True,blank=True)
     batch = models.ForeignKey(Batch,on_delete=models.CASCADE,blank=True,null=True)
-    country = models.ForeignKey(Country,on_delete=models.CASCADE)
+    country = models.ForeignKey(Country,on_delete=models.CASCADE,null=True,blank=True)
     location = models.CharField(max_length=100,null=True,blank=True)
     state = models.ForeignKey(State,on_delete=models.CASCADE,null=True,blank=True)
     district = models.ForeignKey(District,on_delete=models.CASCADE,null=True,blank=True)
@@ -77,7 +97,7 @@ class User(AbstractBaseUser , PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         verbose_name = _('user')
@@ -140,6 +160,9 @@ class Experience_Detail(models.Model):
     def __str__(self):
         return self.user.first_name + self.designation
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+
 
 post_type_options = (
     ('O','Opportunity') , ('S','Seeking Job') , ('I','Internship')
@@ -150,11 +173,12 @@ class Post(models.Model):
     content = RichTextField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
-    deadLine = models.DateField(null=True)
+    tag = models.ManyToManyField(Tag)
+    deadLine = models.DateField(null=True,blank=True)
 
 class Post_Response(models.Model):
-    post = models.ForeignKey(Post , on_delete=models.CASCADE)
-    user = models.ForeignKey(Post , on_delete=models.CASCADE)
+    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskpost')
+    user = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskuser')
 
 class Response_Message(models.Model):
     user = models.ForeignKey(Post , on_delete=models.CASCADE)
@@ -164,21 +188,23 @@ class Response_Message(models.Model):
 
 
 categories_type = (
-    ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English')
+    ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English') , ('EC','Electronics and Communication')
 )
-class SPost(models.Model):
+class Mentor_Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = RichTextField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(choices= categories_type,max_length=2,null=True)
+    tag = models.ManyToManyField(Tag)
+    deadLine = models.DateField(null=True,blank=True)
 
 class Mentor_Post_Response(models.Model):
-    post = models.ForeignKey(SPost , on_delete=models.CASCADE)
-    user = models.ForeignKey(SPost , on_delete=models.CASCADE)
+    post = models.ForeignKey(Mentor_Post , on_delete=models.CASCADE , related_name='studentpost')
+    user = models.ForeignKey(Mentor_Post , on_delete=models.CASCADE , related_name='student')
 
 class Mentor_Response_Message(models.Model):
-    user = models.ForeignKey(SPost , on_delete=models.CASCADE)
+    user = models.ForeignKey(Mentor_Post , on_delete=models.CASCADE)
     postResponse = models.ForeignKey(Mentor_Post_Response , on_delete= models.CASCADE)
     message = models.TextField()
     timeStamp = models.DateTimeField()
@@ -194,7 +220,5 @@ class Student_Support(models.Model):
     paid = models.BooleanField(default=False)
     timeStamp = models.DateField(auto_now_add=True)
     # postedby
-
-
 class Sponser(models.Model):
     user = models.ForeignKey(Student_Support,on_delete=models.CASCADE)
