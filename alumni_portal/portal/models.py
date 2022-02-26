@@ -15,6 +15,7 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
 from ckeditor.fields import RichTextField
 
+
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
 
 
@@ -137,7 +138,7 @@ class User(AbstractBaseUser , PermissionsMixin):
         else:
             return self.username
 
-class Post_Education_Detail(models.Model):
+class PostEducationDetail(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     degree = models.CharField(max_length=256)
     institute_or_university = models.CharField(max_length=100)
@@ -149,7 +150,7 @@ class Post_Education_Detail(models.Model):
         return self.user.first_name + self.degree
 
 
-class Experience_Detail(models.Model):
+class ExperienceDetail(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     designation = models.CharField(max_length=100)
     organization = models.CharField(max_length=256)
@@ -173,16 +174,15 @@ class Post(models.Model):
     content = RichTextField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
-    tag = models.ManyToManyField(Tag)
-    deadLine = models.DateField(null=True,blank=True)
+    
 
-class Post_Response(models.Model):
+class PostResponse(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskpost')
     user = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskuser')
 
-class Response_Message(models.Model):
+class ResponseMessage(models.Model):
     user = models.ForeignKey(Post , on_delete=models.CASCADE)
-    postResponse = models.ForeignKey(Post_Response , on_delete= models.CASCADE)
+    postResponse = models.ForeignKey(PostResponse , on_delete= models.CASCADE)
     message = models.TextField()
     timeStamp = models.DateTimeField()
 
@@ -190,7 +190,7 @@ class Response_Message(models.Model):
 categories_type = (
     ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English') , ('EC','Electronics and Communication')
 )
-class Mentor_Post(models.Model):
+class MentorPost(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     content = RichTextField()
@@ -199,13 +199,13 @@ class Mentor_Post(models.Model):
     tag = models.ManyToManyField(Tag)
     deadLine = models.DateField(null=True,blank=True)
 
-class Mentor_Post_Response(models.Model):
-    post = models.ForeignKey(Mentor_Post , on_delete=models.CASCADE , related_name='studentpost')
-    user = models.ForeignKey(Mentor_Post , on_delete=models.CASCADE , related_name='student')
+class MentorPostResponse(models.Model):
+    post = models.ForeignKey(MentorPost , on_delete=models.CASCADE , related_name='studentpost')
+    user = models.ForeignKey(MentorPost , on_delete=models.CASCADE , related_name='student')
 
-class Mentor_Response_Message(models.Model):
-    user = models.ForeignKey(Mentor_Post , on_delete=models.CASCADE)
-    postResponse = models.ForeignKey(Mentor_Post_Response , on_delete= models.CASCADE)
+class MentorResponseMessage(models.Model):
+    user = models.ForeignKey(MentorPost , on_delete=models.CASCADE)
+    postResponse = models.ForeignKey(MentorPostResponse , on_delete= models.CASCADE)
     message = models.TextField()
     timeStamp = models.DateTimeField()
 
@@ -219,6 +219,24 @@ class Student_Support(models.Model):
     amount = models.DecimalField(max_digits=10,decimal_places=2)
     paid = models.BooleanField(default=False)
     timeStamp = models.DateField(auto_now_add=True)
-    # postedby
+    
 class Sponser(models.Model):
     user = models.ForeignKey(Student_Support,on_delete=models.CASCADE)
+
+class Authentication(models.Model):
+    username = models.CharField(max_length=50,default='')
+    password = models.CharField(max_length=50, default='')
+    is_active = models.IntegerField(null=True)
+    empAuth_objects = models.Manager()
+    def __str__(self):
+        return self.username
+
+mode_of_payment = (
+    ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
+
+class Corpus_fund(models.Model):
+    name = models.ForeignKey(User ,on_delete=models.CASCADE)
+    timestamp = models.DateField(auto_now_add=True)
+    total_amount = models.IntegerField()
+    modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
+        
