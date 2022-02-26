@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 # from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
-from ckeditor.fields import RichTextField
+
 
 
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
@@ -171,7 +171,7 @@ post_type_options = (
 class Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = RichTextField()
+    content = models.TextField(blank=True,null=True)
     timeStamp = models.DateTimeField(auto_now_add=True)
     postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
     
@@ -193,7 +193,7 @@ categories_type = (
 class MentorPost(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = RichTextField()
+    content = models.TextField(blank=True,null=True)
     timeStamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(choices= categories_type,max_length=2,null=True)
     tag = models.ManyToManyField(Tag)
