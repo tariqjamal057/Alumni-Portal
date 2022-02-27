@@ -34,3 +34,6 @@ def loginredirect (request):
 
 def dashtoindex (request):
     return render (request,'index.html')
+
+def dashtobarchive (request):
+    return render (request,'blog-archive.html')
