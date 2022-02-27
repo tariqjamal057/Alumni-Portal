@@ -3,5 +3,6 @@ from . import views
 
 urlpatterns = [
     path('', views.Home),
-    path('accounts/login.html', views.login, name="login"),
+    path('templates/login.html', views.login, name="login"),
+    path('templates/Dashboard.html',views.loginredirect, name="loginredirect")
 ]

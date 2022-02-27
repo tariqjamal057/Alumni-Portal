@@ -13,8 +13,7 @@ from django.core.mail import send_mail
 # from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
-
-
+from ckeditor.fields import RichTextField
 
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
 
@@ -138,7 +137,7 @@ class User(AbstractBaseUser , PermissionsMixin):
         else:
             return self.username
 
-class PostEducationDetail(models.Model):
+class Post_Education_Detail(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     degree = models.CharField(max_length=256)
     institute_or_university = models.CharField(max_length=100)
@@ -171,10 +170,10 @@ post_type_options = (
 class Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = models.TextField(blank=True,null=True)
+    content = RichTextField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
-    
+    deadLine = models.DateField(null=True,blank=True)
 
 class PostResponse(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskpost')
@@ -193,10 +192,9 @@ categories_type = (
 class MentorPost(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = models.TextField(blank=True,null=True)
+    content = RichTextField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(choices= categories_type,max_length=2,null=True)
-    tag = models.ManyToManyField(Tag)
     deadLine = models.DateField(null=True,blank=True)
 
 class MentorPostResponse(models.Model):
@@ -209,34 +207,22 @@ class MentorResponseMessage(models.Model):
     message = models.TextField()
     timeStamp = models.DateTimeField()
 
-type_of_sponsership = (
-    ('E','Education Sponsership') , ('S','Culturals Sponsership') , ('I','InKind Sponsership') , ('P','Promotional Sponsership')
-)
-class Student_Support(models.Model):
-    user = models.ForeignKey(User ,on_delete=models.CASCADE)
-    desc = models.TextField(blank=True,null=True)
-    typeOfSponser = models.CharField(choices=type_of_sponsership , max_length=1)
-    amount = models.DecimalField(max_digits=10,decimal_places=2)
-    paid = models.BooleanField(default=False)
-    timeStamp = models.DateField(auto_now_add=True)
-    
-class Sponser(models.Model):
-    user = models.ForeignKey(Student_Support,on_delete=models.CASCADE)
-
-class Authentication(models.Model):
-    username = models.CharField(max_length=50,default='')
-    password = models.CharField(max_length=50, default='')
-    is_active = models.IntegerField(null=True)
-    empAuth_objects = models.Manager()
-    def __str__(self):
-        return self.username
-
 mode_of_payment = (
     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
-
-class Corpus_fund(models.Model):
+    
+class Corporsefund(models.Model):
     name = models.ForeignKey(User ,on_delete=models.CASCADE)
     timestamp = models.DateField(auto_now_add=True)
     total_amount = models.IntegerField()
     modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
-        
+
+
+class Authentication(models.Model):
+    username = models.CharField(max_length=50,default='')
+    password = models.CharField(max_length=50, default='')
+    isactive = models.IntegerField(null=True)
+
+    def _str_(self):
+        return self.username
+
+    empAuth_objects = models.Manager()

@@ -11,11 +11,12 @@ def login(request):
     if request.method == 'POST':
             username = request.POST.get('username')
             password = request.POST.get('password')
-
+             
             try:
                 user = Authentication.empAuth_objects.get(username="User1",password="KarpagamTech")
-                if user is not None:               
-                    return render(request, 'Dashboard.html')
+                if user is not None:
+                    loginredirect(request,user)               
+                    return render(request, 'Dashboard.html', {})
                 else:
                     print("Someone tried to login and failed.")
                     print("They used username: {} and password: {}".format(username,password))
@@ -26,4 +27,7 @@ def login(request):
                 return redirect('/')
      
     else:
-            return render(request, 'accounts/login.html')
+            return render(request, 'login.html')
+
+def loginredirect (request):
+    return render(request,'Dashboard.html')
