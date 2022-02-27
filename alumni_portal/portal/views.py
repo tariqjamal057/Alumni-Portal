@@ -37,3 +37,18 @@ def dashtoindex (request):
 
 def dashtobarchive (request):
     return render (request,'blog-archive.html')
+
+def dashtobsingle (request):
+    return render (request,'blog-single.html')
+
+def dashtocontact (request):
+    return render (request,'contact.html')
+
+def dashtocourse (request):
+    return render (request,'course-detail.html')
+
+def gallery (request):
+    return render (request,'gallery.html')
+
+def p404page (request):
+    return render (request,'404.html')

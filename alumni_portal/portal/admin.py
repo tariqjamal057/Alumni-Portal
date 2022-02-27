@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from portal.models import Batch, Country, Department, District, ExperienceDetail, MentorPost, MentorPostResponse, MentorResponseMessage, Post, PostEducationDetail, PostResponse, ResponseMessage, State, Tag, User,Authentication
+from portal.models import Batch, Country, Department, District, ExperienceDetail, MentorPost, MentorPostResponse, MentorResponseMessage, Post, PostEducationDetail, PostResponse, ResponseMessage, State, Tag, User,Authentication,StudDetails,Finance
 
 # Register your models here.
 
@@ -20,3 +20,5 @@ admin.site.register(MentorPostResponse)
 admin.site.register(MentorResponseMessage)
 admin.site.register(Tag) 
 admin.site.register(Authentication)
+admin.site.register(StudDetails)
+admin.site.register(Finance)

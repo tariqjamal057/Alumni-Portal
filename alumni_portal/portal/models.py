@@ -210,6 +210,28 @@ class MentorResponseMessage(models.Model):
 mode_of_payment = (
     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
     
+type_of_behaviour = ( ('G','Good'), ('A','Average'), ('B','Bad') )
+
+sem = (('1', '1st Semester'),('2', '2nd Semester'),('3', '3rd Semester'),('4', '4th Semester'),('5', '5th Semester'),
+('6', '6th Semester'),('7', '7th Semester'),('8', '8th Semester'),)
+
+class StudDetails(models.Model):
+    behavior = models.CharField(choices=type_of_behaviour, max_length=1)
+    about = models.TextField()  
+    reason = models.TextField()
+    amount = models.IntegerField()
+    highschoolmark = models.IntegerField()
+    anyarrears = models.BooleanField()
+    cgpa = models.DecimalField(max_digits = 5,decimal_places = 2)
+    currentsem = models.CharField(choices=sem , max_length=1)
+    achievements = models.TextField()
+
+class Finance(models.Model):
+    studentname = models.ForeignKey(User ,on_delete=models.CASCADE)
+    studentdetails = models.ForeignKey(StudDetails, on_delete=models.CASCADE)
+    timestamp = models.DateField(auto_now_add=True)
+    modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
+    
 class Corporsefund(models.Model):
     name = models.ForeignKey(User ,on_delete=models.CASCADE)
     timestamp = models.DateField(auto_now_add=True)
