@@ -31,3 +31,6 @@ def login(request):
 
 def loginredirect (request):
     return render(request,'Dashboard.html')
+
+def dashtoindex (request):
+    return render (request,'index.html')
