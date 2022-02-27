@@ -137,7 +137,7 @@ class User(AbstractBaseUser , PermissionsMixin):
         else:
             return self.username
 
-class Post_Education_Detail(models.Model):
+class PostEducationDetail(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     degree = models.CharField(max_length=256)
     institute_or_university = models.CharField(max_length=100)
