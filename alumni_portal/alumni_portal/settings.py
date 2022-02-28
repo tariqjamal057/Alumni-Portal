@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'alumni_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'abhirami1',
+        'NAME': 'dbm',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': 'abhiramianil@9876',
+        'PASSWORD': 'Vishal_0@2#0&8+',
         'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }

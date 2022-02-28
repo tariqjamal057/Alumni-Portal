@@ -232,13 +232,6 @@ class Finance(models.Model):
     timestamp = models.DateField(auto_now_add=True)
     modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
     
-class Corporsefund(models.Model):
-    name = models.ForeignKey(User ,on_delete=models.CASCADE)
-    timestamp = models.DateField(auto_now_add=True)
-    total_amount = models.IntegerField()
-    modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
-
-
 class Authentication(models.Model):
     username = models.CharField(max_length=50,default='')
     password = models.CharField(max_length=50, default='')
