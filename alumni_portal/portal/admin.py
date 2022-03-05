@@ -2,7 +2,9 @@ from django.contrib import admin
 
 from portal.models import Batch, Country, Department, District, ExperienceDetail, Tech_Help_Post, Tech_Help_PostResponse, Tech_Help_ResponseMessage, Post, PostEducationDetail, PostResponse, ResponseMessage, State, User,Finance_request,Finance
 
-# Register your models here.
+admin.site.site_header = 'Karpagam Institute of Technology'
+admin.site.site_title = 'Admin'
+admin.site.index_title = ''
 
 class AdminConfig(admin.ModelAdmin):
     list_display = ['username','email','registered_on']

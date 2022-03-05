@@ -230,8 +230,8 @@ class Finance_request(models.Model):
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
 
 class Finance(models.Model):
-    studentname = models.ForeignKey(User ,on_delete=models.CASCADE)
-    studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE)
+    studentname = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
+    studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
     timestamp = models.DateField(auto_now_add=True)
     modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
 
