@@ -1,15 +1,18 @@
+from unicodedata import name
 from django.urls import path
 from . import views
+from django.contrib.auth.views import LoginView , LogoutView
 
 urlpatterns = [
-    path('', views.Home),
-    path('login.html', views.login, name="login"),
-    path('Dashboard.html',views.loginredirect, name="loginredirect"),
-    path('index.html',views.dashtoindex,name = "dashtoindex"),
-    path('blog-archive.html',views.dashtobarchive,name="dashtobarchive"),
-    path('blog-single.html',views.dashtobsingle,name = "dashtobsingle"),
-    path('contact.html',views.dashtocontact,name ="dashtocontact"),
-    path('course-detail.html',views.dashtocourse,name="dashtocourse"),
-    path('gallery.html',views.gallery, name = 'gallery'),
-    path('404.html',views.p404page,name = "p404page"),
+    path('login/', LoginView.as_view(), name="login"),
+    path('', LogoutView.as_view(next_page="login"), name="logout"),
+    path('', views.Home,name="home"),
+    path('dashboard/',views.Dashboard, name="dashboard"),
+    path('blog-archive/',views.dashtobarchive,name="dashtobarchive"),
+    path('blog-single/',views.dashtobsingle,name = "dashtobsingle"),
+    path('contact/',views.Contact,name ="contact"),
+    path('course-detail/',views.dashtocourse,name="dashtocourse"),
+    path('gallery/',views.Gallery, name = 'gallery'),
+    path('404/',views.Page404,name = "page404"),
+    path('create-finance-post/',views.Create_Finance_Post,name = "create-finance-post"),
 ]

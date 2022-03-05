@@ -8,12 +8,14 @@ from django.db import models
 # from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
+from django.http import HttpResponse
 # from django.core.exceptions import ValidationError
 # from django.core.validators import MinValueValidator, MaxValueValidator
 # from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
 
@@ -160,8 +162,7 @@ class ExperienceDetail(models.Model):
     def __str__(self):
         return self.user.first_name + self.designation
 
-class Tag(models.Model):
-    name = models.CharField(max_length=50)
+
 
 
 post_type_options = (
@@ -170,7 +171,7 @@ post_type_options = (
 class Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = RichTextField()
+    content = RichTextUploadingField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
     deadLine = models.DateField(null=True,blank=True)
@@ -189,21 +190,21 @@ class ResponseMessage(models.Model):
 categories_type = (
     ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English') , ('EC','Electronics and Communication')
 )
-class MentorPost(models.Model):
+class Tech_Help_Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
-    content = RichTextField()
+    content = RichTextUploadingField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(choices= categories_type,max_length=2,null=True)
     deadLine = models.DateField(null=True,blank=True)
 
-class MentorPostResponse(models.Model):
-    post = models.ForeignKey(MentorPost , on_delete=models.CASCADE , related_name='studentpost')
-    user = models.ForeignKey(MentorPost , on_delete=models.CASCADE , related_name='student')
+class Tech_Help_PostResponse(models.Model):
+    post = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='studentpost')
+    user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='student')
 
-class MentorResponseMessage(models.Model):
-    user = models.ForeignKey(MentorPost , on_delete=models.CASCADE)
-    postResponse = models.ForeignKey(MentorPostResponse , on_delete= models.CASCADE)
+class Tech_Help_ResponseMessage(models.Model):
+    user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE)
+    postResponse = models.ForeignKey(Tech_Help_PostResponse , on_delete= models.CASCADE)
     message = models.TextField()
     timeStamp = models.DateTimeField()
 
@@ -215,29 +216,22 @@ type_of_behaviour = ( ('G','Good'), ('A','Average'), ('B','Bad') )
 sem = (('1', '1st Semester'),('2', '2nd Semester'),('3', '3rd Semester'),('4', '4th Semester'),('5', '5th Semester'),
 ('6', '6th Semester'),('7', '7th Semester'),('8', '8th Semester'),)
 
-class StudDetails(models.Model):
+class Finance_request(models.Model):
+    student_name = models.CharField(max_length=50)
     behavior = models.CharField(choices=type_of_behaviour, max_length=1)
-    about = models.TextField()  
+    about = RichTextUploadingField()  
     reason = models.TextField()
-    amount = models.IntegerField()
-    highschoolmark = models.IntegerField()
+    amount = models.DecimalField(max_digits = 7,decimal_places = 2)
+    highschoolmark = models.DecimalField(max_digits = 5,decimal_places = 2)
     anyarrears = models.BooleanField()
     cgpa = models.DecimalField(max_digits = 5,decimal_places = 2)
     currentsem = models.CharField(choices=sem , max_length=1)
-    achievements = models.TextField()
+    achievements = RichTextUploadingField()
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
 
 class Finance(models.Model):
     studentname = models.ForeignKey(User ,on_delete=models.CASCADE)
-    studentdetails = models.ForeignKey(StudDetails, on_delete=models.CASCADE)
+    studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE)
     timestamp = models.DateField(auto_now_add=True)
     modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
-    
-class Authentication(models.Model):
-    username = models.CharField(max_length=50,default='')
-    password = models.CharField(max_length=50, default='')
-    isactive = models.IntegerField(null=True)
 
-    def _str_(self):
-        return self.username
-
-    empAuth_objects = models.Manager()

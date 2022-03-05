@@ -15,6 +15,9 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TEMPLATE_DIR = os.path.join(BASE_DIR2,'templates')
+STATIC_DIR = os.path.join(BASE_DIR2, 'static')
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,8 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'portal',
     'ckeditor',
+    'ckeditor_uploader',
+    'crispy_forms',
     
 ]
+
+# CKEDITOR_UPLOADER_PATH = 'media/'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -80,11 +87,11 @@ WSGI_APPLICATION = 'alumni_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'dbm',
+        'NAME': 'alumini_portal',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': 'Vishal_0@2#0&8+',
+        'PASSWORD': '',
         'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
         }
@@ -126,13 +133,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static'),
-    )
+STATIC_URL = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
+STATICFILES_DIRS = [
+    STATIC_DIR
+]
 
+STATIC_ROOT=os.path.join(BASE_DIR, "/static/")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR2, 'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
@@ -140,3 +150,6 @@ AUTH_USER_MODEL = 'portal.User'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CKEDITOR_UPLOAD_PATH = "uploads/"
