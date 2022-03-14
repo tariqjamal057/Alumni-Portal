@@ -3,11 +3,15 @@
 # from turtle import title
 # from unicodedata import category
 from datetime import datetime
+from time import timezone
+from tkinter.tix import Tree
+from xmlrpc.client import DateTime
 from django.db import models
 # from django.contrib.auth.models import 
 # from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
+from django.forms import CharField, DateField, DateTimeField
 from django.http import HttpResponse
 # from django.core.exceptions import ValidationError
 # from django.core.validators import MinValueValidator, MaxValueValidator
@@ -169,12 +173,13 @@ post_type_options = (
     ('O','Opportunity') , ('S','Seeking Job') , ('I','Internship')
 )
 class Post(models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user',null=True, blank=True)
     title = models.CharField(max_length=200)
     content = RichTextUploadingField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
     deadLine = models.DateField(null=True,blank=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE , related_name='postedby', null=True, blank=True)
 
 class PostResponse(models.Model):
     post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskpost')
@@ -191,12 +196,13 @@ categories_type = (
     ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English') , ('EC','Electronics and Communication')
 )
 class Tech_Help_Post(models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='techhelpuser',null=True, blank=True)
     title = models.CharField(max_length=200)
     content = RichTextUploadingField()
     timeStamp = models.DateTimeField(auto_now_add=True)
     category = models.CharField(choices= categories_type,max_length=2,null=True)
     deadLine = models.DateField(null=True,blank=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE  ,related_name='alumininame', null=True, blank=True)
 
 class Tech_Help_PostResponse(models.Model):
     post = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='studentpost')
@@ -210,28 +216,54 @@ class Tech_Help_ResponseMessage(models.Model):
 
 mode_of_payment = (
     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
-    
-type_of_behaviour = ( ('G','Good'), ('A','Average'), ('B','Bad') )
 
-sem = (('1', '1st Semester'),('2', '2nd Semester'),('3', '3rd Semester'),('4', '4th Semester'),('5', '5th Semester'),
-('6', '6th Semester'),('7', '7th Semester'),('8', '8th Semester'),)
+class Mark(models.Model):
+    exam = models.CharField(max_length=50)
+    percentage_or_cgpa =  models.DecimalField(max_digits=4,decimal_places=1)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.exam
+    
+class Acheivement(models.Model):
+    name = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 
 class Finance_request(models.Model):
+    title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to ='uploads/student_images/')
     student_name = models.CharField(max_length=50)
-    behavior = models.CharField(choices=type_of_behaviour, max_length=1)
-    about = RichTextUploadingField()  
-    reason = models.TextField()
+    description = models.TextField()
     amount = models.DecimalField(max_digits = 7,decimal_places = 2)
-    highschoolmark = models.DecimalField(max_digits = 5,decimal_places = 2)
-    anyarrears = models.BooleanField()
-    cgpa = models.DecimalField(max_digits = 5,decimal_places = 2)
-    currentsem = models.CharField(choices=sem , max_length=1)
-    achievements = RichTextUploadingField()
+    marks = models.ForeignKey(Mark,on_delete=models.CASCADE , related_name='student_marks')
+    achievements = models.ManyToManyField(Acheivement ,related_name='student_achievement')
+    deadline = models.DateField(default=datetime.now)
+    date = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.student_name
+
+class Finance_request_Post_Response(models.Model):
+    post = models.ForeignKey(Finance_request , on_delete=models.CASCADE , related_name='helpdeskpost')
+    user = models.ForeignKey(Finance_request , on_delete=models.CASCADE , related_name='helpdeskuser')
+
+class Finance_request_Response_Message(models.Model):
+    user = models.ForeignKey(Finance_request , on_delete=models.CASCADE,related_name='response_message_user')
+    postResponse = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE , related_name='post_response')
+    message = models.TextField()
+    timeStamp = models.DateTimeField()
 
 class Finance(models.Model):
     studentname = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
     studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
     timestamp = models.DateField(auto_now_add=True)
     modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
+
+    def __str__(self):
+        return self.studentname.student_name
 

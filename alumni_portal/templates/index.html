@@ -67,33 +67,44 @@
                     </button>
                     <!-- LOGO -->
                     <!-- TEXT BASED LOGO -->
-                    <a class="navbar-brand" href="/"><i class="fa fa-university"></i><span>Varsity</span></a>
+                    <a class="navbar-brand" href="/home"><i class="fa fa-university"></i><span>Varsity</span></a>
                     <!-- IMG BASED LOGO  -->
                     <!-- <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/logo.png' %}" alt="logo"></a> -->
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
-                        <li class="active"><a href="/">Home</a></li>
+                        <li class="active"><a href="/home">Home</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">About us <span
                                     class="fa fa-angle-down"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="course-detail.html">Alumni Association</a></li>
+                                <li><a href="/course-detail.html">Alumni Association</a></li>
                                 <li><a href="https://karpagamtech.ac.in/about-us/college-profile/">About KIT</a></li>
                             </ul>
                         </li>
-                        <li><a href="gallery/">Gallery</a></li>
+                        <li><a href="/gallery">Gallery</a></li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities <span
                                     class="fa fa-angle-down"></span></a>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="blog-archive/">Alumni as Mentor</a></li>
-                                <li><a href="blog-single/">Alumni as Sponsor</a></li>
-                                <li><a href="blog-single/">Alumni Help Desk</a></li>
+                                <li><a href="/blog-archive">Alumni as Mentor</a></li>
+                                <li><a href="/blog-single">Alumni as Sponsor</a></li>
+                                <li><a href="/blog-single">Alumni Help Desk</a></li>
                             </ul>
                         </li>
-                        <li><a href="contact">Contact</a></li>
-                        <li><a href="login">Login</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                        {% if user.is_authenticated %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user}}<span
+                                        class="fa fa-angle-down"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/dashboard">dashboard</a></li>
+                                    <li><a href="/">logout</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="/login">Login</a></li>
+                        {% endif %}
 
                     </ul>
                 </div>

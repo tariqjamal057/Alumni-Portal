@@ -1,0 +1,29 @@
+{% block content %}
+    <div class="mu-course-container">
+        <div class="row">
+            {% for request in requests %}
+                <div class="col-md-6 col-sm-6">
+                    <div style="padding: 10px;margin: 10px 0px;border-radius: 7px;box-shadow: 0px 0px 10px rgba(0,0,0,.1);">
+                        <div style="display: flex;">
+                            <div class="img-square-wrapper" style="margin-right: 10px;">
+                                <img style="width:100px;height:100px;" class="" src="{{ request.image.url }}" alt="Card image cap">
+                            </div>
+                            <div style="flex: 1;">
+                                <div style="width: 100%;display: flex;justify-content:space-between;">
+                                    <h5>{{ request.student_name}}</h5>
+                                    <div style="display: flex;margin: 10px 0px;">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px;cursor: pointer;" data-toggle="modal" data-target="#addFinancialRequest"></i>
+                                        <i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;"></i>
+                                    </div>
+                                </div>
+                                <p class="card-text">{{ request.title }}</p>
+                                <p>₹ {{ request.amount }}</p>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailPageModal" style="margin: 0px!important;margin-top: 10px!important;">view detail</button>
+                    </div>
+                </div>
+            {% endfor %}  
+        </div>
+    </div>
+{% endblock content %}

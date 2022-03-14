@@ -1,53 +1,133 @@
 from multiprocessing import context
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate , login , logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
 
-from portal.forms import FinanceHelpForm
+from portal.forms import FinanceHelpForm, MarkForm
+from portal.models import Finance_request
 
 # from portal.models import allowed_user
 
 # Create your views here.
-def Home(request):
-    return render(request,'index.html')
+
+
+def home(request):
+    user = request.user
+    context = {"user":user}
+    return render(request,'index.html',context)
     
 def login(request):
-    return render(request , 'accounts/login.html')
+    return render(request , 'registration/login.html')
+
+def is_student(user):
+    return user.groups.filter(name='student').exists()
+
+def is_alumini(user):
+    return user.groups.filter(name='alumini').exists()
+
+def is_faculty(user):
+    return user.groups.filter(name='faculty').exists()
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('login')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+        return render(request, 'accounts/change_password.html', {'form': form})
+
+def dashboard(request):
+    if is_faculty(request.user):
+        return redirect('faculty-dashboard')
+
+    elif is_alumini(request.user):
+        return redirect('alumini-dashboard')
+    else:
+        return redirect('student-dashboard')
 
 @login_required(login_url='login')
-# @allowed_user(allowed_roles=['staff','alumini'])
-def Dashboard(request):
-    return render(request,'Dashboard.html')
+def faculty(request):
+    form = FinanceHelpForm()
+    form1 = MarkForm()
+    requests = Finance_request.objects.filter(posted_by = request.user)
+
+    context = {
+        "requests" : requests,
+        "form":form,
+        "form1":form1,
+    }
+    return render(request,'faculty/faculty-dashboard.html',context)
 
 @login_required(login_url='login')
+def alumini(request):
+    return render(request,'alumini/alumini-dashboard.html')
+
+@login_required(login_url='login')
+def student(request):
+    return render(request,'student/student-dashboard.html')
+
+
+
 def dashtobarchive (request):
     return render (request,'blog-archive.html')
 
-@login_required(login_url='login')
 def dashtobsingle (request):
     return render (request,'blog-single.html')
 
-
-
-def Contact(request):
+def contact(request):
     return render (request,'contact.html')
 
 def dashtocourse (request):
     return render (request,'course-detail.html')
 
-def Gallery(request):
+def gallery(request):
     return render (request,'gallery.html')
 
-def Page404(request):
+def page404(request):
     return render (request,'404.html')
 
-def Create_Finance_Post(request):
-    form = FinanceHelpForm()
+#create financial request
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def create_Finance_Post(request):
+    form1 = MarkForm()
     if request.method == 'POST':
-        form = FinanceHelpForm()
-        if form.is_valid:
-            form.save()
-            return redirect('/')
-    context = {'form':form}
-    return render (request,'Finance/create.html',context)
+        form = FinanceHelpForm(request.POST,request.FILES)
+        print(form)
+        if form.is_valid():
+            print('working')
+            addrequest = form.save(commit=False)
+            print(addrequest)
+            addrequest.posted_by = request.user
+            addrequest.save()
+            return redirect('faculty-dashboard')
+        else:
+            print("not valid")
+    context = {'form':form,'form1':form1}
+    return render (request,'Finance/create-finance-request.html',context)
+
+#update financial request
+def update_Finance_Post(request,id):
+    finance_request = Finance_request.objects.get(id=id)
+    form = FinanceHelpForm(instance=finance_request)
+    if request.method == 'POST':
+        form = FinanceHelpForm(request.POST,instance=finance_request)
+        if form.is_valid():
+            addrequest = form.save(commit=False)
+            addrequest.posted_by = request.user
+            addrequest.save()
+            return redirect('faculty-dashboard')
+    context = {'finance_request':finance_request}
+    print(finance_request)
+    return render (request,'Finance/create-finance-request.html',context)
+
+

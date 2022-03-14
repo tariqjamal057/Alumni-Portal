@@ -38,6 +38,16 @@
     <![endif]-->
 
     <style>
+        ::-webkit-scrollbar
+        {
+            width: 0px;
+            background: #0000ff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 20px;
+            height: 50px;
+        }
         .card {
             margin-bottom: 50px;
         }
@@ -57,12 +67,12 @@
 
         .login-innercontainer {
             width: 300px;
-            height: 50%;
+            height: 60%;
             box-shadow: 0px 0px 12px rgba(0, 0, 0, .2);
             border-radius: 10px;
             display: flex;
             flex-direction: column;
-            overflow: hidden!important;
+            overflow-x: hidden!important;
         }
         .login-innercontainer h2 {
             text-align: center;
@@ -71,18 +81,26 @@
         }
         .Form {
             padding: 0px 10px;
+            overflow-y: hidden;
+        }
+        .Form a {
+            text-decoration: none;
+            color: #888;
+            font-size: 15px;
         }
         .btn {
             margin: 20px 0px!important;
         }
     </style>
-    <title>{% block title %} {% endblock %}</title>
+    <title>{% block title %} {% endblock title %}</title>
+    {% block style %}
+    {% endblock style %}
 </head>
 
 <body>
 
     {% block content %}
-    {% endblock %}
+    {% endblock content %}
     <!-- jQuery library -->
     <script src="{% static 'assets/js/jquery.min.js' %}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -96,11 +114,15 @@
     <script type="text/javascript" src="{% static 'assets/js/jquery.mixitup.js' %}"></script>
     <!-- Add fancyBox -->
     <script type="text/javascript" src="{% static 'assets/js/jquery.fancybox.pack.js' %}"></script>
+    <!-- sweetalert cdn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"> </script>
 
 
     <!-- Custom js -->
     <script src="{% static 'assets/js/custom.js' %}"></script>
 
-</body>
+    {% block javascript %}
+    {% endblock javascript %}
 
+</body>
 </html>
