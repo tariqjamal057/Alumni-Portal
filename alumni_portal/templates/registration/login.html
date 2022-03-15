@@ -12,7 +12,7 @@
 	<div class="login-container">
 		<div class="login-innercontainer">
 			<h2 class="w-100 bg-primary">Login</h2>
-			<form class="Form" method="POST" novalidate>
+			<form class="Form" method="POST" novalidate style="overflow-y: scroll;">
 				{% csrf_token %}
 				{{form | crispy}}
 				<a href="{% url 'password_reset' %}">forgot password</a>

@@ -47,30 +47,31 @@ def change_password(request):
 def dashboard(request):
     if is_faculty(request.user):
         return redirect('faculty-dashboard')
-
     elif is_alumini(request.user):
         return redirect('alumini-dashboard')
-    else:
+    elif is_student(request.user):
         return redirect('student-dashboard')
+    else:
+        return redirect('page404')
 
-@login_required(login_url='login')
+@login_required()
 def faculty(request):
     form = FinanceHelpForm()
-    form1 = MarkForm()
+    # form1 = MarkForm()
     requests = Finance_request.objects.filter(posted_by = request.user)
 
     context = {
         "requests" : requests,
         "form":form,
-        "form1":form1,
+        # "form1":form1,
     }
     return render(request,'faculty/faculty-dashboard.html',context)
 
-@login_required(login_url='login')
+@login_required()
 def alumini(request):
     return render(request,'alumini/alumini-dashboard.html')
 
-@login_required(login_url='login')
+@login_required()
 def student(request):
     return render(request,'student/student-dashboard.html')
 
@@ -120,14 +121,24 @@ def update_Finance_Post(request,id):
     finance_request = Finance_request.objects.get(id=id)
     form = FinanceHelpForm(instance=finance_request)
     if request.method == 'POST':
-        form = FinanceHelpForm(request.POST,instance=finance_request)
+        form = FinanceHelpForm(request.POST,request.FILES,instance=finance_request)
         if form.is_valid():
             addrequest = form.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
             return redirect('faculty-dashboard')
-    context = {'finance_request':finance_request}
+    context = {'form':form}
     print(finance_request)
     return render (request,'Finance/create-finance-request.html',context)
+
+#detail descriotion of a particular financial request
+def View_Detail_Of_Financia_Request(request,id):
+    finance_request_detail = Finance_request.objects.get(id=id)
+    context = {
+        'finance_request_detail':finance_request_detail
+    }
+    return render(request,'faculty/financial_request_detail_page.html',context)
+    
+
 
 
