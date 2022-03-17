@@ -1,9 +1,11 @@
 from multiprocessing import context
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
+from django.template.loader import render_to_string
 
 from portal.forms import FinanceHelpForm, MarkForm
 from portal.models import Finance_request
@@ -58,7 +60,7 @@ def dashboard(request):
 def faculty(request):
     form = FinanceHelpForm()
     # form1 = MarkForm()
-    requests = Finance_request.objects.filter(posted_by = request.user)
+    requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
 
     context = {
         "requests" : requests,
@@ -74,8 +76,6 @@ def alumini(request):
 @login_required()
 def student(request):
     return render(request,'student/student-dashboard.html')
-
-
 
 def dashtobarchive (request):
     return render (request,'blog-archive.html')
@@ -100,21 +100,21 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def create_Finance_Post(request):
+    data=()
     form1 = MarkForm()
     if request.method == 'POST':
         form = FinanceHelpForm(request.POST,request.FILES)
-        print(form)
         if form.is_valid():
-            print('working')
             addrequest = form.save(commit=False)
-            print(addrequest)
             addrequest.posted_by = request.user
             addrequest.save()
             return redirect('faculty-dashboard')
         else:
             print("not valid")
-    context = {'form':form,'form1':form1}
-    return render (request,'Finance/create-finance-request.html',context)
+    requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
+    context = {'requests':requests,'form':form,'form1':form1}
+    data['html']=render_to_string(request,'faculty/faculty-dashboard.html',context)
+    return JsonResponse(data)
 
 #update financial request
 def update_Finance_Post(request,id):
