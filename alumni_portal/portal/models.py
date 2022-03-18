@@ -235,10 +235,10 @@ class Acheivement(models.Model):
 
 class Finance_request(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to ='uploads/student_images/')
+    image = models.ImageField(upload_to ='student_images/')
     student_name = models.CharField(max_length=50)
     description = models.TextField()
-    amount = models.DecimalField(max_digits = 7,decimal_places = 2)
+    amount = models.IntegerField()
     marks = models.ForeignKey(Mark,on_delete=models.CASCADE , related_name='student_marks')
     achievements = models.ManyToManyField(Acheivement ,related_name='student_achievement')
     deadline = models.DateField(default=datetime.now)

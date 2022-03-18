@@ -100,7 +100,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def create_Finance_Post(request):
-    data=()
+    data={}
     form1 = MarkForm()
     if request.method == 'POST':
         form = FinanceHelpForm(request.POST,request.FILES)
@@ -108,13 +108,14 @@ def create_Finance_Post(request):
             addrequest = form.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
-            return redirect('faculty-dashboard')
+            requests = Finance_request.objects.all()
+            context = {'requests':requests}
+            data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
+            return JsonResponse(data)
         else:
             print("not valid")
-    requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
-    context = {'requests':requests,'form':form,'form1':form1}
-    data['html']=render_to_string(request,'faculty/faculty-dashboard.html',context)
-    return JsonResponse(data)
+            return JsonResponse({'data':'not valid'})
+    return JsonResponse({'data':'return'})
 
 #update financial request
 def update_Finance_Post(request,id):
