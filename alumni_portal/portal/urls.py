@@ -27,6 +27,7 @@ urlpatterns = [
     path('404/',views.page404,name = "page404")
     ,
     path('request/create-finance-post/',views.create_Finance_Post,name = "create-finance-post"),
-    path('request/update-finance-post/<id>/',views.update_Finance_Post,name = "update-finance-post"),
-    path('request/finance-post-detail-page/? request_id=<id>/',views.View_Detail_Of_Financia_Request,name = "finance-post-detail-page"),
+    path('request/update-finance-post/',views.update_Finance_Post,name = "update-finance-post"),
+    path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post"),
+    path('request/finance-post-detail-page/',views.View_Detail_Of_Financia_Request,name = "finance-post-detail-page"),
 ]

@@ -6,6 +6,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.views.decorators.csrf import csrf_exempt
 
 from portal.forms import FinanceHelpForm, MarkForm
 from portal.models import Finance_request
@@ -60,7 +61,7 @@ def dashboard(request):
 def faculty(request):
     form = FinanceHelpForm()
     # form1 = MarkForm()
-    requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
+    requests = Finance_request.objects.filter(posted_by = request.user)
 
     context = {
         "requests" : requests,
@@ -96,20 +97,16 @@ def page404(request):
     return render (request,'404.html')
 
 #create financial request
-from django.views.decorators.csrf import csrf_exempt
-
 @csrf_exempt
 def create_Finance_Post(request):
     data={}
-    form1 = MarkForm()
     if request.method == 'POST':
         form = FinanceHelpForm(request.POST,request.FILES)
         if form.is_valid():
             addrequest = form.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
-            requests = Finance_request.objects.all()
-            context = {'requests':requests}
+            requests = Finance_request.objects.filter(posted_by=request.user)
             data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
             return JsonResponse(data)
         else:
@@ -118,7 +115,9 @@ def create_Finance_Post(request):
     return JsonResponse({'data':'return'})
 
 #update financial request
+@csrf_exempt
 def update_Finance_Post(request,id):
+    data={}
     finance_request = Finance_request.objects.get(id=id)
     form = FinanceHelpForm(instance=finance_request)
     if request.method == 'POST':
@@ -127,18 +126,33 @@ def update_Finance_Post(request,id):
             addrequest = form.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
-            return redirect('faculty-dashboard')
-    context = {'form':form}
-    print(finance_request)
-    return render (request,'Finance/create-finance-request.html',context)
+            requests = Finance_request.objects.filter(posted_by = request.user)
+            data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
+            return JsonResponse(data)
+        else:
+            print("not valid")
+            return JsonResponse({'data':'not valid'})
+    return JsonResponse({'data':'return'})
+# delete financial Request 
+def delete_Finance_Post(request):
+    data = dict()
+    id = request.POST.get('id')
+    financial_request = Finance_request.objects.filter(id=id)
+    financial_request.delete()
+    data["id"] = id
+    requests = Finance_request.objects.filter(posted_by=request.user)
+    data['html'] = render_to_string('faculty/financial_request.html', {'requests': requests, })
+    data["success"] = True
+    return JsonResponse(data)
 
 #detail descriotion of a particular financial request
 def View_Detail_Of_Financia_Request(request,id):
-    finance_request_detail = Finance_request.objects.get(id=id)
-    context = {
-        'finance_request_detail':finance_request_detail
-    }
-    return render(request,'faculty/financial_request_detail_page.html',context)
+    data = ()
+    id = request.POST.get('id')
+    request = Finance_request.objects.get(id=id)
+    data["id"] = id
+    data['html'] = render_to_string('faculty/financial_request.html', {'request': request, })
+    return JsonResponse(data)
     
 
 

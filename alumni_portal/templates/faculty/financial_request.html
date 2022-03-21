@@ -1,29 +1,125 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
 {% block content %}
-    <div class="mu-course-container">
-        <div class="row">
-            {% for request in requests %}
-                <div class="col-md-6 col-sm-6">
-                    <div style="padding: 10px;margin: 10px 0px;border-radius: 7px;box-shadow: 0px 0px 10px rgba(0,0,0,.1);">
-                        <div style="display: flex;">
-                            <div class="img-square-wrapper" style="margin-right: 10px;">
-                                <img style="width:100px;height:100px;" class="" src="{{ request.image.url }}" alt="Card image cap">
+<div class="mu-course-container">
+    <div class="row">
+        {% for request in requests %}
+            <div class="col-md-6 col-sm-6">
+                <div style="
+            padding: 10px;
+            margin: 10px 0px;
+            border-radius: 7px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
+            position: relative;
+            background: #fff;
+            ">
+                    <div style="display: flex">
+                        <div class="img-square-wrapper" style="margin-right: 10px">
+                            <img style="width: 100px; height: 100px" class="" src="{{ request.image.url }}"
+                                alt="Card image cap" />
+                        </div>
+                        <div style="flex: 1">
+                            <h5>{{ request.student_name}}</h5>
+                            <p class="card-text">{{ request.title }}</p>
+                            <p>₹ {{ request.amount }}.00</p>
+                        </div>
+                        <div style="display: flex; position: absolute; right: 10px; top: 10px">
+                            <button type="button" class="btn btn-info"
+                                style="margin-top: 0px !important; margin-right: 10px !important" data-toggle="modal"
+                                data-target="#updateFinancialRequest{{request.id}}">
+                                <i class="fa fa-pencil-square-o"></i>
+                            </button>
+                            <!-- update Financial request section start -->
+                            <div class="modal fade" id="updateFinancialRequest{{request.id}}" tabindex="-1" role="dialog" aria-labelledby="updateFinancialRequest{{request.id}}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form method="post" id="update_request" enctype="multipart/form-data">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="updateFinancialRequest{{request.id}}">Update Finance Request</h3>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                {% csrf_token %}
+                                                {{form | crispy}}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" onclick="updateRequest({{request.id}})" class="btn btn-primary">update</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                            <div style="flex: 1;">
-                                <div style="width: 100%;display: flex;justify-content:space-between;">
-                                    <h5>{{ request.student_name}}</h5>
-                                    <div style="display: flex;margin: 10px 0px;">
-                                        <a href="{% url 'update-finance-post' request.id %}"><i class="fa fa-pencil-square-o" aria-hidden="true" style="margin-right: 10px;" data-toggle="modal" data-target="#addFinancialRequest"></i></a>
-                                        <a href=""><i class="fa fa-trash" aria-hidden="true" style="cursor: pointer;"></i></a>
+                            <!-- update Financial request section end -->
+
+                            <button type="button" class="btn btn-danger" style="margin-top: 0px !important"
+                                data-toggle="modal" data-target="#deleteRequest{{request.id}}">
+                                <i class="fa fa-trash"></i>
+                            </button>
+                            <!-- Delete particular Finance request post start  -->
+                            <div class="modal fade" id="deleteRequest{{request.id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="deleteRequest{{request.id}}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteRequest{{request.id}}">Delete Financial Request</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete the financial request of
+                                            <b>{{ request.student_name}}</b> </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger"
+                                                onclick="delete_post({{request.id}})"
+                                                style="margin: 0!important;">Delete</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                style="margin: 0!important;">Close</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <p class="card-text">{{ request.title }}</p>
-                                <p>₹ {{ request.amount }}</p>
+                            </div>
+                            <!-- Delete particular Finance request post end  -->
+                            
+                        </div>
+                    </div>
+
+                    <button type="button" style="margin: 0px !important; margin-top: 10px !important"
+                        class="btn btn-primary" style="margin-top: 0px !important" data-toggle="modal"
+                        data-target="#detailPageModal{{request.id}}" onclick="post_description({{request.id}})">
+                        View details
+                    </button>
+                    <!-- View Detail description of the Finance request post section start  -->
+                    <div class="modal fade" id="detailPageModal{{request.id}}" tabindex="-1" role="dialog"
+                        aria-labelledby="detailPageModalTitle" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="detailPageModalTitle">Modal title</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{request.name}}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                        style="margin: 0!important;">Close</button>
+                                </div>
                             </div>
                         </div>
-                        <a href="{% url 'finance-post-detail-page' request.id %}"><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#detailPageModal" style="margin: 0px!important;margin-top: 10px!important;">view detail</button></a>
                     </div>
+                    <!-- View Detail description of the Finance request post section end  -->
+
                 </div>
-            {% endfor %}  
-        </div>
+            </div>
+        {% endfor %}
     </div>
+</div>
 {% endblock content %}
