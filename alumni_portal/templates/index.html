@@ -88,7 +88,9 @@
                                     class="fa fa-angle-down"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="/blog-archive">Alumni as Mentor</a></li>
-                                <li><a href="/blog-single">Alumni as Sponsor</a></li>
+                                {% if is_alumini %}
+                                    <li><a href="/finance_requests">Alumni as Sponsor</a></li>
+                                {% endif %}
                                 <li><a href="/blog-single">Alumni Help Desk</a></li>
                             </ul>
                         </li>
