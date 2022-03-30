@@ -267,3 +267,9 @@ class Finance(models.Model):
     def __str__(self):
         return self.studentname.student_name
 
+class Filter_Finance(models.Model):
+    date = models.DateTimeField()
+    amount = models.DecimalField(max_digits=6, decimal_places=3)
+
+    def __str__(self):
+        return self.amount

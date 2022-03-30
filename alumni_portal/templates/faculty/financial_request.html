@@ -46,7 +46,7 @@
                                                 {{form | crispy}}
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" onclick="updateRequest({{request.id}})" class="btn btn-primary">update</button>
+                                                <button type="button" onclick="updateRequest({request:id})" class="btn btn-primary">update</button>
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                             </div>
                                         </div>
@@ -76,7 +76,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger"
-                                                onclick="delete_post({{request.id}})"
+                                                onclick="delete_post({request:id})"
                                                 style="margin: 0!important;">Delete</button>
                                             <button type="button" class="btn btn-primary" data-dismiss="modal"
                                                 style="margin: 0!important;">Close</button>
@@ -91,7 +91,7 @@
 
                     <button type="button" style="margin: 0px !important; margin-top: 10px !important"
                         class="btn btn-primary" style="margin-top: 0px !important" data-toggle="modal"
-                        data-target="#detailPageModal{{request.id}}" onclick="post_description({{request.id}})">
+                        data-target="#detailPageModal{{request.id}}" onclick="post_description({request:id})">
                         View details
                     </button>
                     <!-- View Detail description of the Finance request post section start  -->

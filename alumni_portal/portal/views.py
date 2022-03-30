@@ -68,7 +68,9 @@ def faculty(request):
         "form":form,
         # "form1":form1,
     }
-    return render(request,'faculty/faculty-dashboard.html',context)
+   
+@login_required()
+
 
 @login_required()
 def alumini(request):
