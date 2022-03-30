@@ -3,9 +3,6 @@
 # from turtle import title
 # from unicodedata import category
 from datetime import datetime
-from time import timezone
-from tkinter.tix import Tree
-from xmlrpc.client import DateTime
 from django.db import models
 # from django.contrib.auth.models import 
 # from django.contrib.auth.base_user import AbstractBaseUser
@@ -253,10 +250,11 @@ class Finance_request_Post_Response(models.Model):
     user = models.ForeignKey(Finance_request , on_delete=models.CASCADE , related_name='helpdeskuser')
 
 class Finance_request_Response_Message(models.Model):
-    user = models.ForeignKey(Finance_request , on_delete=models.CASCADE,related_name='response_message_user')
     postResponse = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE , related_name='post_response')
+    message_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name="from_user")
+    message_to = models.ForeignKey(User,on_delete=models.CASCADE,related_name="to_user")
     message = models.TextField()
-    timeStamp = models.DateTimeField()
+    date = models.DateTimeField()
 
 class Finance(models.Model):
     studentname = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')

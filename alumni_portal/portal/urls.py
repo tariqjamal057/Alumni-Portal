@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.urls import path, re_path as url
 from . import views
 from django.contrib.auth.views import LoginView, LogoutView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
@@ -28,6 +29,7 @@ urlpatterns = [
     ,
     path('request/create-finance-post/',views.create_Finance_Post,name = "create-finance-post"),
     path('request/update-finance-post/',views.update_Finance_Post,name = "update-finance-post"),
-    path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post"),
-    path('request/finance-post-detail-page/',views.View_Detail_Of_Financia_Request,name = "finance-post-detail-page"),
+    path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post")
+    ,
+    path('finance_requests/',views.finance_request_page,name="finance_request")
 ]
