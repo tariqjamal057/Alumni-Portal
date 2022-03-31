@@ -35,31 +35,6 @@
 </div> 
 <!-- Create Financial request section end -->
 
-<!-- Financial filter section start -->
-<div class="modal fade" id="FilterFinancialRequest" data-backdrop="false" tabindex="-1" role="dialog"
-	aria-labelledby="FilterFinancialRequestTitle" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<form method="post" id="filter_request" enctype="multipart/form-data">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="FilterFilterFinancialRequestTitle">Filter Finance Request</h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					{% csrf_token %}
-					{{form | crispy}}
-				</div>
-				<div class="modal-footer">
-					
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div> 
-<!-- Financial filter section end -->
 
 <section id="mu-course-content">
 	<div class="container">
@@ -74,19 +49,8 @@
 									class="btn btn-primary" data-toggle="modal" data-target="#addFinancialRequest">
 									Add Request
 								</button>
-							    
-								<button type="button" style="margin-top: 5px!important;margin-left: 20px!important;"
-									class="btn btn-primary" data-toggle="modal" data-target="#FilterFinancialRequest">
-									Filter
-								</button>
-
-								<class = "search-wrapper" style="margin-top: 10px!important;margin-left: 25px!important;">
-								<font face = "WildWest"><input type = "search" id = "search" placeholder=" Search the Posts "></font>
-								
-								
-								
 							</div>
-						</div>
+							<p>Search</p>
 						</div>
 					</div>
 					<div class="row">

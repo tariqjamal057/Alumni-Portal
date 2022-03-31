@@ -71,9 +71,7 @@ def faculty(request):
         "form":form,
         # "updateform":updateform,
     }
-   
-@login_required()
-
+    return render(request,'faculty/faculty-dashboard.html',context)
 
 @login_required()
 def alumini(request):
@@ -143,7 +141,6 @@ def update_Finance_Post(request):
         else:
             print("Updated")
             form=request.POST.get('form')
-            print("form  "+form)
             id=request.POST.get('id')
             print(" id "+id)
             finance_request = Finance_request.objects.get(id=id)
@@ -200,8 +197,9 @@ def addResponse_Message(request):
     data = dict()
     id = request.POST.get('id')
     message = request.POST.get('message')
+    if is_alumini(request.user):
+        interest = Finance_request_Post_Response.objects.get_or_create(user)
     print(message)
-    print('id')
     print(id)
     return render(request,'pages/financehelp_page.html')
 
