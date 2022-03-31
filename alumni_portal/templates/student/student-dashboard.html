@@ -1,6 +1,212 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
+
 {% block content %}
-    {% include 'dashboard-navigation/navigation.html' %}
+{% include 'dashboard-navigation/navigation.html' %}
+
+<!-- Create Financial request section start -->
+<div class="modal fade" id="add_help_desk_post" data-backdrop="false" tabindex="-1" role="dialog"
+	aria-labelledby="add_help_desk_postTitle" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<form method="post" id="create_mentor_help_post" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="add_help_desk_postTitle">Create Mentor help Post</h3>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="position: relative;">
+					{% csrf_token %}
+					{{ mentor_help_post_form | crispy }}
+					{{ mentor_help_post_form.media }}
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Add Post</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div> 
+<!-- Create Financial request section end -->
+
+
+<section id="mu-course-content">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="mu-course-content-area">
+					<div class="row" style="margin-bottom: 20px;">
+						<div style="display: flex;justify-content: space-between;">
+							<div style="display: flex;">
+								<h2>Mentor Help Post</h2>
+								<button type="button" style="margin-top: 5px!important;margin-left: 20px!important;"
+									class="btn btn-primary" data-toggle="modal" data-target="#add_help_desk_post">
+									Add Post
+								</button>
+							</div>
+							<p>Search</p>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-9" id="mentor_help_post_container"
+							style="background-color:#fff;">
+							<!-- start finance-request content container -->
+							{% include 'student/mentor_help.html' %}
+							<!-- end finance-request content container -->
+						</div>
+						<div class="col-md-3">
+							<!-- start sidebar -->
+							<aside class="mu-sidebar">
+								<!-- start single sidebar -->
+
+								<!-- end single sidebar -->
+								<!-- start single sidebar -->
+								<div class="mu-single-sidebar">
+									<h3>Featured Sponsors</h3>
+									<div class="mu-sidebar-popular-courses">
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Medical Science</a></h4>
+												<span class="popular-course-price">$200.00</span>
+											</div>
+										</div>
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Web Design</a></h4>
+												<span class="popular-course-price">$250.00</span>
+											</div>
+										</div>
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Health & Sports</a></h4>
+												<span class="popular-course-price">$90.00</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end single sidebar -->
+								<!-- start single sidebar -->
+								<div class="mu-single-sidebar">
+									<h3>Featured Mentors</h3>
+									<div class="mu-sidebar-popular-courses">
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Medical Science</a></h4>
+												<span class="popular-course-price">$200.00</span>
+											</div>
+										</div>
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Web Design</a></h4>
+												<span class="popular-course-price">$250.00</span>
+											</div>
+										</div>
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Health & Sports</a></h4>
+												<span class="popular-course-price">$90.00</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end single sidebar -->
+								<!-- end single sidebar -->
+
+								<!-- start single sidebar -->
+								<div class="mu-single-sidebar">
+									<h3>My Posts</h3>
+									<div class="mu-sidebar-popular-courses">
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Medical Science</a></h4>
+												<span class="popular-course-price">$200.00</span>
+											</div>
+										</div>
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Web Design</a></h4>
+												<span class="popular-course-price">$250.00</span>
+											</div>
+										</div>
+										<div class="media">
+											<div class="media-left">
+												<a href="#">
+													<img class="media-object"
+														src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
+												</a>
+											</div>
+											<div class="media-body">
+												<h4 class="media-heading"><a href="#">Health & Sports</a></h4>
+												<span class="popular-course-price">$90.00</span>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- end single sidebar -->
+
+							</aside>
+							<!-- / end sidebar -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 {% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/student/student.js' %}"></script>
+{% endblock javascript %}

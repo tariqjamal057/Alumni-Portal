@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% block style %}
+    <style>
+        img{
+            width: 100%;
+        }
+    </style>
+{% endblock style %}
 
 {% block content %}
 <div>
@@ -120,10 +127,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="mu-page-breadcrumb-area">
-                        <h2>Alumini As a Sponser</h2>
+                        <h2>Alumini As a Mentor Page</h2>
                         <ol class="breadcrumb">
                             <li><a href="/home">Home</a></li>
-                            <li class="active">Financial Request</li>
+                            <li class="active">Mentor Help Posts</li>
                         </ol>
                     </div>
                 </div>
@@ -131,91 +138,88 @@
         </div>
     </section>
     <!-- End breadcrumb -->
-    <section id="mu-course-content">
+    <section id="mu-course-content" style="padding: 30px 0 !important;">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="mu-course-content-area">
                         <div class="row">
-                            <div class="col-md-9" id="finance_request_container"
-                                style="background-color:#fff; padding: 20px;">
+                            <div class="col-md-9" id="mentor_help_post_container"
+                                style="background-color:#fff;">
                                 <!-- start finance-request content container -->
-                                <div class="mu-course-container">
+                                <div class="mu-course-container" style="background: #fff;padding: 20px;">
                                     <div class="row">
-                                        {% for request in finance_requests %}
+                                        {% for mentor_help_post in mentor_help_posts %}
+                                        
+                                
+                                
                                         <div class="col-md-6 col-sm-6">
-                                            <div
-                                                style="padding: 10px;margin: 10px 0px;border-radius: 7px;box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);position: relative;background: #fff;">
-                                                <div style="display: flex">
-                                                    <div class="img-square-wrapper" style="margin-right: 10px">
-                                                        <img style="width: 100px; height: 100px" class=""
-                                                            src="{{ request.image.url }}" alt="Card image cap" />
+                                            <div style="
+                                            padding: 10px !important;
+                                            padding-top: 5px !important;
+                                            margin: 10px 0px;
+                                            position: relative;
+                                            background: #f8f8f8;
+                                            padding-bottom: 20px !important;
+                                            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+                                            ">
+                                                <div>
+                                                    <div>
+                                                        <div style="display: flex;align-items:center;justify-content:space-between;">
+                                                            <h3>{{ mentor_help_post.title }}</h3>
+                                                        </div>
+                                                        <p>{{mentor_help_post.content | safe | truncatechars:250 }}</p>
                                                     </div>
-                                                    <div style="flex: 1">
-                                                        <h5>{{ request.student_name}}</h5>
-                                                        <p class="card-text">{{ request.title }}</p>
-                                                        <p>₹ {{ request.amount }}.00</p>
-                                                    </div>
+                                                   
                                                 </div>
-                                                <div style="display: flex;align-items: center;">
-                                                    <button type="button"
-                                                        style="margin: 0px !important; margin-top: 10px !important"
-                                                        class="btn btn-primary btn-sm" style="margin-top: 0px !important"
-                                                        data-toggle="modal" data-target="#detailPageModal{{request.id}}">
-                                                        View details
-                                                    </button>
-                                                    <button type="button"
-                                                        style="margin: 0px !important; margin-top: 10px !important;margin-left: 10px !important;" class="btn btn-primary btn-sm" data-toggle="modal"
-                                                        data-target="#chat{{request.id}}" >Chat with
-                                                        Staff</button>
-                                                </div>
+                                
+                                                <button type="button" style="margin: 0px !important; margin-top: 10px !important"
+                                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#student_post_detail_page{{mentor_help_post.id}}">
+                                                    View details
+                                                </button>
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    style="margin: 0px !important; margin-top: 10px !important" data-toggle="modal"
+                                                    data-target="#chat{{mentor_help_post.id}}">Chat with Alumini</button>
                                                 <!-- View Detail description of the Finance request post section start  -->
-                                                <div class="modal fade" id="detailPageModal{{request.id}}" tabindex="-1"
-                                                    role="dialog" aria-labelledby="detailPageModalTitle"
-                                                    aria-hidden="true">
+                                                <div class="modal fade" id="student_post_detail_page{{mentor_help_post.id}}" tabindex="-1" role="dialog"
+                                                    aria-labelledby="student_post_detail_page_Title" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="detailPageModalTitle">
-                                                                    {{request.title}}</h5>
-                                                                <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                </button>
+                                                                <div style="display:flex;justify-content: space-between;align-items: center;">
+                                                                    <h2 class="modal-title" style="margin-top:0px !important;margin-bottom:0px !important;" id="student_post_detail_pageTitle">{{mentor_help_post.title}}</h2>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <img style="width: 100px; height: 100px" class=""
-                                                                    src="{{ request.image.url }}"
-                                                                    alt="Card image cap" />
-                                                                <h3>Name : {{request.student_name}}</h3>
-                                                                <p> Amount : {{ request.amount }}</p>
-                                                                <p>Description : {{ request.description }}</p>
-                                                                <p>Marks : {{ request.marks }}</p>
-                                                                <!-- <p>{{ request.achievement }}</p> -->
-                                                                <p>Deadline : {{ request.deadline }}</p>
+                                                                <p>{{mentor_help_post.content | safe}}</p>
+                                                                <p>Posted By : {{mentor_help_post.posted_by}}</p>
                                                             </div>
                                                             <hr style="margin: 0!important">
-                                                            <button type="button" class="btn btn-primary"
-                                                                data-dismiss="modal"
-                                                                style="margin: 0!important;">Close</button>
+                                                            <div
+                                                                style="display: flex;justify-content: space-between;align-items: center;padding: 15px;">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                                    style="margin: 0!important;">Close</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <!-- View Detail description of the Finance request post section end  -->
-
-
                                                 <!-- chat with staff modal start  -->
-                                                <div class="modal fade" id="chat{{request.id}}" tabindex="-1"
-                                                    role="dialog" aria-labelledby="chat{{request.id}}"
-                                                    aria-hidden="true">
+                                                <div class="modal fade" id="chat{{request.id}}" tabindex="-1" role="dialog"
+                                                    aria-labelledby="chat{{request.id}}" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <form method="post" id="chat" enctype="multipart/form-data">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h3 class="modal-title" id="chat{{request.id}}">Chat
+                                                                    <h3 class="modal-title" id="chat{{request.id}}">Post Title : {{ request.title }}
                                                                     </h3>
-                                                                    <button type="button" class="close"
-                                                                        data-dismiss="modal" aria-label="Close">
+                                                                    <h4 class="modal-title" id="chat{{request.id}}">Staff Name : {{ request.posted_by }}
+                                                                    </h4>
+                                                                    <h4 class="modal-title" id="chat{{request.id}}">Amount : {{ request.amount }}</h4>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                         <span aria-hidden="true">&times;</span>
                                                                     </button>
                                                                 </div>
@@ -223,29 +227,21 @@
                                                                     <div class="textcontainer">
                                                                         <div class="message_area" id="messagearea"
                                                                             style="position: relative;width: 100%;padding: 10px;height: 300px;overflow-y: scroll;margin-bottom: 10px;border: 1px solid rgba(0, 0, 0, 0.19);border-radius: 7px;">
-                                                                            <div>
-                                                                                {% include 'faculty/chat.html' %}
-                                                                            </div>
+                                                                            {% include 'faculty/chat.html' %}
                                                                         </div>
-                                                                        <div
-                                                                            style="display: flex;justify-content: space-between;align-items: center;">
+                                                                        <div style="display: flex;justify-content: space-between;align-items: center;">
                                                                             <div class="textarea">
-                                                                                {% csrf_token %}
-                                                                                <textarea name="message"
-                                                                                    id="message{{request.id}}"
-                                                                                    class="form-control"
+                                                                                <textarea name="message" id="message{{request.id}}" class="form-control"
                                                                                     rows="2"></textarea>
                                                                             </div>
-                                                                            <button type="button"
-                                                                                class="btn btn-primary"
+                                                                            <button type="button" class="btn btn-primary"
                                                                                 style="margin-bottom: 0px !important;"
                                                                                 onclick="addchat('{{request.id}}')">send</button>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-default"
-                                                                        data-dismiss="modal">Close</button>
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -263,7 +259,7 @@
                                 <!-- start sidebar -->
                                 <aside class="mu-sidebar">
                                     <!-- start single sidebar -->
-
+    
                                     <!-- end single sidebar -->
                                     <!-- start single sidebar -->
                                     <div class="mu-single-sidebar">
@@ -352,7 +348,7 @@
                                     </div>
                                     <!-- end single sidebar -->
                                     <!-- end single sidebar -->
-
+    
                                     <!-- start single sidebar -->
                                     <div class="mu-single-sidebar">
                                         <h3>My Posts</h3>
@@ -396,7 +392,7 @@
                                         </div>
                                     </div>
                                     <!-- end single sidebar -->
-
+    
                                 </aside>
                                 <!-- / end sidebar -->
                             </div>

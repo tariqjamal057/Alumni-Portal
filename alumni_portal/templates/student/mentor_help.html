@@ -1,0 +1,163 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block style %}
+    <style>
+        img{
+            width: 100%;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+
+<div class="mu-course-container" style="background: #fff;padding: 20px;">
+    <div class="row">
+        {% for mentor_help_post in mentor_help_posts %}
+        
+
+
+        <div class="col-md-6 col-sm-6">
+            <div style="
+            padding: 10px !important;
+            padding-top: 5px !important;
+            margin: 10px 0px;
+            position: relative;
+            background: #f8f8f8;
+            padding-bottom: 20px !important;
+            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+            ">
+                <div>
+                    <div>
+                        <div style="display: flex;align-items:center;justify-content:space-between;">
+                            <h3>{{ mentor_help_post.title }}</h3>
+                            <div style="margin-top: 20px !important;">
+                                <button type="button" class="btn btn-info"
+                                    style="margin-top: 0px !important; margin-right: 10px !important" data-toggle="modal"
+                                    data-target="#update_mentor_help_post{{mentor_help_post.id}}" onclick="get_form('{{mentor_help_post.id}}')">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger"
+                                    style="margin-top: 0px !important;" data-toggle="modal"
+                                    data-target="#delete_mentor_help_post{{mentor_help_post.id}}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <!-- Delete particular Finance request post start  -->
+                                <div class="modal fade" id="delete_mentor_help_post{{mentor_help_post.id}}" tabindex="-1" role="dialog"
+                                aria-labelledby="delete_mentor_help_post{{mentor_help_post.id}}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="delete_mentor_help_post{{mentor_help_post.id}}">Delete Mentor Help Post</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Do you want to delete 
+                                                <b>{{ mentor_help_post.title}}</b> Post
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger"
+                                            onclick="delete_mentor_help_post('{{mentor_help_post.id}}')"
+                                                style="margin: 0!important;">Delete</button>
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                style="margin: 0!important;">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Delete particular Finance request post end  -->
+
+                            </div>
+                        </div>
+                        <p>{{mentor_help_post.content | safe | truncatechars:250 }}</p>
+                    </div>
+                   
+                </div>
+
+                <button type="button" style="margin: 0px !important; margin-top: 10px !important"
+                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#student_post_detail_page{{mentor_help_post.id}}">
+                    View details
+                </button>
+                <button type="button" class="btn btn-primary btn-sm"
+                    style="margin: 0px !important; margin-top: 10px !important" data-toggle="modal"
+                    data-target="#chat{{mentor_help_post.id}}">Chat with Alumini</button>
+                <!-- View Detail description of the Finance request post section start  -->
+                <div class="modal fade" id="student_post_detail_page{{mentor_help_post.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="student_post_detail_page_Title" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <div style="display:flex;justify-content: space-between;align-items: center;">
+                                    <h2 class="modal-title" style="margin-top:0px !important;margin-bottom:0px !important;" id="student_post_detail_pageTitle">{{mentor_help_post.title}}</h2>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <p>{{mentor_help_post.content | safe}}</p>
+                                <p>Posted By : {{mentor_help_post.posted_by}}</p>
+                            </div>
+                            <hr style="margin: 0!important">
+                            <div
+                                style="display: flex;justify-content: space-between;align-items: center;padding: 15px;">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    style="margin: 0!important;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- View Detail description of the Finance request post section end  -->
+                <!-- chat with staff modal start  -->
+                <div class="modal fade" id="chat{{request.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="chat{{request.id}}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <form method="post" id="chat" enctype="multipart/form-data">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title" id="chat{{request.id}}">Post Title : {{ request.title }}
+                                    </h3>
+                                    <h4 class="modal-title" id="chat{{request.id}}">Staff Name : {{ request.posted_by }}
+                                    </h4>
+                                    <h4 class="modal-title" id="chat{{request.id}}">Amount : {{ request.amount }}</h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="textcontainer">
+                                        <div class="message_area" id="messagearea"
+                                            style="position: relative;width: 100%;padding: 10px;height: 300px;overflow-y: scroll;margin-bottom: 10px;border: 1px solid rgba(0, 0, 0, 0.19);border-radius: 7px;">
+                                            {% include 'faculty/chat.html' %}
+                                        </div>
+                                        <div style="display: flex;justify-content: space-between;align-items: center;">
+                                            <div class="textarea">
+                                                <textarea name="message" id="message{{request.id}}" class="form-control"
+                                                    rows="2"></textarea>
+                                            </div>
+                                            <button type="button" class="btn btn-primary"
+                                                style="margin-bottom: 0px !important;"
+                                                onclick="addchat('{{request.id}}')">send</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- chat with staff modal end  -->
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+<script src="{% static 'js/student/student.js' %}"></script>
+{% endblock javascript %}

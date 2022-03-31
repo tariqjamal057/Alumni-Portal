@@ -173,9 +173,9 @@ class Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user',null=True, blank=True)
     title = models.CharField(max_length=200)
     content = RichTextUploadingField()
-    timeStamp = models.DateTimeField(auto_now_add=True)
-    postType = models.CharField(choices=post_type_options,max_length=1,blank=True)
-    deadLine = models.DateField(null=True,blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    post_type = models.CharField(choices=post_type_options,max_length=1,blank=True)
+    deadline = models.DateField(null=True,blank=True)
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE , related_name='postedby', null=True, blank=True)
 
 class PostResponse(models.Model):
@@ -184,22 +184,18 @@ class PostResponse(models.Model):
 
 class ResponseMessage(models.Model):
     user = models.ForeignKey(Post , on_delete=models.CASCADE)
-    postResponse = models.ForeignKey(PostResponse , on_delete= models.CASCADE)
+    post_response = models.ForeignKey(PostResponse , on_delete= models.CASCADE)
     message = models.TextField()
-    timeStamp = models.DateTimeField()
+    date = models.DateTimeField()
 
 
-categories_type = (
-    ('D','Web Developement') , ('G','Graphic Design') , ('AI','Artificial Intelegence') , ('DS','Data Science') , ('M','Math') , ('P','Physics') , ('C','Chemistry') , ('P','Physics') , ('E','English') , ('EC','Electronics and Communication')
-)
 class Tech_Help_Post(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='techhelpuser',null=True, blank=True)
     title = models.CharField(max_length=200)
     content = RichTextUploadingField()
-    timeStamp = models.DateTimeField(auto_now_add=True)
-    category = models.CharField(choices= categories_type,max_length=2,null=True)
-    deadLine = models.DateField(null=True,blank=True)
-    posted_by = models.ForeignKey(User , on_delete=models.CASCADE  ,related_name='alumininame', null=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateField(null=True,blank=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE  ,related_name='studentname', null=True, blank=True)
 
 class Tech_Help_PostResponse(models.Model):
     post = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='studentpost')
@@ -207,9 +203,9 @@ class Tech_Help_PostResponse(models.Model):
 
 class Tech_Help_ResponseMessage(models.Model):
     user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE)
-    postResponse = models.ForeignKey(Tech_Help_PostResponse , on_delete= models.CASCADE)
+    post_response = models.ForeignKey(Tech_Help_PostResponse , on_delete= models.CASCADE)
     message = models.TextField()
-    timeStamp = models.DateTimeField()
+    date = models.DateTimeField()
 
 mode_of_payment = (
     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
@@ -250,16 +246,15 @@ class Finance_request_Post_Response(models.Model):
     user = models.ForeignKey(Finance_request , on_delete=models.CASCADE , related_name='helpdeskuser')
 
 class Finance_request_Response_Message(models.Model):
-    postResponse = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE , related_name='post_response')
-    message_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name="from_user")
-    message_to = models.ForeignKey(User,on_delete=models.CASCADE,related_name="to_user")
+    user = models.ForeignKey(Finance_request , on_delete=models.CASCADE)
+    post_response = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE)
     message = models.TextField()
     date = models.DateTimeField()
 
 class Finance(models.Model):
-    studentname = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
-    studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
-    timestamp = models.DateField(auto_now_add=True)
+    student_name = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
+    student_details = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
+    date = models.DateField(auto_now_add=True)
     modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
 
     def __str__(self):

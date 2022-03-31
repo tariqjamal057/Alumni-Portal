@@ -29,7 +29,17 @@ urlpatterns = [
     ,
     path('request/create-finance-post/',views.create_Finance_Post,name = "create-finance-post"),
     path('request/update-finance-post/',views.update_Finance_Post,name = "update-finance-post"),
-    path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post")
-    ,
+    path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post"),
     path('finance_requests/',views.finance_request_page,name="finance_request")
+    ,
+    path('chat/',views.addResponse_Message,name="addchatmessage")
+    ,
+    path('request/create-mentor-help-post/',views.create_mentor_post,name = "create-mentor-help-post"),
+    path('request/update-mentor-help-post/',views.update_mentor_post,name = "update-mentor-help-post"),
+    path('request/delete-mentor-help-post/',views.delete_mentor_post,name = "delete-mentor-help-post"),
+    path('mentor_help_posts/',views.alumini_as_mentor_page,name="mentor-help-post")
+    ,
+    path('load-more/',views.load_more,name='load-more')
+    ,
+
 ]

@@ -8,7 +8,7 @@
     <div class="row">
 
         {% for request in requests %}
-        <div class="col-md-6 col-sm-6">
+        <div class="col-md-6 col-sm">
             <div style="
             padding: 10px;
             margin: 10px 0px;
@@ -17,7 +17,7 @@
             position: relative;
             background: #fff;
             ">
-                <div style="display: flex">
+                <div style="display: flex" class="post-container">
                     <div class="img-square-wrapper" style="margin-right: 10px">
                         <img style="width: 100px; height: 100px" class="" src="{{ request.image.url }}"
                             alt="Card image cap" />
@@ -36,14 +36,16 @@
                         </button>
                         <div>
                             <!-- update Financial request section start -->
-                            <div class="modal fade" id="updateFinancialRequest{{request.id}}" tabindex="-1" role="dialog"
-                                aria-labelledby="updateFinancialRequest{{request.id}}" aria-hidden="true">
+                            <div class="modal fade" id="updateFinancialRequest{{request.id}}" tabindex="-1"
+                                role="dialog" aria-labelledby="updateFinancialRequest{{request.id}}" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
                                     <form method="post" id="update_request{{request.id}}" enctype="multipart/form-data">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h3 class="modal-title" id="updateFinancialRequest{{request.id}}">Update Finance Request</h3>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <h3 class="modal-title" id="updateFinancialRequest{{request.id}}">Update
+                                                    Finance Request</h3>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
@@ -53,8 +55,10 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="submit" onclick="update_form('{{request.id}}')" class="btn btn-primary">update</button>
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                <button type="submit" onclick="update_form('{{request.id}}')"
+                                                    class="btn btn-primary">update</button>
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Close</button>
                                             </div>
                                         </div>
                                     </form>
@@ -99,12 +103,12 @@
                 </div>
 
                 <button type="button" style="margin: 0px !important; margin-top: 10px !important"
-                    class="btn btn-primary btn-sm" data-toggle="modal"
-                    data-target="#detailPageModal{{request.id}}">
+                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#detailPageModal{{request.id}}">
                     View details
                 </button>
-                <button type="button" class="btn btn-primary btn-sm" style="margin: 0px !important; margin-top: 10px !important" data-toggle="modal"
-                                    data-target="#chat{{request.id}}">Chat with Alumini</button>
+                <button type="button" class="btn btn-primary btn-sm"
+                    style="margin: 0px !important; margin-top: 10px !important" data-toggle="modal"
+                    data-target="#chat{{request.id}}" onclick="get_form('{{request.id}}')">Chat with Alumini</button>
                 <!-- View Detail description of the Finance request post section start  -->
                 <div class="modal fade" id="detailPageModal{{request.id}}" tabindex="-1" role="dialog"
                     aria-labelledby="detailPageModalTitle" aria-hidden="true">
@@ -143,8 +147,10 @@
                         <form method="post" id="chat" enctype="multipart/form-data">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h3 class="modal-title" id="chat{{request.id}}">Post Title : {{ request.title }}</h3>
-                                    <h4 class="modal-title" id="chat{{request.id}}">Staff Name : {{ request.posted_by }}</h4>
+                                    <h3 class="modal-title" id="chat{{request.id}}">Post Title : {{ request.title }}
+                                    </h3>
+                                    <h4 class="modal-title" id="chat{{request.id}}">Staff Name : {{ request.posted_by }}
+                                    </h4>
                                     <h4 class="modal-title" id="chat{{request.id}}">Amount : {{ request.amount }}</h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
@@ -178,6 +184,7 @@
             </div>
         </div>
         {% endfor %}
+        <button class="btn btn-primary btn-xl" style="margin-left: 20px !important;" id="loadmoreBtn" onclick="load_more()">Load more</button>
     </div>
 </div>
 {% endblock content %}

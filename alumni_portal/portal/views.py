@@ -7,9 +7,10 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
+from django.core import serializers
 
-from portal.forms import FinanceHelpForm, MarkForm
-from portal.models import Finance_request, User
+from portal.forms import FinanceHelpForm, MarkForm, MentorHelpForm
+from portal.models import Finance_request, Finance_request_Post_Response, Tech_Help_Post, User
 
 # from portal.models import allowed_user
 
@@ -78,7 +79,13 @@ def alumini(request):
 
 @login_required()
 def student(request):
-    return render(request,'student/student-dashboard.html')
+    mentor_help_post_form = MentorHelpForm()
+    mentor_help_posts = Tech_Help_Post.objects.filter(posted_by = request.user)
+    context = {
+        'mentor_help_post_form':mentor_help_post_form,
+        'mentor_help_posts':mentor_help_posts,
+    }
+    return render(request,'student/student-dashboard.html',context)
 
 def dashtobarchive (request):
     return render (request,'blog-archive.html')
@@ -109,6 +116,7 @@ def create_Finance_Post(request):
             addrequest = form.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
+            print("saved")
             requests = Finance_request.objects.filter(posted_by=request.user)
             data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
             return JsonResponse(data)
@@ -120,6 +128,117 @@ def create_Finance_Post(request):
 #update financial request
 @csrf_exempt
 def update_Finance_Post(request):
+    data={}
+    try:
+        if request.POST.get('type')=='get':
+            id = request.POST.get('id')
+            print("Id in update = "+id)
+            finance_request = Finance_request.objects.get(id=id)
+            updateform = FinanceHelpForm(instance=finance_request)
+            data['id'] = id
+            data['html']=render_to_string('faculty/update_financial_request.html',{'updateform':updateform})
+            return JsonResponse(data)
+        else:
+            print("Updated")
+            form=request.POST.get('form')
+            print("form  "+form)
+            id=request.POST.get('id')
+            print(" id "+id)
+            finance_request = Finance_request.objects.get(id=id)
+            updateform = FinanceHelpForm(form,instance=finance_request)
+            print(updateform)
+            if updateform.is_valid():
+                addrequest = updateform.save(commit=False)
+                addrequest.posted_by = request.user
+                addrequest.save()
+                requests = Finance_request.objects.filter(posted_by = request.user)
+                data['id'] = id
+                data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
+                return JsonResponse(data)
+            else:
+                # data['form'] = ren 
+                return JsonResponse({'data':'not valid'})
+        return JsonResponse(data)
+
+    except:
+        print('working')
+        id = request.POST.get('id')
+        print("id in except = ")
+        print(id)
+        finance_request = Finance_request.objects.get(id=id)
+        updateform = FinanceHelpForm(request.POST,request.FILES,instance=finance_request)
+        if updateform.is_valid():
+            addrequest = updateform.save(commit=False)
+            addrequest.posted_by = request.user
+            addrequest.save()
+            requests = Finance_request.objects.filter(posted_by = request.user)
+            
+            return JsonResponse(data)
+        else:
+            # data['form'] = ren 
+            return JsonResponse({'data':'not valid'})
+
+    
+    
+# delete financial Request 
+def delete_Finance_Post(request):
+    data = dict()
+    id = request.POST.get('id')
+    financial_request = Finance_request.objects.filter(id=id)
+    financial_request.delete()
+    data["id"] = id
+    requests = Finance_request.objects.filter(posted_by=request.user)
+    data['html'] = render_to_string('faculty/financial_request.html', {'requests': requests, })
+    data["success"] = True
+    return JsonResponse(data)
+
+#Message 
+@csrf_exempt
+def addResponse_Message(request):
+    data = dict()
+    id = request.POST.get('id')
+    message = request.POST.get('message')
+    print(message)
+    print('id')
+    print(id)
+    return render(request,'pages/financehelp_page.html')
+
+def finance_request_page(request):
+    finance_requests = Finance_request.objects.all().order_by('-id')
+    user = request.user
+    context = {
+        'finance_requests':finance_requests,
+        'user':user
+    }
+    return render(request,'pages/financehelp_page.html',context)
+
+
+
+# student section 
+
+#create mentor help post
+@csrf_exempt
+def create_mentor_post(request):
+    data={}
+    
+    if request.method == 'POST':
+        form = MentorHelpForm(request.POST,request.FILES)
+        if form.is_valid():
+            addpost = form.save(commit=False)
+            addpost.user = request.user
+            addpost.posted_by = request.user
+            addpost.save()
+            mentor_help_posts = Tech_Help_Post.objects.filter(posted_by=request.user)
+            data['html']=render_to_string('student/mentor_help.html',{'mentor_help_posts':mentor_help_posts})
+            return JsonResponse(data)
+        else:
+            print("not valid")
+            return JsonResponse({'data':'not valid'})
+    return JsonResponse({'data':'return'})
+
+#update mentor help post
+@csrf_exempt
+def update_mentor_post(request):
     data={}
     try:
         if request.POST.get('type')=='get':
@@ -168,48 +287,40 @@ def update_Finance_Post(request):
 
     
     
-# delete financial Request 
-def delete_Finance_Post(request):
+# delete mentor help post 
+def delete_mentor_post(request):
     data = dict()
     id = request.POST.get('id')
-    financial_request = Finance_request.objects.filter(id=id)
-    financial_request.delete()
+    student_post = Tech_Help_Post.objects.filter(id=id)
+    student_post.delete()
     data["id"] = id
-    requests = Finance_request.objects.filter(posted_by=request.user)
-    data['html'] = render_to_string('faculty/financial_request.html', {'requests': requests, })
+    mentor_help_posts = Tech_Help_Post.objects.filter(posted_by=request.user)
+    data['html'] = render_to_string('student/mentor_help.html', {'mentor_help_posts': mentor_help_posts, })
     data["success"] = True
     return JsonResponse(data)
 
-# #chat 
-# @csrf_exempt
-# def addChatToDatabase(request):
-#     data={}
-#     if request.method == 'POST':
-#         chat=request.POST.get('chat')
-#         id = request.POST.get('id')
-#         chat_id = request.POST.get('id')
-#         post = Finance_request.objects.get(id=id)
-#         chat_msg = Chat_With_Staff.objects.filter(post_id = chat_id)
-#         # print(chat_msg.form_user)
-#         if is_alumini(request.user):
-#             Chat_With_Staff.objects.create(post_id=post,form_user=request.user,to_user=post.posted_by,message=chat)
-#         else:
-#             Chat_With_Staff.objects.create(post_id=post,form_user=request.user,to_user=post.posted_by,message=chat)
-#         print(chat_id + "  " + id)
-#         msg = Chat_With_Staff.objects.filter(post_id = chat_id)
-#         print(msg)
-#         data["id"] = id
-#         data['html']=render_to_string('faculty/chat.html',{'msg':msg})
-#         data["success"] = True
-#     return JsonResponse(data)
-
-def finance_request_page(request):
-    finance_requests = Finance_request.objects.all().order_by('-id')
+# All Mentor help posts 
+def alumini_as_mentor_page(request):
+    mentor_help_posts = Tech_Help_Post.objects.all().order_by('-id')
     user = request.user
-    # msg = Chat_With_Staff.objects.all()
     context = {
-        'finance_requests':finance_requests,
-        # 'msg':msg,
+        'mentor_help_posts':mentor_help_posts,
         'user':user
     }
-    return render(request,'pages/financehelp_page.html',context)
+    return render(request,'pages/mentorhelp_page.html',context)
+
+
+
+
+# Load more 
+def load_more(request):
+    offset=int(request.POST['offset'])
+    limit=5
+    posts=Finance_request.objects.all()[offset:limit+offset]
+    totalData=Finance_request.objects.count()
+    data={}
+    posts_json=serializers.serialize('json',posts)
+    return JsonResponse(data={
+        'requests':posts_json,
+        'totalResult':totalData
+    })
