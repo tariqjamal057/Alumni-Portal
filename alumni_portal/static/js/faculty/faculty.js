@@ -133,17 +133,14 @@ function get_form(id) {
 function addchat(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   alert(id);
-  console.log("A");
-  const message = new FormData($("chat")[0]);
+  const message = document.getElementById("chat_btn"+id).value;
+  alert(message)
   console.log("message = " + message);
   $.ajax({
     type: "POST",
     url: "/chat/",
     data: { message: message, id: id, csrfmiddlewaretoken: csrftoken },
-    processData: false,
-    contentType: false,
     success: function (response) {
-      console.log(message);
       var x = "#chat" + response["id"];
       $(x).modal("hide");
       $("#finance_request_container").html(response.html);

@@ -71,7 +71,9 @@ def faculty(request):
         "form":form,
         # "updateform":updateform,
     }
-    return render(request,'faculty/faculty-dashboard.html',context)
+   
+@login_required()
+
 
 @login_required()
 def alumini(request):
