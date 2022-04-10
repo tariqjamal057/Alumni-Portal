@@ -164,4 +164,18 @@ class ExperienceDetail(models.Model):
     def __str__(self):
         return self.user.first_name + self.designation
 
-        
+
+
+# class Finance(models.Model):
+#     studentname = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
+#     studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
+#     timestamp = models.DateField(auto_now_add=True)
+
+class Finance_request(models.Model):
+    title = models.CharField(max_length=100)
+    student_name = models.CharField(max_length=50)
+    description = models.TextField()
+    amount = models.IntegerField()
+    marks = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
