@@ -1,0 +1,406 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block style %}
+    <style>
+        img{
+            width: 100%;
+        }
+    </style>
+{% endblock style %}
+
+{% block content %}
+<div>
+    <!--START SCROLL TOP BUTTON -->
+    <a class="scrollToTop" href="#">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- END SCROLL TOP BUTTON -->
+
+    <!-- Start header  -->
+    <header id="mu-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="mu-header-area">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="mu-header-top-left">
+                                    <div class="mu-top-email">
+                                        <i class="fa fa-envelope"></i>
+                                        <span>info@markups.io</span>
+                                    </div>
+                                    <div class="mu-top-phone">
+                                        <i class="fa fa-phone"></i>
+                                        <span>(568) 986 652</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                <div class="mu-header-top-right">
+                                    <nav>
+                                        <ul class="mu-top-social-nav">
+                                            <li><a href="#"><span class="fa fa-facebook"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-twitter"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-google-plus"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-linkedin"></span></a></li>
+                                            <li><a href="#"><span class="fa fa-youtube"></span></a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End header  -->
+    <!-- Start menu -->
+    <section id="mu-menu">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <!-- FOR MOBILE VIEW COLLAPSED BUTTON -->
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- LOGO -->
+                    <!-- TEXT BASED LOGO -->
+                    <a class="navbar-brand" href="/home"><i class="fa fa-university"></i><span style="font-size: 24px;">Karpagam Institute Of Technology</span></a>
+                    <!-- IMG BASED LOGO  -->
+                    <!-- <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/logo.png' %}" alt="logo"></a> -->
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
+                        <li><a href="/home">Home</a></li>
+                        <li class="dropdown active">
+                            <a href="/" class="dropdown-toggle active" data-toggle="dropdown">Course <span
+                                    class="fa fa-angle-down"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/course">Course Archive</a></li>
+                                <li><a href="/course-detail">Course Detail</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/gallery">Gallery</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <span
+                                    class="fa fa-angle-down"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/blog-archive">Blog Archive</a></li>
+                                <li><a href="/blog-single">Blog Single</a></li>
+                            </ul>
+                        </li>
+                        <li><a href="/contact">Contact</a></li>
+                        <li><a href="/404">404 Page</a></li>
+                        <li><a href="/" id="mu-search-icon"><i class="fa fa-search"></i></a></li>
+                    </ul>
+                </div>
+                <!--/.nav-collapse -->
+            </div>
+        </nav>
+    </section>
+    <!-- End menu -->
+    <!-- Start search box -->
+    <div id="mu-search">
+        <div class="mu-search-area">
+            <button class="mu-search-close"><span class="fa fa-close"></span></button>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="mu-search-form">
+                            <input type="search" placeholder="Type Your Keyword(s) & Hit Enter">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End search box -->
+    <!-- Page breadcrumb -->
+    <section id="mu-page-breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-page-breadcrumb-area">
+                        <h2>Alumini As a Mentor Page</h2>
+                        <ol class="breadcrumb">
+                            <li><a href="/home">Home</a></li>
+                            <li class="active">Mentor Help Posts</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb -->
+    <section id="mu-course-content" style="padding: 30px 0 !important;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-course-content-area">
+                        <div class="row">
+                            <div class="col-md-9" id="mentor_help_post_container"
+                                style="background-color:#fff;">
+                                <!-- start finance-request content container -->
+                                <div class="mu-course-container" style="background: #fff;padding: 20px;">
+                                    <div class="row">
+                                        {% for help in help_desk %}
+                                        
+                                
+                                
+                                        <div class="col-md-12 col-sm-12">
+                                            <div style="
+                                            padding: 10px !important;
+                                            padding-top: 5px !important;
+                                            margin: 10px 0px;
+                                            position: relative;
+                                            background: #f8f8f8;
+                                            padding-bottom: 20px !important;
+                                            box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+                                            ">
+                                                <div>
+                                                    <div>
+                                                        <div style="display: flex;align-items:center;justify-content:space-between;">
+                                                            <h4><span>Project Title: <span>{{ help.title }}</h4>
+                                            
+                                                        </div>
+                                                        <p>{{help.content | safe | truncatechars:200 }}</p>
+                                                    </div>
+                                                </div>
+                                
+                                                <button type="button" style="margin: 0px !important; margin-top: 10px !important;"
+                                                    class="btn btn-primary btn-sm" data-toggle="modal" data-target="#student_post_detail_page{{mentor_help_post.id}}">
+                                                    View details
+                                                </button>
+                                                <button type="button" class="btn btn-primary btn-sm"
+                                                    style="margin: 0px !important; margin-top: 10px !important; float: right;" data-toggle="modal"
+                                                    data-target="#chat{{mentor_help_post.id}}">Send Message</button>
+                                                <!-- View Detail description of the Finance request post section start  -->
+                                                <div class="modal fade" id="student_post_detail_page{{mentor_help_post.id}}" tabindex="-1" role="dialog"
+                                                    aria-labelledby="student_post_detail_page_Title" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <div style="display:flex;justify-content: space-between;align-items: center;">
+                                                                    <h2 class="modal-title" style="margin-top:0px !important;margin-bottom:0px !important;" id="student_post_detail_pageTitle">{{help.title}}</h2>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>{{help.content | safe}}</p>
+                                                            </div>
+                                                            <hr style="margin: 0!important">
+                                                            <div
+                                                                style="display: flex;justify-content: space-between;align-items: center;padding: 15px;">
+                                                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                                                    style="margin: 0!important;">Close</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- View Detail description of the Finance request post section end  -->
+                                                <!-- chat with staff modal start  -->
+                                                <div class="modal fade" id="chat{{request.id}}" tabindex="-1" role="dialog"
+                                                    aria-labelledby="chat{{request.id}}" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <form method="post" id="chat" enctype="multipart/form-data">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h3 class="modal-title" id="chat{{request.id}}">Post Title : {{ help.title }}
+                                                                    </h3>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="textcontainer">
+                                                                        <div class="message_area" id="messagearea"
+                                                                            style="position: relative;width: 100%;padding: 10px;height: 300px;overflow-y: scroll;margin-bottom: 10px;border: 1px solid rgba(0, 0, 0, 0.19);border-radius: 7px;">
+                                                                            {% include 'faculty/chat.html' %}
+                                                                        </div>
+                                                                        <div style="display: flex;justify-content: space-between;align-items: center;">
+                                                                            <div class="textarea">
+                                                                                <textarea name="message" id="message{{request.id}}" class="form-control"
+                                                                                    rows="2"></textarea>
+                                                                            </div>
+                                                                            <button type="button" class="btn btn-primary"
+                                                                                style="margin-bottom: 0px !important;"
+                                                                                onclick="addchat('{{request.id}}')">send</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <!-- chat with staff modal end  -->
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <!-- end finance-request content container -->
+                            </div>
+                            <div class="col-md-3">
+                                <!-- start sidebar -->
+                                <aside class="mu-sidebar">
+                                    <!-- start single sidebar -->
+    
+                                    <!-- end single sidebar -->
+                                    <!-- start single sidebar -->
+                                    <div class="mu-single-sidebar">
+                                        <h3>Featured Sponsors</h3>
+                                        <div class="mu-sidebar-popular-courses">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Medical Science</a></h4>
+                                                    <span class="popular-course-price">$200.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Web Design</a></h4>
+                                                    <span class="popular-course-price">$250.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Health & Sports</a></h4>
+                                                    <span class="popular-course-price">$90.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end single sidebar -->
+                                    <!-- start single sidebar -->
+                                    <div class="mu-single-sidebar">
+                                        <h3>Featured Mentors</h3>
+                                        <div class="mu-sidebar-popular-courses">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Medical Science</a></h4>
+                                                    <span class="popular-course-price">$200.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Web Design</a></h4>
+                                                    <span class="popular-course-price">$250.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Health & Sports</a></h4>
+                                                    <span class="popular-course-price">$90.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end single sidebar -->
+                                    <!-- end single sidebar -->
+    
+                                    <!-- start single sidebar -->
+                                    <div class="mu-single-sidebar">
+                                        <h3>My Posts</h3>
+                                        <div class="mu-sidebar-popular-courses">
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Medical Science</a></h4>
+                                                    <span class="popular-course-price">$200.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Web Design</a></h4>
+                                                    <span class="popular-course-price">$250.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="media">
+                                                <div class="media-left">
+                                                    <a href="#">
+                                                        <img class="media-object"
+                                                            src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
+                                                    </a>
+                                                </div>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><a href="#">Health & Sports</a></h4>
+                                                    <span class="popular-course-price">$90.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- end single sidebar -->
+    
+                                </aside>
+                                <!-- / end sidebar -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/faculty/faculty.js' %}"></script>
+{% endblock javascript %}

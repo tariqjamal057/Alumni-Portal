@@ -2,7 +2,9 @@
 # from tkinter import CASCADE
 # from turtle import title
 # from unicodedata import category
+from atexit import register
 from datetime import datetime
+from tkinter import CASCADE
 from django.db import models
 # from django.contrib.auth.models import 
 # from django.contrib.auth.base_user import AbstractBaseUser
@@ -12,11 +14,11 @@ from django.forms import CharField, DateField, DateTimeField
 from django.http import HttpResponse
 # from django.core.exceptions import ValidationError
 # from django.core.validators import MinValueValidator, MaxValueValidator
-from django.db.models import Q
+# from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
-# from ckeditor.fields import RichTextField
-# from ckeditor_uploader.fields import RichTextUploadingField
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
 gender_options = (('','Choose Gender'),('M','Male'),('F','Female'))
 
@@ -76,28 +78,28 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser , PermissionsMixin):
-    username = models.CharField(max_length=30, blank=True, null=True)
+    username = models.CharField(max_length=30)
     email = models.EmailField(_('email address'),unique=True )
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
-    gender = models.CharField(choices=gender_options,max_length=1,blank=True)
+    first_name = models.CharField(_('first name'), max_length=30)
+    last_name = models.CharField(_('last name'), max_length=30)
+    gender = models.CharField(choices=gender_options,max_length=1)
     dob = models.DateField(blank=True,null=True)    
-    mobile_no=models.CharField(max_length=10,blank=True,null=True)
-    profile_photo=models.ImageField(blank=True,null=True,upload_to="profile_picture")
-    department = models.ForeignKey(Department,on_delete=models.CASCADE,null=True,blank=True)
-    batch = models.ForeignKey(Batch,on_delete=models.CASCADE,blank=True,null=True)
+    mobile_no=models.CharField(max_length=10)
+    profile_photo=models.ImageField(upload_to="profile_picture")
+    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    register_number = models.IntegerField(blank=True, null=True)
+    batch = models.ForeignKey(Batch,on_delete=models.CASCADE)
     country = models.ForeignKey(Country,on_delete=models.CASCADE,null=True,blank=True)
     location = models.CharField(max_length=100,null=True,blank=True)
     state = models.ForeignKey(State,on_delete=models.CASCADE,null=True,blank=True)
     district = models.ForeignKey(District,on_delete=models.CASCADE,null=True,blank=True)
-    current_address=models.TextField(blank=True,null=True)
-    permanent_address = models.TextField(blank=True,null=True)
-    registered_on=models.DateField(auto_now_add=True)
+    current_address=models.TextField()
+    permanent_address = models.TextField()
+    registered_on = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=False) 
-    is_staff=models.BooleanField(default=False)     
-    groups=models.ManyToManyField(Group)
-    is_temporary = models.BooleanField
-     
+    is_staff = models.BooleanField(default=False)     
+    groups = models.ManyToManyField(Group)
+      
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
@@ -145,9 +147,9 @@ class PostEducationDetail(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     degree = models.CharField(max_length=256)
     institute_or_university = models.CharField(max_length=100)
-    currently_pursing_this = models.BooleanField(default=False)
+    currently_pursing = models.BooleanField(default=False)
     from_date = models.DateField()
-    to_date = models.DateField(null=True,blank=True)
+    to_date = models.DateField(null=True,blank=True)####
 
     def __str__(self):
         return self.user.first_name + self.degree
@@ -166,16 +168,110 @@ class ExperienceDetail(models.Model):
 
 
 
-# class Finance(models.Model):
-#     studentname = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
-#     studentdetails = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
-#     timestamp = models.DateField(auto_now_add=True)
+
+post_type_options = (
+    ('O','Opportunity') , ('S','Seeking Job') , ('I','Internship')
+)
+class Post(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user',null=True, blank=True)
+    title = models.CharField(max_length=200)
+    content = RichTextUploadingField()
+    date = models.DateTimeField(auto_now_add=True)
+    post_type = models.CharField(choices=post_type_options,max_length=1,blank=True)
+    deadline = models.DateField(null=True,blank=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE , related_name='postedby', null=True, blank=True)
+
+class PostResponse(models.Model):
+    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskpost')
+    user = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskuser')
+
+class ResponseMessage(models.Model):
+    user = models.ForeignKey(Post , on_delete=models.CASCADE)
+    post_response = models.ForeignKey(PostResponse , on_delete= models.CASCADE)
+    message = models.TextField()
+    date = models.DateTimeField()
+
+
+class Tech_Help_Post(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='techhelpuser',null=True, blank=True)
+    title = models.CharField(max_length=200)
+    stack = models.CharField(max_length=200, null=True, blank=True)
+    content = RichTextUploadingField()
+    date = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateField(null=True,blank=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE  ,related_name='studentname', null=True, blank=True)
+
+class Tech_Help_PostResponse(models.Model):
+    post = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='studentpost')
+    user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='student')
+
+class Tech_Help_ResponseMessage(models.Model):
+    user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE)
+    post_response = models.ForeignKey(Tech_Help_PostResponse , on_delete= models.CASCADE)
+    message = models.TextField()
+    date = models.DateTimeField()
+
+# mode_of_payment = (
+#     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
+
+class Mark(models.Model):
+    exam = models.CharField(max_length=50)
+    percentage_or_cgpa =  models.DecimalField(max_digits=4,decimal_places=1)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.exam
+    
+
+
 
 class Finance_request(models.Model):
     title = models.CharField(max_length=100)
+    image = models.ImageField(upload_to ='student_images/')
     student_name = models.CharField(max_length=50)
+    department = models.ForeignKey(Department,on_delete = models.CASCADE)
+    year = models.IntegerField()
     description = models.TextField()
-    amount = models.IntegerField()
-    marks = models.IntegerField()
+    # amount = models.IntegerField()
+    needs = models.TextField()
+    marks = models.ForeignKey(Mark,on_delete=models.CASCADE , related_name='student_marks')
+    # percentage_or_HSC_marks = models.DecimalField(max_digits=3,decimal_places=2)
+    achievements = models.TextField()
+    academics_performance = models.TextField()
+    other_performance = models.TextField()
+    # deadline = models.DateField(default=datetime.now)
     date = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.student_name
+
+    def get_interested_alumni(self):
+        return Finance_request_Post_Response.objects.filter(post=self)
+
+class Finance_request_Post_Response(models.Model):
+    post = models.ForeignKey(Finance_request , on_delete=models.CASCADE , related_name='helpdeskpost')
+    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='helpdeskuser')
+
+    def get_alumni_msgs(self):
+        return Finance_request_Response_Message.objects.filter(user=self.user)
+
+class Finance_request_Response_Message(models.Model):
+    user = models.ForeignKey(Finance_request , on_delete=models.CASCADE)
+    post_response = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE)
+    message = models.TextField()
+    date = models.DateTimeField()
+
+class Finance(models.Model):
+    student_name = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
+    student_details = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
+    date = models.DateField(auto_now_add=True)
+    # modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
+
+    def __str__(self):
+        return self.studentname.student_name
+
+class featured_Sponser(models.Model):
+    user = models.ForeignKey(Finance_request_Post_Response, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+    date = models.DateTimeField()

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    {% include 'dashboard-navigation/navigation.html' %}
+    <div class="mu-course-container">
+        <div class="column">
+            <div class="row justify-content-center align-items-center">
+            {% for request in finance_post %}
+            <div class="container text-center">
+                <div class="col-md-6 col-sm"> 
+                 
+                    <div style="
+                        padding: 10px;
+                        margin: 10px 0px;
+                        border-radius: 7px;
+                        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
+                        position: relative;
+                        background: #fff;
+                        " class="d-flex justify-content-center">
+                       
+                            <div style="display: flex" class="post-container">
+                                <div class="img-square-wrapper" style="margin-right: 10px">
+                                    <img style="width: 100px; height: 100px" class="" src="{{ request.image.url }}"
+                                    ="Card image cap" />
+                                </div>
+
+                                <div style="flex: 1" class="d-flex justify-content-left">
+                                    <h4><b> {{request.title}}</b></h4>
+                                        <p class="card-text">Name : {{ request.student_name }}
+                                    &nbsp &nbsp Year : {{ request.year }}</p>
+                                <!-- {{request.id}} -->
+                                    <p>Description: {{request.description}}</p>
+
+                                    <div class="col-md-12 bg-light text-right">
+                                    <a href="{% url 'student_detail' request.id %}" class="btn btn-primary btn-xl float-right" style="margin-left: 20px !important;" >View Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                </div>    
+                
+            </div>        
+        </div>
+    </div> 
+</div> 
+{% endfor%}
+                       
+{% endblock content %}

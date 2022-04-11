@@ -1,0 +1,214 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="mu-course-container">
+    <div class="row">
+
+        {% for request in requests %}
+        <div class="col-md-6 col-sm">
+            <div style="
+            padding: 10px;
+            margin: 10px 0px;
+            border-radius: 7px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
+            position: relative;
+            background: #fff;
+            ">
+                <div style="display: flex" class="post-container">
+                    <div class="img-square-wrapper" style="margin-right: 10px">
+                        <img style="width: 100px; height: 100px" class="" src="{{ request.image.url }}"
+                            alt="Card image cap" />
+                    </div>
+                    <div style="flex: 1">
+                        <h5>{{ request.title}}</h5>
+                        <p class="card-text">{{ request.student_name }}</p>
+                        <p>{{ request.description}}</p>
+                        {{request.id}}
+                    </div>
+                    <div style="display: flex; position: absolute; right: 10px; top: 10px">
+                        <button type="button" class="btn btn-info"
+                            style="margin-top: 0px !important; margin-right: 10px !important" data-toggle="modal"
+                            data-target="#updateFinancialRequest{{request.id}}" onclick="get_form('{{request.id}}')">
+                            <i class="fa fa-pencil-square-o"></i>
+                        </button>
+                        <div>
+                            <!-- update Financial request section start -->
+                            <div class="modal fade" id="updateFinancialRequest{{request.id}}" tabindex="-1"
+                                role="dialog" aria-labelledby="updateFinancialRequest{{request.id}}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <form method="post" id="update_request{{request.id}}" enctype="multipart/form-data">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h3 class="modal-title" id="updateFinancialRequest{{request.id}}">Update
+                                                    Finance Request</h3>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div id="update_container{{request.id}}">
+                                                    {% include 'faculty/update_financial_request.html' %}
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="submit" onclick="update_form('{{request.id}}')"
+                                                    class="btn btn-primary">update</button>
+                                                <button type="button" class="btn btn-default"
+                                                    data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- update Financial request section end -->
+                        </div>
+                        <button type="button" class="btn btn-danger" style="margin-top: 0px !important"
+                            data-toggle="modal" data-target="#deleteRequest{{request.id}}">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                        <!-- Delete particular Finance request post start  -->
+                        <div class="modal fade" id="deleteRequest{{request.id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="deleteRequest{{request.id}}" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteRequest{{request.id}}">Delete Financial
+                                            Request</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Do you want to delete the financial request of
+                                            <b>{{ request.student_name}}</b>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger"
+                                            onclick="delete_post('{{request.id}}')"
+                                            style="margin: 0!important;">Delete</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                            style="margin: 0!important;">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Delete particular Finance request post end  -->
+                        
+                        </div>
+                    </div>
+                    <!-- style="margin: 4px !important; margin-top: 10px !important" -->
+                    <div class="col-md-12 bg-light text-right">
+                        <div class="btn btn-primary" data-toggle="modal" data-target="#detailPageModal{{request.id}}">
+                            View details
+                        </div>
+                        <!-- <a href="{% url 'faculty_view_student_details.html' request.id %}" class="btn btn-primary btn-xl float-right" style="margin-left: 20px !important;" >View Details</a> -->
+                    </div>
+                
+                       
+                    </div>
+                
+
+                <div class="modal fade bd-example-modal-lg" id="msg_modal{{request.id}}" tabindex="-1" aria-labelledby="msg_modal{{request.id}}" aria-hidden="true">
+                <div class="modal-dialog ">
+                <div class="modal-content">
+    
+                {% for interested in request.get_interested_alumni %}
+                
+                <button type="button" class="btn btn-primary btn-sm"
+                    style="margin: 0px !important; margin-top: 10px !important" data-toggle="modal"
+                    data-target="#chat{{request.id}}">Chat with Alumini</button>
+                     <!-- chat with staff modal start  -->
+                <div class="modal fade" id="chat{{request.id}}" tabindex="-1" role="dialog"
+                aria-labelledby="chat{{request.id}}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title" id="chat{{request.id}}">Post Title : {{ request.title }}
+                                </h3>
+                                <h4 class="modal-title" id="chat{{request.id}}">Staff Name : {{ request.posted_by }}
+                                </h4>
+                                <!-- <h4 class="modal-title" id="chat{{request.id}}">Amount : {{ request.amount }}</h4> -->
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="textcontainer">
+                                    <div class="message_area" id="messagearea"
+                                        style="position: relative;width: 100%;padding: 10px;height: 300px;overflow-y: scroll;margin-bottom: 10px;border: 1px solid rgba(0, 0, 0, 0.19);border-radius: 7px;">
+                                        {% include 'faculty/chat.html' %}
+                                    </div>
+                                    <div style="display: flex;justify-content: space-between;align-items: center;">
+                                        <div class="textarea">
+                                            <textarea name="message" id="chat_btn{{request.id}}"class="form-control"
+                                                rows="2"></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary"
+                                            style="margin-bottom: 0px !important;"
+                                            onclick="addchat('{{request.id}}')">send</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+
+            {% empty %}
+
+            <h1>Hi</h1>
+            <!-- chat with staff modal end  -->
+            {% endfor %}
+        </div>
+    </div>
+  </div>
+                <!-- View Detail description of the Finance request post section start  -->
+                <div class="modal fade" id="detailPageModal{{request.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="detailPageModalTitle" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="detailPageModalTitle">{{request.title}}</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img style="width: 100px; height: 100px" class="" src="{{ request.image.url }}"
+                                    alt="Card image cap" />
+                                <h3>Name : {{request.student_name}}</h3>
+                                <p> Amount : {{ request.amount }}</p>
+                                <p>Description : {{ request.description }}</p>
+                                <p>Marks : {{ request.marks }}</p>
+                                <!-- <p>{{ request.achievement }}</p> -->
+                                <!-- <p>Deadline : {{ request.deadline }}</p> -->
+                            </div>
+                            <hr style="margin: 0!important">
+                            <div
+                                style="display: flex;justify-content: space-between;align-items: center;padding: 15px;">
+                                <button type="button" class="btn btn-primary" data-dismiss="modal"
+                                    style="margin: 0!important;">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- View Detail description of the Finance request post section end  -->
+                
+               
+            </div>
+        </div>
+        {% endfor %}
+        <!-- <div class="btn btn-primary btn-xl" style="margin-left: 20px !important;" id="loadmoreBtn" onclick="load_more()">Load more</div> -->
+    </div>
+</div>
+{% endblock content %}
+{% block javascript %}
+<script src="{% static 'js/faculty/faculty.js' %}"></script>
+{% endblock javascript %}

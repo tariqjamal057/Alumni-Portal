@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
+{% endblock style %}
+
+{% block content %}
+{% include 'dashboard-navigation/navigation.html' %}
+
+<!-- Create Financial request section start -->
+<div class="modal fade" id="addFinancialRequest" data-backdrop="false" tabindex="-1" role="dialog"
+	aria-labelledby="addFinancialRequestTitle" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<form method="post" id="create_request" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title" id="addFinancialRequestTitle">Create Finance Request</h3>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					{% csrf_token %}
+					{{form | crispy}}
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Save</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</form>
+	</div>
+</div> 
+<!-- Create Financial request section end -->
+
+
+<section id="mu-course-content">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="mu-course-content-area">
+					<div class="row" style="margin-bottom: 20px;">
+						<div style="display: flex;justify-content: space-between;">
+							<div style="display: flex;">
+								<h2>Financial Request</h2>
+								<button type="button" style="margin-top: 5px!important;margin-left: 20px!important;"
+									class="btn btn-primary" data-toggle="modal" data-target="#addFinancialRequest">
+									Add Request
+								</button>
+							</div>
+							<!-- <p>Search</p> -->
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-9" id="finance_request_container"
+							style="background-color:#fff; padding: 20px;">
+							<!-- start finance-request content container -->
+							{% include 'faculty/financial_request.html' %}
+							<!-- end finance-request content container -->
+						</div>
+						
+						
+						<div class="col-md-3">
+							<!-- start sidebar -->
+							<aside class="mu-sidebar">
+								
+								<!-- end single sidebar -->
+								<!-- start single sidebar -->
+								<div class="mu-single-sidebar">
+									
+									<h3>Recent Chats</h3>
+									
+										
+										<div class="col-md-12 bg-light text-right">
+											Vimal S <div class="btn btn-primary btn-sm">
+											View Chat Messages
+											</div>
+										</div>
+
+										<div class="col-md-12 bg-light text-right">
+											Vignesh N <div class="btn btn-primary btn-sm">
+											View Chat Messages
+											</div>
+										</div>
+
+										<div class="col-md-12 bg-light text-right">
+											Harshan R <div class="btn btn-primary btn-sm">
+											View Chat Messages
+											</div>
+										</div>
+										
+										<div class="col-md-12 bg-light text-right">
+											Naveen<div class="btn btn-primary btn-sm">
+											View Chat Messages
+											</div>
+										</div>
+
+										<div class="col-md-12 bg-light text-right">
+											Dharun <div class="btn btn-primary btn-sm">
+											View Chat Messages
+											</div>
+										</div>
+									</div>
+								</div>
+							</div> 
+						</aside>
+					</div>
+				</div>
+			</div>
+		</div> 
+	</div>
+</div>
+</section>
+{% endblock content %}
+
+{% block javascript %}
+
+{% endblock javascript %}
+										
