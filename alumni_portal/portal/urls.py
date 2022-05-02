@@ -28,11 +28,13 @@ urlpatterns = [
     path('404/',views.page404,name = "page404")
     ,
     path('request/create-finance-post/',views.create_Finance_Post,name = "create-finance-post"),
-    path('request/update-finance-post/',views.update_Finance_Post,name = "update-finance-post"),
+    path('request/update-finance-post/<int:pk>',views.update_Finance_Post,name = "update-finance-post"),
     path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post"),
-    path('finance_requests/',views.finance_request_page,name="finance_request")
+    path('request/view_datails/?id=<int:pk>',views.view_detail_page , name="request_details"),
+    path('finance_requests/',views.finance_request_page,name="finance_request"),
+    path('request_detail_page/?id=<int:pk>',views.finance_request_detail_page,name="request_detail_page")
     ,
-    path('chat/',views.addResponse_Message,name="addchatmessage"),
+    # path('chat/',views.addResponse_Message,name="addchatmessage"),
     path('alumni_response/',views.alumini_message,name="alumini_message")
     ,
     path('request/create-mentor-help-post/',views.create_mentor_post,name = "create-mentor-help-post"),
@@ -45,8 +47,5 @@ urlpatterns = [
     path('request/update-mentor-help-post/',views.update_mentor_post,name = "update-mentor-help-post"),
     path('request/delete-mentor-help-post/',views.delete_mentor_post,name = "delete-mentor-help-post"),
 
-    path('view_student_detail/<int:id>',views.view_student_details , name="student_detail"),
-    # path('faculty_view_student_details/<int:id>', views.view_student_details, name="faculty_view_student_detail"),
-    
 
 ]

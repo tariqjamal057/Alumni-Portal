@@ -9,31 +9,7 @@
 {% block content %}
 {% include 'dashboard-navigation/navigation.html' %}
 
-<!-- Create Financial request section start -->
-<div class="modal fade" id="addFinancialRequest" data-backdrop="false" tabindex="-1" role="dialog"
-	aria-labelledby="addFinancialRequestTitle" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<form method="post" id="create_request" enctype="multipart/form-data">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="addFinancialRequestTitle">Create Finance Request</h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					{% csrf_token %}
-					{{form | crispy}}
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Save</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div> 
-<!-- Create Financial request section end -->
+
 
 
 <section id="mu-course-content">
@@ -45,10 +21,11 @@
 						<div style="display: flex;justify-content: space-between;">
 							<div style="display: flex;">
 								<h2>Financial Request</h2>
-								<button type="button" style="margin-top: 5px!important;margin-left: 20px!important;"
-									class="btn btn-primary" data-toggle="modal" data-target="#addFinancialRequest">
+								<a href="/request/create-finance-post"
+									style="margin-top: 5px!important;margin-left: 20px!important;"
+									class="btn btn-primary">
 									Add Request
-								</button>
+								</a>
 							</div>
 							<!-- <p>Search</p> -->
 						</div>
@@ -57,65 +34,152 @@
 						<div class="col-md-9" id="finance_request_container"
 							style="background-color:#fff; padding: 20px;">
 							<!-- start finance-request content container -->
-							{% include 'faculty/financial_request.html' %}
-							<!-- end finance-request content container -->
-						</div>
-						
-						
-						<div class="col-md-3">
-							<!-- start sidebar -->
-							<aside class="mu-sidebar">
-								
-								<!-- end single sidebar -->
-								<!-- start single sidebar -->
-								<div class="mu-single-sidebar">
-									
-									<h3>Recent Chats</h3>
-									
-										
-										<div class="col-md-12 bg-light text-right">
-											Vimal S <div class="btn btn-primary btn-sm">
-											View Chat Messages
-											</div>
-										</div>
+							<div class="mu-course-container">
+								<div class="row">
+									{% for request in requests %}
+									<div class="col-md-6 col-sm">
+										<div style="
+										padding: 10px;
+										margin: 10px 0px;
+										border-radius: 7px;
+										box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
+										position: relative;
+										background: #fff;
+										">
+											<div style="display: flex;flex-direction: column;">
+												<div style="display: flex" class="post-container">
+													<div class="img-square-wrapper" style="margin-right: 10px">
+														<img style="width: 100px; height: 100px;border-radius:50%;"
+															class="" src="{{ request.image.url }}"
+															alt="Card image cap" />
+													</div>
+													<div style="flex: 1">
+														<div style="display: flex;justify-content: space-between;">
+															<h4>{{ request.title | truncatechars:20}}</h4>
+															<div
+																style="display: flex;align-items: center;justify-content: center;">
+																<a class="btn btn-sm btn-primary"
+																	href="{% url 'update-finance-post' request.id %}"
+																	style="margin-top: 0px !important;"><i
+																		class="fa fa-pencil-square-o"></i></a>
+																<button type="button" class="btn btn-danger btn-sm"
+																	style="margin-top: 0px !important;margin-left: 5px !important;"
+																	data-toggle="modal"
+																	data-target="#deleteRequest{{request.id}}">
+																	<i class="fa fa-trash"></i>
+																</button>
+																<!-- Delete particular Finance request post start  -->
+																<div class="modal fade" id="deleteRequest{{request.id}}"
+																	tabindex="-1" role="dialog"
+																	aria-labelledby="deleteRequest{{request.id}}"
+																	aria-hidden="true">
+																	<div class="modal-dialog" role="document">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<h5 class="modal-title"
+																					id="deleteRequest{{request.id}}">
+																					Delete Financial
+																					Request</h5>
+																				<button type="button" class="close"
+																					data-dismiss="modal"
+																					aria-label="Close">
+																					<span
+																						aria-hidden="true">&times;</span>
+																				</button>
+																			</div>
+																			<div class="modal-body">
+																				<p>Do you want to delete the financial
+																					request of
+																					<b>{{ request.student_name}}</b>
+																				</p>
+																			</div>
+																			<div class="modal-footer">
+																				<button type="button"
+																					class="btn btn-danger"
+																					onclick="delete_post('{{request.id}}')"
+																					style="margin: 0!important;">Delete</button>
+																				<button type="button"
+																					class="btn btn-primary"
+																					data-dismiss="modal"
+																					style="margin: 0!important;">Close</button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<!-- Delete particular Finance request post end  -->
+															</div>
 
-										<div class="col-md-12 bg-light text-right">
-											Vignesh N <div class="btn btn-primary btn-sm">
-											View Chat Messages
+														</div>
+														<div style="display: flex;">
+															<p class="card-text">name : {{ request.student_name }}</p>
+															&nbsp;&nbsp;
+															<p class="card-text">Year : {{ request.year }}<sup>rd</sup>
+																{{request.department}}</p>
+														</div>
+														<p style="font-size: 15px !important;">Description :
+															{{request.description | truncatechars:50}}</p>
+													</div>
+												</div>
+												<div class="col-md-12 bg-light text-right"
+													style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
+													<a href="{% url 'request_details' request.id %}"
+														class="btn btn-primary"
+														style="margin: 0 !important;margin-top: 10px !important;">
+														View details
+													</a>
+												</div>
 											</div>
-										</div>
 
-										<div class="col-md-12 bg-light text-right">
-											Harshan R <div class="btn btn-primary btn-sm">
-											View Chat Messages
-											</div>
-										</div>
-										
-										<div class="col-md-12 bg-light text-right">
-											Naveen<div class="btn btn-primary btn-sm">
-											View Chat Messages
-											</div>
-										</div>
-
-										<div class="col-md-12 bg-light text-right">
-											Dharun <div class="btn btn-primary btn-sm">
-											View Chat Messages
-											</div>
 										</div>
 									</div>
+									{% endfor %}
+									<!-- end finance-request content container -->
 								</div>
-							</div> 
-						</aside>
+
+
+								<div class="col-md-3">
+									<!-- start sidebar -->
+									<aside class="mu-sidebar">
+
+										<!-- end single sidebar -->
+										<!-- start single sidebar -->
+
+								</div>
+							</div>
+							</aside>
+						</div>
+					</div>
+					<div class="row" style="background-color:#fff;">
+						<div class="col-md-9">
+							{% if requests.has_other_pages %}
+								<!-- Pagination -->
+								<nav class="my-3 container">
+									<ul class="pagination">
+										{% if requests.has_previous %}
+									<li class="page-item"><a class="page-link" href="?page={{requests.previous_page_number}}">Previous</a></li>
+									{% endif %}
+									{% for i in requests.paginator.page_range %}
+									{% if requests.number == i %}
+									<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+									{% else %}
+									<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+									{% endif %}
+									{% endfor %}
+									{% if requests.has_next %}
+									<li class="page-item"><a class="page-link" href="?page={{requests.next_page_number}}">Next</a></li>
+									{% endif %}
+									</ul>
+								</nav>
+							{% endif %}
+						</div>
 					</div>
 				</div>
 			</div>
-		</div> 
+		</div>
 	</div>
-</div>
 </section>
 {% endblock content %}
 
 {% block javascript %}
-
+<script src="{% static 'js/faculty/faculty.js' %}"></script>
 {% endblock javascript %}
-										

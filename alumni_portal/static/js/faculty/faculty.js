@@ -1,42 +1,42 @@
-// Add Finance request
-$(document).on("submit", "#create_request", function (e) {
-  e.preventDefault();
-  // alert('hai');
-  $("#addFinancialRequest").modal("hide");
+// // Add Finance request
+// $(document).on("submit", "#create_request", function (e) {
+//   e.preventDefault();
+//   // alert('hai');
+//   $("#addFinancialRequest").modal("hide");
 
-  const financial_request_form = new FormData($("#create_request")[0]);
-  $.ajax({
-    type: "POST",
-    url: "/request/create-finance-post/",
-    data: financial_request_form,
-    processData: false,
-    contentType: false,
-    success: function (response) {
-      $("#finance_request_container").html(response.html);
-      console.log("saved in database");
-      swal({
-        title: "Add Financial",
-        text: "Financial Request Added",
-        icon: "success",
-        closeOnClickOutside: false,
-        buttons: {
-          cancel: {
-            text: "Cancel",
-            value: false,
-            visible: true,
-            closeModal: true,
-          },
-          confirm: {
-            text: "ok",
-            value: true,
-            visible: true,
-            closeModal: true,
-          },
-        },
-      });
-    },
-  });
-});
+//   const financial_request_form = new FormData($("#create_request")[0]);
+//   $.ajax({
+//     type: "POST",
+//     url: "/request/create-finance-post/",
+//     data: financial_request_form,
+//     processData: false,
+//     contentType: false,
+//     success: function (response) {
+//       $("#finance_request_container").html(response.html);
+//       console.log("saved in database");
+//       swal({
+//         title: "Add Financial",
+//         text: "Financial Request Added",
+//         icon: "success",
+//         closeOnClickOutside: false,
+//         buttons: {
+//           cancel: {
+//             text: "Cancel",
+//             value: false,
+//             visible: true,
+//             closeModal: true,
+//           },
+//           confirm: {
+//             text: "ok",
+//             value: true,
+//             visible: true,
+//             closeModal: true,
+//           },
+//         },
+//       });
+//     },
+//   });
+// });
 
 // update Finance Request
 function update_form(id) {

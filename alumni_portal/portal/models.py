@@ -80,21 +80,21 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser , PermissionsMixin):
     username = models.CharField(max_length=30)
     email = models.EmailField(_('email address'),unique=True )
-    first_name = models.CharField(_('first name'), max_length=30)
-    last_name = models.CharField(_('last name'), max_length=30)
-    gender = models.CharField(choices=gender_options,max_length=1)
+    first_name = models.CharField(_('first name'), max_length=30,null=True,blank=True)
+    last_name = models.CharField(_('last name'), max_length=30,null=True,blank=True)
+    gender = models.CharField(choices=gender_options,max_length=1,null=True,blank=True)
     dob = models.DateField(blank=True,null=True)    
-    mobile_no=models.CharField(max_length=10)
-    profile_photo=models.ImageField(upload_to="profile_picture")
-    department = models.ForeignKey(Department,on_delete=models.CASCADE)
+    mobile_no=models.CharField(max_length=10,null=True,blank=True)
+    profile_photo=models.ImageField(upload_to="profile_picture",null=True,blank=True)
+    department = models.ForeignKey(Department,on_delete=models.CASCADE,null=True,blank=True)
     register_number = models.IntegerField(blank=True, null=True)
-    batch = models.ForeignKey(Batch,on_delete=models.CASCADE)
+    batch = models.ForeignKey(Batch,on_delete=models.CASCADE,null=True,blank=True)
     country = models.ForeignKey(Country,on_delete=models.CASCADE,null=True,blank=True)
     location = models.CharField(max_length=100,null=True,blank=True)
     state = models.ForeignKey(State,on_delete=models.CASCADE,null=True,blank=True)
     district = models.ForeignKey(District,on_delete=models.CASCADE,null=True,blank=True)
-    current_address=models.TextField()
-    permanent_address = models.TextField()
+    current_address=models.TextField(null=True,blank=True)
+    permanent_address = models.TextField(null=True,blank=True)
     registered_on = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(_('active'), default=False) 
     is_staff = models.BooleanField(default=False)     
@@ -214,17 +214,8 @@ class Tech_Help_ResponseMessage(models.Model):
 # mode_of_payment = (
 #     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
 
-class Mark(models.Model):
-    exam = models.CharField(max_length=50)
-    percentage_or_cgpa =  models.DecimalField(max_digits=4,decimal_places=1)
-    date = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
-        return self.exam
-    
-
-
-
+type_of_exam = (('s','select'),('+2','12 Exam Marks'),('cg','CGPA'))
 class Finance_request(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to ='student_images/')
@@ -232,14 +223,11 @@ class Finance_request(models.Model):
     department = models.ForeignKey(Department,on_delete = models.CASCADE)
     year = models.IntegerField()
     description = models.TextField()
-    # amount = models.IntegerField()
     needs = models.TextField()
-    marks = models.ForeignKey(Mark,on_delete=models.CASCADE , related_name='student_marks')
-    # percentage_or_HSC_marks = models.DecimalField(max_digits=3,decimal_places=2)
-    achievements = models.TextField()
-    academics_performance = models.TextField()
-    other_performance = models.TextField()
-    # deadline = models.DateField(default=datetime.now)
+    exam_name = models.CharField(choices=type_of_exam,max_length=20,null=True)
+    percentage_or_cgpa =  models.IntegerField(null=True)
+    achievements = models.TextField(null=True)
+    other_performance = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
 

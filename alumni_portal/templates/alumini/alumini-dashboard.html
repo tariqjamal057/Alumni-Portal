@@ -1,52 +1,111 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% load static %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
+{% endblock style %}
+
 {% block content %}
+{% include 'dashboard-navigation/navigation.html' %}
 
-    {% include 'dashboard-navigation/navigation.html' %}
-    <div class="mu-course-container">
-        <div class="column">
-            <div class="row justify-content-center align-items-center">
-            {% for request in finance_post %}
-            <div class="container text-center">
-                <div class="col-md-6 col-sm"> 
-                 
-                    <div style="
-                        padding: 10px;
-                        margin: 10px 0px;
-                        border-radius: 7px;
-                        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
-                        position: relative;
-                        background: #fff;
-                        " class="d-flex justify-content-center">
-                       
-                            <div style="display: flex" class="post-container">
-                                <div class="img-square-wrapper" style="margin-right: 10px">
-                                    <img style="width: 100px; height: 100px" class="" src="{{ request.image.url }}"
-                                    ="Card image cap" />
-                                </div>
 
-                                <div style="flex: 1" class="d-flex justify-content-left">
-                                    <h4><b> {{request.title}}</b></h4>
-                                        <p class="card-text">Name : {{ request.student_name }}
-                                    &nbsp &nbsp Year : {{ request.year }}</p>
-                                <!-- {{request.id}} -->
-                                    <p>Description: {{request.description}}</p>
 
-                                    <div class="col-md-12 bg-light text-right">
-                                    <a href="{% url 'student_detail' request.id %}" class="btn btn-primary btn-xl float-right" style="margin-left: 20px !important;" >View Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                       
-                    </div>
-                </div>    
-                
-            </div>        
-        </div>
-    </div> 
-</div> 
-{% endfor%}
-                       
+
+<section id="mu-course-content">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="mu-course-content-area">
+					<div class="row" style="margin-bottom: 20px;">
+						<div style="display: flex;justify-content: space-between;">
+							<div style="display: flex;">
+								<h2>Financial Request</h2>
+							</div>
+							<form>
+								<div class="input-group">
+									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
+									<div class="input-group-append">
+									<button class="btn btn-dark btn-lg" type="submit" id="button-addon2">Search</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-9" id="finance_request_container"
+							style="background-color:#fff; padding: 20px;">
+							<!-- start finance-request content container -->
+							<div class="mu-course-container">
+								<div class="row">
+									{% for request in finance_post %}
+									<div class="col-md-6 col-sm">
+										<div style="
+										padding: 10px;
+										margin: 10px 0px;
+										border-radius: 7px;
+										box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
+										position: relative;
+										background: #fff;
+										">
+											<div style="display: flex;flex-direction: column;">
+												<div style="display: flex" class="post-container">
+													<div class="img-square-wrapper" style="margin-right: 10px">
+														<img style="width: 100px; height: 100px;border-radius:50%;"
+															class="" src="{{ request.image.url }}"
+															alt="Card image cap" />
+													</div>
+													<div style="flex: 1">
+														<div style="display: flex;justify-content: space-between;">
+															<h4>{{ request.title | truncatechars:20}}</h4>
+
+														</div>
+														<div style="display: flex;">
+															<p class="card-text">name : {{ request.student_name }}</p>
+															&nbsp;&nbsp;
+															<p class="card-text">Year : {{ request.year }}<sup>rd</sup>
+																{{request.department}}</p>
+														</div>
+														<p style="font-size: 15px !important;">Description :
+															{{request.description | truncatechars:50}}</p>
+													</div>
+												</div>
+												<div class="col-md-12 bg-light text-right"
+													style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
+													<a href="{% url 'request_detail_page' request.id %}"
+														class="btn btn-primary"
+														style="margin: 0 !important;margin-top: 10px !important;">
+														View details
+													</a>
+												</div>
+											</div>
+
+										</div>
+									</div>
+									{% endfor %}
+									<!-- end finance-request content container -->
+								</div>
+
+
+								<div class="col-md-3">
+									<!-- start sidebar -->
+									<aside class="mu-sidebar">
+
+										<!-- end single sidebar -->
+										<!-- start single sidebar -->
+
+								</div>
+							</div>
+							</aside>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
 {% endblock content %}
+
+{% block javascript %}
+<!-- <script src="{% static 'js/faculty/faculty.js' %}"></script> -->
+{% endblock javascript %}

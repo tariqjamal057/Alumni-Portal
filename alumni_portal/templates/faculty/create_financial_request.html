@@ -9,9 +9,9 @@
         <div >
             <h2 style="margin: 20px 0px !important;">Create Financial Request</h2>
             {% csrf_token %}
-            {{ updateform | crispy }}
+            {{ form | crispy }}
             <div class="d-flex justify-content-center">
-                <input type="submit" class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body" value="Create">
+                <input type="submit" class="btn btn-primary btn-block btn-lg" value="Create">
             </div>
         </div>
     </div>

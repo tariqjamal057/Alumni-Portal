@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
-{% load static %}
 {% load crispy_forms_tags %}
+{% load static %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
+{% endblock style %}
 
 {% block content %}
+
 <div>
     <!--START SCROLL TOP BUTTON -->
     <a class="scrollToTop" href="#">
@@ -131,24 +136,19 @@
         </div>
     </section>
     <!-- End breadcrumb -->
+
+
     <section id="mu-course-content">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
                     <div class="mu-course-content-area">
                         <div class="row" style="margin-bottom: 20px;">
-                            <div style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
+                            <div style="display: flex;justify-content: space-between;">
                                 <div style="display: flex;">
                                     <h2>Financial Request</h2>
                                 </div>
-                                <form>
-                                    <div class="input-group" style="display: flex;justify-content: center;align-items: center;">
-                                        <input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
-                                        <div class="input-group-append">
-                                        <button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                <!-- <p>Search</p> -->
                             </div>
                         </div>
                         <div class="row">
@@ -157,89 +157,74 @@
                                 <!-- start finance-request content container -->
                                 <div class="mu-course-container">
                                     <div class="row">
-                                        {% for request in finance_post %}
-                                        <div class="col-md-6 col-sm">
-                                            <div style="
-                                            padding: 10px;
-                                            margin: 10px 0px;
-                                            border-radius: 7px;
-                                            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
-                                            position: relative;
-                                            background: #fff;
-                                            ">
-                                                <div style="display: flex;flex-direction: column;">
-                                                    <div style="display: flex" class="post-container">
-                                                        <div class="img-square-wrapper" style="margin-right: 10px">
-                                                            <img style="width: 100px; height: 100px;border-radius:50%;"
-                                                                class="" src="{{ request.image.url }}"
-                                                                alt="Card image cap" />
+                                        <div class="col-md-12 col-sm">
+                                            <h2>{{ request_details.title}}</h2>
+                                            <h2>{{ request_details.id}}</h2>
+                                            <div class="img-square-wrapper" style="margin-right: 10px;">
+                                                <img style="width: 150px; height: 150px;border-radius:50%;" class=""
+                                                    src="{{ request_details.image.url }}" alt="Card image cap" />
+                                            </div>
+                                            <p class="card-text">name : {{ request_details.student_name }}</p>
+                                            <p class="card-text">Year : {{ request_details.year }}<sup>rd</sup>
+                                                {{request_details.department}}</p>
+                                            <p>Description : {{ request_details.description }}</p>
+                                            <p>Needs : {{ request_details.needs }}</p>
+                                            <p>Exam Name : {{request.exam_name}}</p>
+                                            <p>Percentage or CGPA : {{request.percentage_or_cgpa}}</p>
+                                            <p>Achievements : {{request.achievements}}</p>
+                                            <p>Other Performance : {{request.other_performance}}</p>
+                                            <div class="col-md-12 bg-light text-right"
+                                                style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
+                                                <!-- Button trigger modal -->
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chatModels{{ request_details.id}}">
+                                                    Chat with Staff
+                                                </button>
+                                                
+                                                <!-- Modal -->
+                                                <div class="modal fade" id="chatModels{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="chatModels{{ request_details.id}}Label" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="chatModels{{ request_details.id}}Label" style="float: left;">Modal title</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
                                                         </div>
-                                                        <div style="flex: 1">
-                                                            <div style="display: flex;justify-content: space-between;">
-                                                                <h4>{{ request.title | truncatechars:20}}</h4>
-    
+                                                        <div class="modal-body">
+                                                            <div class="Container">
+                                                                <div style="width: 100%;height: 50vh;background: #0f0;" ></div>
+                                                                <div style="display: flex;justify-content: space-between;align-items: center;margin: 10px 0px;">
+                                                                    {% csrf_token %}
+                                                                    <Textarea id="alumni_msg{{request_details.id}}" style="height: 40px !important;width: 100% !important;padding: 10px !important;" id=""></Textarea>
+                                                                    <button type="button" onclick="alumni_addchat('{{ request_details.id}}')" style="height: 40px !important;background: none;border: none;outline: none;"><i class="fa fa-paper-plane" style="transform: rotate(40deg);"></i></button>
+                                                                </div>
                                                             </div>
-                                                            <div style="display: flex;">
-                                                                <p class="card-text">name : {{ request.student_name }}</p>
-                                                                &nbsp;&nbsp;
-                                                                <p class="card-text">Year : {{ request.year }}<sup>rd</sup>
-                                                                    {{request.department}}</p>
-                                                            </div>
-                                                            <p style="font-size: 15px !important;">Description :
-                                                                {{request.description | truncatechars:50}}</p>
                                                         </div>
+                                                        <!-- <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="button" class="btn btn-primary">Save changes</button>
+                                                        </div> -->
                                                     </div>
-                                                    <div class="col-md-12 bg-light text-right"
-                                                        style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
-                                                        <a href="{% url 'request_detail_page' request.id %}"
-                                                            class="btn btn-primary"
-                                                            style="margin: 0 !important;margin-top: 10px !important;">
-                                                            View details
-                                                        </a>
                                                     </div>
                                                 </div>
-    
                                             </div>
                                         </div>
-                                        {% endfor %}
-                                        <!-- end finance-request content container -->
                                     </div>
-    
-    
-                                    <div class="col-md-3">
-                                        <!-- start sidebar -->
-                                        <aside class="mu-sidebar">
-    
-                                            <!-- end single sidebar -->
-                                            <!-- start single sidebar -->
-    
-                                    </div>
+                                    <!-- end finance-request content container -->
                                 </div>
-                                </aside>
+
+                                <div class="col-md-3">
+                                    <!-- start sidebar -->
+                                    <aside class="mu-sidebar">
+
+                                        <!-- end single sidebar -->
+                                        <!-- start single sidebar -->
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="row" >
-                            <div class="col-md-9" style="background-color:#fff;">
-                                {% if finance_post.has_other_pages %}
-                                    <!-- Pagination -->
-                                    <nav class="my-3 container">
-                                        <ul class="pagination">
-                                            {% if finance_post.has_previous %}
-                                                <li class="page-item"><a class="page-link" href="?page={{finance_post.previous_page_number}}">Previous</a></li>
-                                            {% endif %}
-                                            {% for i in finance_post.paginator.page_range %}
-                                                {% if finance_post.number == i %}
-                                                    <li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
-                                                {% else %}
-                                                    <li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if finance_post.has_next %}
-                                                <li class="page-item"><a class="page-link" href="?page={{finance_post.next_page_number}}">Next</a></li>
-                                            {% endif %}
-                                        </ul>
-                                    </nav>
-                                {% endif %}
+                            </aside>
+                            <div class="col-md-3" style="background-color:#fff;">
+                                <h3>Recent Chats</h3>
                             </div>
                         </div>
                     </div>
@@ -249,3 +234,7 @@
     </section>
 </div>
 {% endblock content %}
+
+{% block javascript %}
+    <script src="{% static 'js/alumini/alumini.js' %}"></script>
+{% endblock javascript %}

@@ -87,11 +87,11 @@ WSGI_APPLICATION = 'alumni_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'portal',
+        'NAME': 'db2',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
-        'PASSWORD': '#@!123PRIYAN---',
+        'PASSWORD': 'TariqJamal@123',
         'OPTIONS': {
         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         'init_command': "set FOREIGN_KEY_CHECKS = 0;",

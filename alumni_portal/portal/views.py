@@ -8,10 +8,12 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
 from django.contrib import messages
 from django.template.loader import render_to_string
+from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
+from django.db.models import Q
 
-from portal.forms import FinanceHelpForm, MarkForm, MentorHelpForm
+from portal.forms import FinanceHelpForm, MentorHelpForm
 from portal.models import *
 
 # from portal.models import allowed_user
@@ -33,7 +35,7 @@ def is_student(user):
     return user.groups.filter(name='student').exists()
 
 def is_alumini(user):
-    return user.groups.filter(name='alumini').exists()
+    return user.groups.filter(name='alumni').exists()
 
 def is_faculty(user):
     return user.groups.filter(name='faculty').exists()
@@ -58,26 +60,28 @@ def dashboard(request):
     elif is_alumini(request.user):
         return redirect('alumini-dashboard')
     elif is_student(request.user):
-        return redirect('home')
+        return redirect('student-dashboard')
     else:
         return redirect('page404')
 
 @login_required()
 def faculty(request):
-    form = FinanceHelpForm()
-    requests = Finance_request.objects.filter(posted_by = request.user)
-    # finance_request = Finance_request.objects.get(id=id)
-    # updateform = FinanceHelpForm(instance=finance_request)
+    requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
+    paginator=Paginator(requests,1)
+    page_num=request.GET.get('page',1)
+    requests=paginator.page(page_num)
     context = {
         "requests" : requests,
-        "form":form,
-        # "updateform":updateform,
     }
     return render(request,'faculty/faculty-dashboard.html',context)
 
 @login_required()
 def alumini(request):
-    requests = Finance_request.objects.all()
+    if 'q' in request.GET:
+        q=request.GET['q']
+        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(student_name__icontains=q)).order_by('-id')
+    else:
+        requests = Finance_request.objects.all().order_by('-id')
     context = {
         'finance_post' :  requests,
     }
@@ -112,77 +116,38 @@ def page404(request):
     return render (request,'404.html')
 
 #create financial request
-@csrf_exempt
 def create_Finance_Post(request):
-    data={}
-    
+    form = FinanceHelpForm()
+    print("started")
     if request.method == 'POST':
         form = FinanceHelpForm(request.POST,request.FILES)
+        print(form.is_valid())
+        print("enter")
         if form.is_valid():
             addrequest = form.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
-            print("saved")
-            requests = Finance_request.objects.filter(posted_by=request.user)
-            data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
-            return JsonResponse(data)
-        else:
-            print("not valid")
-            return JsonResponse({'data':'not valid'})
-    return JsonResponse({'data':'return'})
+            print("work")
+            return redirect('/dashboard')
+    return render(request,'faculty/create_financial_request.html',{'form':form})
 
-#update financial request
-@csrf_exempt
-def update_Finance_Post(request):
-    data={}
-    try:
-        if request.POST.get('type')=='get':
-            id = request.POST.get('id')
-            print("Id in update = "+id)
-            finance_request = Finance_request.objects.get(id=id)
-            updateform = FinanceHelpForm(instance=finance_request)
-            data['id'] = id
-            data['html']=render_to_string('faculty/update_financial_request.html',{'updateform':updateform})
-            return JsonResponse(data)
-        else:
-            print("Updated")
-            form=request.POST.get('form')
-            id=request.POST.get('id')
-            #print(" id "+id)
-            finance_request = Finance_request.objects.get(id=id)
-            updateform = FinanceHelpForm(form,instance=finance_request)
-            print(updateform)
-            if updateform.is_valid():
-                addrequest = updateform.save(commit=False)
-                addrequest.posted_by = request.user
-                addrequest.save()
-                requests = Finance_request.objects.filter(posted_by = request.user)
-                data['id'] = id
-                data['html']=render_to_string('faculty/financial_request.html',{'requests':requests})
-                return JsonResponse(data)
-            else:
-                # data['form'] = ren 
-                return JsonResponse({'data':'not valid'})
-        return JsonResponse(data)
 
-    except:
-        print('working')
-        id = request.POST.get('id')
-        print("id in except = ")
-        print(id)
-        finance_request = Finance_request.objects.get(id=id)
-        updateform = FinanceHelpForm(request.POST,request.FILES,instance=finance_request)
+
+def update_Finance_Post(request,pk):
+    req = Finance_request.objects.get(id=pk)
+    updateform = FinanceHelpForm(instance=req)
+    if request.method == 'POST':
+        updateform = FinanceHelpForm(request.POST,request.FILES,instance=req)
         if updateform.is_valid():
             addrequest = updateform.save(commit=False)
             addrequest.posted_by = request.user
             addrequest.save()
-            requests = Finance_request.objects.filter(posted_by = request.user)
-            
-            return JsonResponse(data)
-        else:
-            # data['form'] = ren 
-            return JsonResponse({'data':'not valid'})
+            return redirect('/dashboard')
+    return render(request,'faculty/update_financial_request.html',{'updateform':updateform})
 
+def view_detail_page(request,pk):
+    request_i = Finance_request.objects.get(id=pk)
+    return render(request,'faculty/financial_request_detail_page.html',{'request_details':request_i})
     
     
 # delete financial Request 
@@ -197,36 +162,61 @@ def delete_Finance_Post(request):
     data["success"] = True
     return JsonResponse(data)
 
-#Message 
+# Finance Request page 
+def finance_request_page(request):
+    if 'q' in request.GET:
+        q=request.GET['q']
+        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(student_name__icontains=q) | Q(description__icontains=q) | Q(needs__icontains=q)).order_by('-id')
+    else:
+        requests = Finance_request.objects.all().order_by('-id')
+    paginator=Paginator(requests,1)
+    page_num=request.GET.get('page',1)
+    requests=paginator.page(page_num)
+    context = {
+        'finance_post' :  requests,
+    }
+    return render(request,'pages/financehelp_page.html',context)
+
+def finance_request_detail_page(request,pk):
+    request_i = Finance_request.objects.get(id=pk)
+    return render(request,'pages/request_detail.html',{'request_details' : request_i})
+
 @csrf_exempt
-def addResponse_Message(request):
-    data = dict()
-    id = request.POST.get('id')
-    message = request.POST.get('message')
-    interest,created = Finance_request_Post_Response.objects.get_or_create()
-
-
 def alumini_message(request):
     data = dict()
     print("working")
     id = request.POST.get('id')
     message = request.POST.get('message')
-    
     post=Finance_request.objects.get(id=id)
     interest,created = Finance_request_Post_Response.objects.get_or_create(user=request.user,post=post)
     Finance_request_Response_Message.objects.create(user_id=post.id,post_response_id=interest.id,message=message, date=datetime.now())
     print("done")
     return JsonResponse(data)
 
-def finance_request_page(request):
-    finance_requests = Finance_request.objects.all().order_by('-id')
-    user = request.user
-    context = {
-        'finance_requests':finance_requests,
-        'user':user
-    }
-    return render(request,'pages/financehelp_page.html',context)
+# #Message 
+# @csrf_exempt
+# def addResponse_Message(request):
+#     data = dict()
+#     id = request.POST.get('id')
+#     message = request.POST.get('message')
+#     interest,created = Finance_request_Post_Response.objects.get_or_create()
 
+
+# def alumini_message(request):
+#     data = dict()
+#     print("working")
+#     id = request.POST.get('id')
+#     message = request.POST.get('message')
+    
+#     post=Finance_request.objects.get(id=id)
+#     interest,created = Finance_request_Post_Response.objects.get_or_create(user=request.user,post=post)
+#     Finance_request_Response_Message.objects.create(user_id=post.id,post_response_id=interest.id,message=message, date=datetime.now())
+#     print("done")
+#     return JsonResponse(data)
+
+
+
+ 
 
 
 # student section 
@@ -355,16 +345,5 @@ def create_help_desk_post(request):
             return JsonResponse({'data':'not valid'})
     return JsonResponse({'data':'return'})
 
-#view student details in alumini page
-def view_student_details(request,id):
-    request_i = Finance_request.objects.get(id=id)
-    # context = {
-    #     'view_details' :  requests,
-    # }
-    return render(request,'alumini/student_details.html',{'view_details' : request_i})
 
-# def faculty_view_student_details(request,id):
-#     view_request = Finance_request.objects.get(id=id)
-#     return render(view_request,'faculty/faculty_view_student_details.html',{'view_details' : view_request})
 
-    
