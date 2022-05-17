@@ -120,6 +120,14 @@
 
     <!-- Custom js -->
     <script src="{% static 'assets/js/custom.js' %}"></script>
+    <script type='text/javascript' charset='UTF-8'>
+        (function (config) {  
+            config.urlCapture = { 
+                filterURLQuery: true
+            }
+        })(window['adrum-config'] || (window['adrum-config'] = {}));
+     </script>
+     <script src='//cdn.appdynamics.com/adrum/adrum-latest.js' type='text/javascript' charset='UTF-8'></script>
 
     {% block javascript %}
     {% endblock javascript %}

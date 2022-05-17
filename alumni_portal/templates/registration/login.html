@@ -9,17 +9,20 @@
 {% endblock style %}
 
 {% block content %}
-	<div class="login-container">
-		<div class="login-innercontainer">
-			<h2 class="w-100 bg-primary">Login</h2>
-			<form class="Form" method="POST" novalidate style="overflow-y: scroll;">
-				{% csrf_token %}
-				{{form | crispy}}
-				<a href="{% url 'password_reset' %}">forgot password</a>
-				<div class="d-flex justify-content-center">
-					<button class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">Login</button>
-				</div>
-			</form>
+	<div class="container">
+		<img src="{% static 'image/logo.jpg' %}" alt="logo" style="width: 200px;margin: 20px 0 0 0;">
+		<div class="login-container" >
+			<div class="login-innercontainer" >
+				<h2 class="w-100 bg-primary">Login</h2>
+				<form class="Form" method="POST" novalidate style="overflow-y: scroll;">
+					{% csrf_token %}
+					{{form | crispy}}
+					<a href="{% url 'password_reset' %}">forgot password</a>
+					<div class="d-flex justify-content-center">
+						<button class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">Login</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 {% endblock content %}

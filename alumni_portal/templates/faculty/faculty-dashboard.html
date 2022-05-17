@@ -18,18 +18,42 @@
 			<div class="col-md-12">
 				<div class="mu-course-content-area">
 					<div class="row" style="margin-bottom: 20px;">
-						<div style="display: flex;justify-content: space-between;">
+						<div style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
 							<div style="display: flex;">
 								<h2>Financial Request</h2>
 								<a href="/request/create-finance-post"
 									style="margin-top: 5px!important;margin-left: 20px!important;"
-									class="btn btn-primary">
+									class="btn btn-primary btn-sm">
 									Add Request
 								</a>
 							</div>
-							<!-- <p>Search</p> -->
+							<form style="margin-top: -20px !important;">
+								<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
+									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
+									<div class="input-group-append">
+									<button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
+									</div>
+								</div>
+							</form>
 						</div>
 					</div>
+
+
+					<!-- <div class="row" style="margin-bottom: 20px;">
+						<div style="display: flex;justify-content: space-between;">
+							<div style="display: flex;">
+								<h2>Financial Request</h2>
+							</div>
+							<form>
+								<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
+									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
+									<div class="input-group-append">
+									<button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div> -->
 					<div class="row">
 						<div class="col-md-9" id="finance_request_container"
 							style="background-color:#fff; padding: 20px;">
@@ -144,9 +168,9 @@
 										<!-- end single sidebar -->
 										<!-- start single sidebar -->
 
+									</aside>
 								</div>
 							</div>
-							</aside>
 						</div>
 					</div>
 					<div class="row" style="background-color:#fff;">

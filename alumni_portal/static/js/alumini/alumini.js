@@ -7,12 +7,12 @@ function alumni_addchat(id) {
   $.ajax({
     type: "POST",
     url: "/alumni_response/",
-    data: { message: message, id: id},
+    data: { message: message, id: id, csrfmiddlewaretoken: csrftoken},
     success: function (response) {
       alert("yes");
       var x = "#chat" + response["id"];
       $(x).modal("hide");
-      // $("#finance_request_container").html(response.html);
+      $("#alumni_message").html(response.html);
       alert(response);
     },
     error: () => {
@@ -21,4 +21,17 @@ function alumni_addchat(id) {
   });
 }
 
-
+function get_post_id(id) {
+  const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  $.ajax({
+    type: "POST",
+    url: "/get_alumni_message/",
+    data: { id: id},
+    success: function (response) {
+      $("#alumni_message").html(response.html);
+    },
+    error: () => {
+      alert("Something went wrong");
+    },
+  });
+}

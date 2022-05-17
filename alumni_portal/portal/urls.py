@@ -30,12 +30,15 @@ urlpatterns = [
     path('request/create-finance-post/',views.create_Finance_Post,name = "create-finance-post"),
     path('request/update-finance-post/<int:pk>',views.update_Finance_Post,name = "update-finance-post"),
     path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post"),
-    path('request/view_datails/?id=<int:pk>',views.view_detail_page , name="request_details"),
+    path('request/view_datails/<int:pk>',views.view_detail_page , name="request_details"),
     path('finance_requests/',views.finance_request_page,name="finance_request"),
-    path('request_detail_page/?id=<int:pk>',views.finance_request_detail_page,name="request_detail_page")
+    path('request_detail_page/<int:pk>',views.finance_request_detail_page,name="request_detail_page")
     ,
-    # path('chat/',views.addResponse_Message,name="addchatmessage"),
-    path('alumni_response/',views.alumini_message,name="alumini_message")
+    path('alumni_response/',views.alumini_message,name="alumini_message"),
+    path('get_interest/',views.get_message_interest,name = "get_interest"),
+    path('add_amount/',views.add_finance_amount,name = "add_amount"),
+    path('add_sponser/',views.add_sponser,name = "add_sponser"),
+    path('get_alumni_message/',views.get_alumni_message,name = "get_alumni_message")
     ,
     path('request/create-mentor-help-post/',views.create_mentor_post,name = "create-mentor-help-post"),
     path('request/update-mentor-help-post/',views.update_mentor_post,name = "update-mentor-help-post"),

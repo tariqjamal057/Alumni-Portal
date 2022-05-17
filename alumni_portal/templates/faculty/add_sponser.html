@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+    student: {{student_name}}
+    alumni : {{alumni_name}}
+    <br>
+    <form method="post">
+        <input type="text" name="studentname" value="{{student_name}}" id="studentname" readonly>
+        <input type="text" name="alumniname" value="{{alumni_name}}" id="alumniname" readonly>
+        <input type="number" name="amount" id="amount">
+        <button type="button" onclick="add_sponser('{{postid}}','{{alumniid}}')">Add</button>
+    </form>
+{% endblock content %}

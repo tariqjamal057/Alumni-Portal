@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+
+{% block content %}
+<div id="alumni_message" style="position: relative;padding: 10px 5px 10px 10px;">
+    {% for msg in message %}
+        {% if msg.user == user %}
+            <span style="position: absolute;right: 0;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;" class="bg-info">{{msg.message}}</span>
+            <div style="margin: 5px 0px"></div>
+        {% endif %}
+        {% if msg.user != user %}
+            <span style="position: absolute;left: 0;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;" class="bg-primary">{{msg.message}}</span>
+            <div style="margin: 5px 0px"></div>
+        {% endif %}
+        <br>
+        <!-- <p>{{msg.message}}</p> -->
+    {% endfor %}
+</div>
+{% endblock content %}

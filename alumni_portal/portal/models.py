@@ -218,14 +218,11 @@ class Tech_Help_ResponseMessage(models.Model):
 type_of_exam = (('s','select'),('+2','12 Exam Marks'),('cg','CGPA'))
 class Finance_request(models.Model):
     title = models.CharField(max_length=100)
-    image = models.ImageField(upload_to ='student_images/')
+    image = models.ImageField(upload_to ='student_images')
     student_name = models.CharField(max_length=50)
     department = models.ForeignKey(Department,on_delete = models.CASCADE)
     year = models.IntegerField()
     description = models.TextField()
-    needs = models.TextField()
-    exam_name = models.CharField(choices=type_of_exam,max_length=20,null=True)
-    percentage_or_cgpa =  models.IntegerField(null=True)
     achievements = models.TextField(null=True)
     other_performance = models.TextField(null=True)
     date = models.DateTimeField(auto_now_add=True)
@@ -240,12 +237,12 @@ class Finance_request(models.Model):
 class Finance_request_Post_Response(models.Model):
     post = models.ForeignKey(Finance_request , on_delete=models.CASCADE , related_name='helpdeskpost')
     user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='helpdeskuser')
-
+    
     def get_alumni_msgs(self):
         return Finance_request_Response_Message.objects.filter(user=self.user)
 
 class Finance_request_Response_Message(models.Model):
-    user = models.ForeignKey(Finance_request , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , on_delete=models.CASCADE,null=True)
     post_response = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE)
     message = models.TextField()
     date = models.DateTimeField()
@@ -260,6 +257,7 @@ class Finance(models.Model):
         return self.studentname.student_name
 
 class featured_Sponser(models.Model):
-    user = models.ForeignKey(Finance_request_Post_Response, on_delete=models.CASCADE)
+    student_name = models.ForeignKey(Finance_request_Post_Response,on_delete=models.CASCADE,related_name='student_name',null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='alumni')
     amount = models.IntegerField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
