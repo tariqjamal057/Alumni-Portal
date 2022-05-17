@@ -3,15 +3,15 @@
 <div>
   {% csrf_token %}
   <div>
-    <div id="finance_request_container">
+    <div id="finance_request_container d-flex" >
       {% for msg in messages %}
-      <p class="text-left float-left" style="max-width: 70%;float: left;">{{msg.message}}</p>
+      <p class="text-left float-left" style="max-width: 70%;">{{msg.message}}</p>
         <!-- {{msg.user}}</p> -->
       {% endfor %}
     </div>
     <div style="background-color:#c3c3f1;">
       {% for faculty_msg in faculty_messages %}
-      <p class="text-left" style="max-width: 70%;float: right;">{{faculty_msg.message}}</p>
+      <p class="text-left" style="max-width: 70%;">{{faculty_msg.message}}</p>
         <!-- {{faculty_msg.user}}</p> -->
       {% endfor %}
     </div>
