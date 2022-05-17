@@ -1,0 +1,22 @@
+.interest {
+    outline: none !important;
+    border: none !important;
+    width: 100% !important;
+    float: left !important;
+    background-color: transparent !important;
+    transition: .5s;
+    border-radius: 5px;
+    padding: 7px;
+}
+.interest:hover {
+    background-color: #d9edf7 !important;
+}
+
+#spn  {
+    padding: 7px;
+    border-radius: 5px;
+    transition: .5s;
+}
+#spn:hover {
+    background-color: #d9edf7;
+}

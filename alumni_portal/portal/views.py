@@ -154,10 +154,16 @@ def update_Finance_Post(request,pk):
 
 def view_detail_page(request,pk):
     request_i = Finance_request.objects.get(id=pk)
-    alumni_interest = Finance_request_Post_Response.objects.filter(post = request_i).order_by('-id')
+    alumni_interest = Finance_request_Post_Response.objects.filter(post = request_i).order_by('-id')  
+    recent_intetest = Finance_request_Post_Response.objects.filter(post = request_i).order_by('-id')[:5]  
+    amount = featured_Sponser.objects.filter(student_name_id = request_i.id).order_by('-id')[:5]
+    all_sponser = featured_Sponser.objects.filter(student_name_id = request_i.id).order_by('-id')
     context = {
         'request_details' : request_i,
-        'alumni_interest':alumni_interest
+        'alumni_interest':alumni_interest,
+        'recent_intetest':recent_intetest,
+        'amounts':amount,
+        'all_sponser':all_sponser,
     }
     return render(request,'faculty/financial_request_detail_page.html',context)
     

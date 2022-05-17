@@ -2,26 +2,28 @@
 {% block content %}
 <div>
   {% csrf_token %}
-  <div>
-    <div id="finance_request_container d-flex" >
+  <div id="finance_request_container" style="display: flex;flex-direction: column;height: 80vh;overflow-y: scroll;">
+    <div style="max-width: 70%;justify-self: left;">
       {% for msg in messages %}
-      <p class="text-left float-left" style="max-width: 70%;">{{msg.message}}</p>
+      <p class="text-left float-left" >{{msg.message}}</p>
         <!-- {{msg.user}}</p> -->
       {% endfor %}
     </div>
-    <div style="background-color:#c3c3f1;">
+    <div style="background-color:#c3c3f1;max-width: 70%;align-content: flex-end;">
       {% for faculty_msg in faculty_messages %}
-      <p class="text-left" style="max-width: 70%;">{{faculty_msg.message}}</p>
+      <p class="text-left" >{{faculty_msg.message}}</p>
         <!-- {{faculty_msg.user}}</p> -->
       {% endfor %}
     </div>
   </div>
-  <div style="display: flex;justify-content: space-between;align-items: center;margin: 10px 0px;">
-    <Textarea id="alumni_msg{{post_interest}}"
+  <div style="display: flex;flex-direction: column;">
+    <div style="display: flex;justify-content: space-between;align-items: center;margin: 10px 0px;">
+      <Textarea id="alumni_msg{{post_interest}}"
       style="height: 40px !important;width: 100% !important;padding: 10px !important;" id="text"></Textarea>
     <button type="button" onclick="faculty_addchat('{{post_interest}}')"
       style="height: 40px !important;background: none;border: none;outline: none;"><i class="fa fa-paper-plane"
         style="transform: rotate(40deg);"></i></button>
+    </div>
     <button type="button" onclick="add_amount('{{post_interest}}','{{intest_user}}')" data-toggle="modal"
       data-target="#addamount">Add amount</button>
 

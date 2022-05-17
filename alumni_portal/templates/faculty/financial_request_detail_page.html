@@ -4,6 +4,8 @@
 {% load social_share %}
 
 {% block style %}
+<style>
+</style>
 <link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
 {% endblock style %}
 
@@ -26,9 +28,11 @@
                      <div class="col-md-12">
                        <article class="mu-blog-single-item">
                          <figure class="mu-blog-single-img">
-                            <h2>{{ request_details.title}}</h2>
+                           <div style="margin: 10px 0px 0px 10px;">
+                            <h2 class="text-info">{{ request_details.title}}</h2>
                             <img style="width: 150px; height: 150px;border-radius:50%;" class=""
                                     src="{{ request_details.image.url }}" alt="Card image cap" />
+                            </div>
                            <figcaption class="mu-blog-caption">
                                
                             <h3 class="card-text">{{ request_details.student_name }}</h3>
@@ -67,7 +71,7 @@
                          </div>
                          <!-- End blog social share -->
                          <div class="col-md-12 bg-light text-right" style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chatModels{{ request_details.id}}">
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#chatModels{{ request_details.id}}">
                                 Chat with Alumni
                             </button>
                             
@@ -83,25 +87,51 @@
                                     </div>
 
                                     <div class="modal-body bg-in">
-                                        <div class="Container-left">
+                                        <div class="Container-left" style="height: 35vh;overflow-y: scroll;">
 
                                             {% for interest in alumni_interest %}
                                         
-                                                <button type="button" style="float: left !important;" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
+                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
                                                 <br>
-                                                <div style="width: 100%;height: 3px;margin: 10px 0px;background:rgba(0, 0, 0, 0.19)"></div>
+                                                <hr style="margin-bottom: 5px !important">
+                                            {% endfor %}
+                                            {% for interest in alumni_interest %}
+                                        
+                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
+                                                <br>
+                                                <hr style="margin-bottom: 5px !important">
+                                            {% endfor %}
+                                            {% for interest in alumni_interest %}
+                                        
+                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
+                                                <br>
+                                                <hr style="margin-bottom: 5px !important">
+                                            {% endfor %}
+                                            {% for interest in alumni_interest %}
+                                        
+                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
+                                                <br>
+                                                <hr style="margin-bottom: 5px !important">
+                                            {% endfor %}
+                                            {% for interest in alumni_interest %}
+                                        
+                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
+                                                <br>
+                                                <hr style="margin-bottom: 5px !important" >
+                                            {% endfor %}
+                                            {% for interest in alumni_interest %}
+                                        
+                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
+                                                <br>
+                                                <hr style="margin-bottom: 5px !important">
                                             {% endfor %}
                                         </div>
                                     </div>
-                                    <!-- <div class="modal-footer">
+                                    <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div> -->
                                 </div>
                                 </div>
                             </div>
-
-
 
                             <div class="modal fade"id="messagemodel{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="messagemodel{{ request_details.id}}Label" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -141,83 +171,28 @@
                  <aside class="mu-sidebar">
                    <!-- start single sidebar -->
                    <div class="mu-single-sidebar">
-                     <h3>Categories</h3>
+                     <h3>Recent Interests</h3>
                      <ul class="mu-sidebar-catg">
-                       <li><a href="#">Web Design</a></li>
-                       <li><a href="">Web Development</a></li>
-                       <li><a href="">Math</a></li>
-                       <li><a href="">Physics</a></li>
-                       <li><a href="">Camestry</a></li>
-                       <li><a href="">English</a></li>
+                       {% for inst in recent_intetest %}
+                        <li style="cursor: pointer;" data-toggle="modal" data-target="#chatModels{{ request_details.id}}">
+                          <a>{{ inst.user }}</a>
+                        </li>
+                       {% endfor %}
+                       <button type="button" data-toggle="modal" data-target="#chatModels{{ request_details.id}}" class="btn btn-sm btn-info">view all</button>
                      </ul>
                    </div>
                    <!-- end single sidebar -->
                    <!-- start single sidebar -->
                    <div class="mu-single-sidebar">
-                     <h3>Popular News</h3>
-                     <div class="mu-sidebar-popular-courses">
-                       <div class="media">
-                         <div class="media-left">
-                           <a href="#">
-                             <img class="media-object" src="assets/img/courses/1.jpg" alt="img">
-                           </a>
-                         </div>
-                         <div class="media-body">
-                           <h4 class="media-heading"><a href="#">Medical Science</a></h4>                      
-                           <span class="popular-course-price">$200.00</span>
-                         </div>
-                       </div>
-                       <div class="media">
-                         <div class="media-left">
-                           <a href="#">
-                             <img class="media-object" src="assets/img/courses/2.jpg" alt="img">
-                           </a>
-                         </div>
-                         <div class="media-body">
-                           <h4 class="media-heading"><a href="#">Web Design</a></h4>                      
-                           <span class="popular-course-price">$250.00</span>
-                         </div>
-                       </div>
-                       <div class="media">
-                         <div class="media-left">
-                           <a href="#">
-                             <img class="media-object" src="assets/img/courses/3.jpg" alt="img">
-                           </a>
-                         </div>
-                         <div class="media-body">
-                           <h4 class="media-heading"><a href="#">Health & Sports</a></h4>                      
-                           <span class="popular-course-price">$90.00</span>
-                         </div>
-                       </div>
-                     </div>
-                   </div>
-                   <!-- end single sidebar -->
-                   <!-- start single sidebar -->
-                   <div class="mu-single-sidebar">
-                     <h3>Archives</h3>
+                     <h3>Sponsers</h3>
                      <ul class="mu-sidebar-catg mu-sidebar-archives">
-                       <li><a href="#">May <span>(25)</span></a></li>
-                       <li><a href="">June <span>(35)</span></a></li>
-                       <li><a href="">July <span>(20)</span></a></li>
-                       <li><a href="">August <span>(125)</span></a></li>
-                       <li><a href="">September <span>(45)</span></a></li>
-                       <li><a href="">October <span>(85)</span></a></li>
+                       {% for amount in amounts %}
+                        <li style="cursor: pointer;"><a>{{amount.amount}}.00</a> by <span>{{amount.user}}</span></li>
+                       {% endfor %}
                      </ul>
-                   </div>
-                   <!-- end single sidebar -->
-                   <!-- start single sidebar -->
-                   <div class="mu-single-sidebar">
-                     <h3>Tags Cloud</h3>
-                     <div class="tag-cloud">
-                       <a href="#">Health</a>
-                       <a href="#">Science</a>
-                       <a href="#">Sports</a>
-                       <a href="#">Mathematics</a>
-                       <a href="#">Web Design</a>
-                       <a href="#">Admission</a>
-                       <a href="#">History</a>
-                       <a href="#">Environment</a>
-                     </div>
+                     <button type="button" data-toggle="modal" data-target="#sponser_list" class="btn btn-sm btn-info">view all sponser</button>
+                     <!-- sponsers list modal  -->
+                     {% include 'faculty/all_sponsers.html' %}
                    </div>
                    <!-- end single sidebar -->
                  </aside>
