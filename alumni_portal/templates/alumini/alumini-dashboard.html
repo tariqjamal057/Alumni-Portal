@@ -3,7 +3,6 @@
 {% load static %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
 {% endblock style %}
 
 {% block content %}
@@ -18,28 +17,33 @@
 			<div class="col-md-12">
 				<div class="mu-course-content-area">
 					<div class="row" style="margin-bottom: 20px;">
-						<div style="display: flex;justify-content: space-between;">
+						<div style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
 							<div style="display: flex;">
-								<h2>Financial Request</h2>
+								<h2>Help Desk Post</h2>
+								<a href="/request/create_help_desk_post"
+									style="margin-top: 5px!important;margin-left: 20px!important;"
+									class="btn btn-primary btn-sm">
+									Add Post
+								</a>
 							</div>
-							<form>
-								<div class="input-group">
+							<form style="margin-top: -20px !important;">
+								<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
 									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
 									<div class="input-group-append">
-									<button class="btn btn-dark btn-lg" type="submit" id="button-addon2">Search</button>
+									<button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
 									</div>
 								</div>
 							</form>
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-9" id="finance_request_container"
+						<div class="col-md-12" id="post_container"
 							style="background-color:#fff; padding: 20px;">
 							<!-- start finance-request content container -->
 							<div class="mu-course-container">
 								<div class="row">
-									{% for request in finance_post %}
-									<div class="col-md-6 col-sm">
+									{% for help_desk_post in posts %}
+									<div class="col-md-4 col-sm">
 										<div style="
 										padding: 10px;
 										margin: 10px 0px;
@@ -50,29 +54,70 @@
 										">
 											<div style="display: flex;flex-direction: column;">
 												<div style="display: flex" class="post-container">
-													<div class="img-square-wrapper" style="margin-right: 10px">
-														<img style="width: 100px; height: 100px;border-radius:50%;"
-															class="" src="{{ request.image.url }}"
-															alt="Card image cap" />
-													</div>
+													
 													<div style="flex: 1">
 														<div style="display: flex;justify-content: space-between;">
-															<h4>{{ request.title | truncatechars:20}}</h4>
+															<h4>{{ help_desk_post.title | truncatechars:25}}</h4>
+															<div
+																style="display: flex;align-items: center;justify-content: center;">
+																<a class="btn btn-sm btn-primary"
+																	href="{% url 'update_help_desk_post' help_desk_post.id %}"
+																	style="margin-top: 0px !important;"><i
+																		class="fa fa-pencil-square-o"></i></a>
+																<button type="button" class="btn btn-danger btn-sm"
+																	style="margin-top: 0px !important;margin-left: 5px !important;"
+																	data-toggle="modal"
+																	data-target="#deletePost{{help_desk_post.id}}">
+																	<i class="fa fa-trash"></i>
+																</button>
+																<!-- Delete particular Finance request post start  -->
+																<div class="modal fade" id="deletePost{{help_desk_post.id}}"
+																	tabindex="-1" role="dialog"
+																	aria-labelledby="deletePost{{help_desk_post.id}}"
+																	aria-hidden="true">
+																	<div class="modal-dialog" role="document">
+																		<div class="modal-content">
+																			<div class="modal-header">
+																				<h5 class="modal-title"
+																					id="deletePost{{help_desk_post.id}}">
+																					Delete Financial
+																					Request</h5>
+																				<button type="button" class="close"
+																					data-dismiss="modal"
+																					aria-label="Close">
+																					<span
+																						aria-hidden="true">&times;</span>
+																				</button>
+																			</div>
+																			<div class="modal-body">
+																				<p>Do you want to delete the Help Desk Post of
+																					<b>{{ help_desk_post.title}}</b>
+																				</p>
+																			</div>
+																			<div class="modal-footer">
+																				<button type="button"
+																					class="btn btn-danger"
+																					onclick="delete_post('{{help_desk_post.id}}')"
+																					style="margin: 0!important;">Delete</button>
+																				<button type="button"
+																					class="btn btn-primary"
+																					data-dismiss="modal"
+																					style="margin: 0!important;">Close</button>
+																			</div>
+																		</div>
+																	</div>
+																</div>
+																<!-- Delete particular Finance request post end  -->
+															</div>
 
 														</div>
-														<div style="display: flex;">
-															<p class="card-text">name : {{ request.student_name }}</p>
-															&nbsp;&nbsp;
-															<p class="card-text">Year : {{ request.year }}<sup>rd</sup>
-																{{request.department}}</p>
-														</div>
-														<p style="font-size: 15px !important;">Description :
-															{{request.description | truncatechars:50}}</p>
+														<p style="font-size: 15px !important;">Description: 
+														{{help_desk_post.content | truncatechars:50 | safe}}</p>
 													</div>
 												</div>
 												<div class="col-md-12 bg-light text-right"
 													style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
-													<a href="{% url 'request_detail_page' request.id %}"
+													<a href="{% url 'help_desk_detail_page' help_desk_post.id %}"
 														class="btn btn-primary"
 														style="margin: 0 !important;margin-top: 10px !important;">
 														View details
@@ -94,9 +139,33 @@
 										<!-- end single sidebar -->
 										<!-- start single sidebar -->
 
+									</aside>
 								</div>
 							</div>
-							</aside>
+						</div>
+					</div>
+					<div class="row" style="background-color:#fff;">
+						<div class="col-md-9">
+							{% if requests.has_other_pages %}
+								<!-- Pagination -->
+								<nav class="my-3 container">
+									<ul class="pagination">
+										{% if requests.has_previous %}
+									<li class="page-item"><a class="page-link" href="?page={{requests.previous_page_number}}">Previous</a></li>
+									{% endif %}
+									{% for i in requests.paginator.page_range %}
+									{% if requests.number == i %}
+									<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+									{% else %}
+									<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+									{% endif %}
+									{% endfor %}
+									{% if requests.has_next %}
+									<li class="page-item"><a class="page-link" href="?page={{requests.next_page_number}}">Next</a></li>
+									{% endif %}
+									</ul>
+								</nav>
+							{% endif %}
 						</div>
 					</div>
 				</div>
@@ -107,5 +176,5 @@
 {% endblock content %}
 
 {% block javascript %}
-<!-- <script src="{% static 'js/faculty/faculty.js' %}"></script> -->
+<script src="{% static 'js/alumini/alumini.js' %}"></script>
 {% endblock javascript %}

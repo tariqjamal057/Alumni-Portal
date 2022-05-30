@@ -20,16 +20,14 @@ class addSponser(ModelForm):
         model = featured_Sponser
         fields = ['student_name','user','amount']
 
-class MentorHelpForm(ModelForm):
-    deadline = forms.DateField(label="Date from", widget=forms.TextInput(attrs={'type': 'date', 'min': now_date}))
-    class Meta:
-        model = Tech_Help_Post
-        fields = ['title','content','deadline']
-
 class Help_Desk_Form(ModelForm):
-    deadline = forms.DateField(label="Date from", widget=forms.TextInput(attrs={'type': 'date', 'min': now_date}))
     class Meta:
         model = Post
-        fields = ['title','content','deadline']
+        fields = ['title','content','post_type']
+
+class MentorHelpForm(ModelForm):
+    class Meta:
+        model = Tech_Help_Post
+        fields = ['title','stack','content']
 
 

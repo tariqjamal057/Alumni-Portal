@@ -1,4 +1,4 @@
-// Delete a Post
+// Delete Financial Request Post
 function delete_post(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
@@ -19,7 +19,7 @@ function delete_post(id) {
   });
 }
 
-
+// Chat with Alumni for Finance Request
 function faculty_addchat(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   alert(id);
@@ -43,7 +43,7 @@ function faculty_addchat(id) {
   });
 }
 
-
+// Get Interest Shown Alumni 
 function get_interest_message(post,user) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
@@ -59,6 +59,7 @@ function get_interest_message(post,user) {
   });
 }
 
+// Add amount for a Particular Finance post
 function add_amount(post,user) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
@@ -75,7 +76,7 @@ function add_amount(post,user) {
   });
 }
 
-
+// Adding Alumni as a sponser for particular Finance Post 
 function add_sponser(postid,alumniid) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   const studentname = document.getElementById('studentname').value; 

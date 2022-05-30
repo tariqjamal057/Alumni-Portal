@@ -167,55 +167,6 @@ class ExperienceDetail(models.Model):
         return self.user.first_name + self.designation
 
 
-
-
-post_type_options = (
-    ('O','Opportunity') , ('S','Seeking Job') , ('I','Internship')
-)
-class Post(models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='user',null=True, blank=True)
-    title = models.CharField(max_length=200)
-    content = RichTextUploadingField()
-    date = models.DateTimeField(auto_now_add=True)
-    post_type = models.CharField(choices=post_type_options,max_length=1,blank=True)
-    deadline = models.DateField(null=True,blank=True)
-    posted_by = models.ForeignKey(User , on_delete=models.CASCADE , related_name='postedby', null=True, blank=True)
-
-class PostResponse(models.Model):
-    post = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskpost')
-    user = models.ForeignKey(Post , on_delete=models.CASCADE , related_name='helpdeskuser')
-
-class ResponseMessage(models.Model):
-    user = models.ForeignKey(Post , on_delete=models.CASCADE)
-    post_response = models.ForeignKey(PostResponse , on_delete= models.CASCADE)
-    message = models.TextField()
-    date = models.DateTimeField()
-
-
-class Tech_Help_Post(models.Model):
-    user = models.ForeignKey(User , on_delete=models.CASCADE , related_name='techhelpuser',null=True, blank=True)
-    title = models.CharField(max_length=200)
-    stack = models.CharField(max_length=200, null=True, blank=True)
-    content = RichTextUploadingField()
-    date = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateField(null=True,blank=True)
-    posted_by = models.ForeignKey(User , on_delete=models.CASCADE  ,related_name='studentname', null=True, blank=True)
-
-class Tech_Help_PostResponse(models.Model):
-    post = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='studentpost')
-    user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE , related_name='student')
-
-class Tech_Help_ResponseMessage(models.Model):
-    user = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE)
-    post_response = models.ForeignKey(Tech_Help_PostResponse , on_delete= models.CASCADE)
-    message = models.TextField()
-    date = models.DateTimeField()
-
-# mode_of_payment = (
-#     ('O','Online Banking') , ('N','Net Banking') , ('U','UPI') , ('C','Credit/Debit card'), ('A','Cash'))
-
-
-type_of_exam = (('s','select'),('+2','12 Exam Marks'),('cg','CGPA'))
 class Finance_request(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to ='student_images')
@@ -247,17 +198,49 @@ class Finance_request_Response_Message(models.Model):
     message = models.TextField()
     date = models.DateTimeField()
 
-class Finance(models.Model):
-    student_name = models.ForeignKey(Finance_request ,on_delete=models.CASCADE , related_name='studentname')
-    student_details = models.ForeignKey(Finance_request, on_delete=models.CASCADE , related_name='details')
-    date = models.DateField(auto_now_add=True)
-    # modeofpayment = models.CharField(choices=mode_of_payment , max_length=1)
-
-    def __str__(self):
-        return self.studentname.student_name
 
 class featured_Sponser(models.Model):
     student_name = models.ForeignKey(Finance_request_Post_Response,on_delete=models.CASCADE,related_name='student_name',null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='alumni')
     amount = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
+
+
+post_type_options = (
+    ('O','Opportunity') , ('S','Seeking Job') , ('I','Internship')
+)
+class Post(models.Model):
+    title = models.CharField(max_length=200)
+    content = RichTextUploadingField()
+    post_type = models.CharField(choices=post_type_options,max_length=1,blank=True)
+    date = models.DateTimeField(auto_now_add=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE , related_name='postedby')
+
+class PostResponse(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    post = models.ForeignKey(Post , on_delete=models.CASCADE)
+
+class ResponseMessage(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    post_response = models.ForeignKey(PostResponse , on_delete= models.CASCADE)
+    message = models.TextField()
+    date = models.DateTimeField()
+
+
+class Tech_Help_Post(models.Model):
+    title = models.CharField(max_length=200)
+    stack = models.CharField(max_length=200)
+    content = RichTextUploadingField()
+    date = models.DateTimeField(auto_now_add=True)
+    posted_by = models.ForeignKey(User , on_delete=models.CASCADE  ,related_name='studentname')
+
+class Tech_Help_PostResponse(models.Model):
+    post = models.ForeignKey(Tech_Help_Post , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+
+class Tech_Help_ResponseMessage(models.Model):
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    post_response = models.ForeignKey(Tech_Help_PostResponse , on_delete= models.CASCADE)
+    message = models.TextField()
+    date = models.DateTimeField()
+

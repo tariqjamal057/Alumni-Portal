@@ -6,6 +6,12 @@
 
 
 {% block style %}
+<style>
+    img {
+        width: 100% !important;
+        height: 100% !important;
+    }
+</style>
 <link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
 {% endblock style %}
 
@@ -128,10 +134,10 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="mu-page-breadcrumb-area">
-                        <h2>Alumini As a Sponser</h2>
+                        <h2>Help Desk Post</h2>
                         <ol class="breadcrumb">
                             <li><a href="/home">Home</a></li>
-                            <li class="active">Financial Request</li>
+                            <li class="active">Help Desk Post</li>
                         </ol>
                     </div>
                 </div>
@@ -158,33 +164,17 @@
                          <div class="col-md-12">
                            <article class="mu-blog-single-item">
                              <figure class="mu-blog-single-img">
-                                 <div style="margin: 10px 0px 0px 10px;display: flex;justify-content: center;align-items: center;flex-direction: column;">
-                                     <h2 class="text-info" style="margin-bottom: 50px;">{{ request_details.title}}</h2>
-                                     <img style="width: 150px; height: 150px;border-radius:50%;" class=""
-                                     src="{{ request_details.image.url }}" alt="Card image cap" />
-                                    </div>
-                                     <figcaption class="mu-blog-caption" style="margin: 20px 0;;display: flex;justify-content: center;align-items: center;flex-direction: column;">
-                                   
-                                <h3 class="card-text">{{ request_details.student_name }}</h3>
-                                <h5 class="card-text">{{ request_details.year }}<sup>rd</sup> Year</h5>
-    
-                               </figcaption >                      
+                                 <div style="margin: 10px 0px 0px 10px;">
+                                     <h2 class="text-info" style="margin-bottom: 20px;">{{ post.title}}</h2>
+                                    </div>                    
                              </figure>
                              <div class="mu-blog-description">
                                  <blockquote>
                                      Description                           
                                  </blockquote>
-                               <p>{{ request_details.description }}</p>
-                               <blockquote>
-                                    Achievements                           
-                                </blockquote>
-                                <p>{{ request_details.achievements }}</p>
-                                <blockquote>
-                                    Other Performance                          
-                                </blockquote>
-                                <p>{{ request_details.other_performance }}</p>
-                                  <a href="#">Posted By &nbsp;{{ request_details.posted_by }}</a>
-                                  <a href="#">{{ request_details.date }}</a>
+                               <p>{{ post.content | safe }}</p>
+                                  <a href="#">Posted By :&nbsp;{{ post.posted_by }}</a>
+                                  <a href="#">{{ post.date }}</a>
                                 
                              </div>
                              <!-- start blog social share -->
@@ -202,28 +192,27 @@
                              <div class="col-md-12 bg-light text-right"
                                                 style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
                                                 <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#chatModels{{ request_details.id}}" onclick="get_post_id('{{request_details.id}}')">
-                                                    Chat with Staff
+                                                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#chatModels{{ post.id}}" onclick="get_helpdesk_post_id('{{post.id}}')">
+                                                    Chat with User
                                                 </button>
-                                                
                                                 <!-- Modal -->
-                                                <div class="modal fade"id="chatModels{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="chatModels{{ request_details.id}}Label" aria-hidden="true">
-                                                    <div class="modal-dialog modal-sm" role="document">
+                                                <div class="modal fade" id="chatModels{{ post.id}}" tabindex="-1" role="dialog" aria-labelledby="chatModels{{ post.id}}Label" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header bg-info">
-                                                            <h5 class="modal-title" id="chatModels{{ request_details.id}}Label" style="float: left;">Chat</h5>
+                                                            <h5 class="modal-title" id="chatModels{{ post.id}}Label" style="float: left;">Chat</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body" style="display: flex;justify-content: space-between;align-items: center;flex-direction: column;">
-                                                                <div style="width: 100%;height: 50vh;border: 1px solid rgba(0,0,0,.1) !important;overflow-y: scroll;">
-                                                                    {% include 'pages/alumni_as_sponser/alumni_chat.html' %}
+                                                                <div id="help_desk_post_message" style="width: 100%;height: 50vh;border: 1px solid rgba(0,0,0,.1) !important;overflow-y: scroll;">
+                                                                    {% include 'pages/help_desk_post/chat.html' %}
                                                                 </div>
                                                                 <div style="display: flex;justify-content: space-between;align-items: center;margin: 10px 0px;width: 100%;height: 100%;">
                                                                     {% csrf_token %}
-                                                                    <Textarea id="alumni_msg{{request_details.id}}" style="height: 40px !important;width: 100% !important;padding: 10px !important;" id=""></Textarea>
-                                                                    <button type="button" onclick="alumni_addchat('{{ request_details.id}}')" style="height: 40px !important;background: none;border: none;outline: none;"><i class="fa fa-paper-plane text-info" style="transform: rotate(40deg);"></i></button>
+                                                                    <Textarea id="alumni_msg{{post.id}}" style="height: 40px !important;width: 100% !important;padding: 10px !important;" id=""></Textarea>
+                                                                    <button type="button" onclick="addchat('{{ post.id}}')" style="height: 40px !important;background: none;border: none;outline: none;"><i class="fa fa-paper-plane text-info" style="transform: rotate(40deg);"></i></button>
                                                                 </div>
                                                         </div>
                                                         <!-- <div class="modal-footer">
@@ -246,25 +235,22 @@
                            <h3>Related Posts</h3>
                            <div class="mu-related-item-area">
                              <div id="mu-related-item-slide">
-                                 {% for all_request in all_requests %}
+                                 {% for post in all_post %}
                                <div class="col-md-6">
                                  <article class="mu-blog-single-item">
                                    <figure class="mu-blog-single-img" style="margin: 10px 0px 10px 10px;">
-                                       <h3><a href="#">{{ all_request.title | truncatechars:20 }}</a></h3>
-                                       <img style="height: 150px;width: 150px;border-radius: 50%;" src="{{ all_request.image.url }}"
-                                       alt="Card image cap" />
+                                       <h3><a href="#">{{ post.title | truncatechars:20 }}</a></h3>
                                      <figcaption class="mu-blog-caption">
                                      </figcaption>
-                                    </figure>
-                                                          
+                                    </figure>      
                                    <div class="mu-blog-meta">
-                                     <a href="#">By {{ all_request.posted_by }}</a>
-                                     <a href="#">{{ all_request.date }}</a>
+                                     <a href="#">By {{ post.posted_by }}</a>
+                                     <a href="#">{{ post.date }}</a>
                                    </div>
                                    <div class="mu-blog-description">
-                                     {{ all_request.description | truncatechars:90}}
+                                     {{ post.content | truncatechars:90 | safe}}
                                      <br>
-                                     <a href="{% url 'request_detail_page' all_request.id %}" class="btn-info btn btn-sm">Read More</a>
+                                     <a href="{% url 'post_detail' post.id %}" class="btn-info btn btn-sm">Read More</a>
                                    </div>
                                  </article>
                                </div>
@@ -288,7 +274,7 @@
                             {% for msgs in message %}
                                 <p>{{msgs.message}}</p>
                             {% endfor %}
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chatModels{{ request_details.id}}" onclick="get_post_id('{{request_details.id}}')">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#chatModels{{ post.id}}" onclick="get_post_id('{{post.id}}')">
                                 continue chat
                             </button>
                          </ul>
@@ -323,5 +309,5 @@
 {% endblock content %}
 
 {% block javascript %}
-    <script src="{% static 'js/alumini/alumini.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 {% endblock javascript %}

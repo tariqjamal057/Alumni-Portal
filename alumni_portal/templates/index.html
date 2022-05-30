@@ -337,44 +337,19 @@
                                     <div class="mu-single-feature">
 
                                         <h4>Looking for Mentors</h4>
-
+                                        {% for mentorpost in mentor_help_post %}
                                         <div class="card">
 
                                             <div class="card-body">
-                                                <h5 class="card-title">Project Title</h5>
-                                                <p class="card-text">Project Description and skills goes here, Project
-                                                    Description and skills goes here, Project Description and skills goes
-                                                    here, Project Description and skills goes here</p>
+                                                <h5 class="card-title">{{mentorpost.title}}</h5>
+                                                <p class="card-text">{{mentorpost.content | safe | truncatechars:150}}</p>
 
-                                                <a href="#" class="btn btn-primary">View Detail</a>
+                                                <a href="{% url 'mentor_help_detail_page' mentorpost.id %}" class="btn btn-primary">View Detail</a>
                                             </div>
                                         </div>
                                         <hr>
-                                        <div class="card">
-
-                                            <div class="card-body">
-                                                <h5 class="card-title">Project Title</h5>
-                                                <p class="card-text">Project Description and skills goes here, Project
-                                                    Description and skills goes here, Project Description and skills goes
-                                                    here, Project Description and skills goes here</p>
-
-                                                <a href="#" class="btn btn-primary">View Detail</a>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="card">
-
-                                            <div class="card-body">
-                                                <h5 class="card-title">Project Title</h5>
-                                                <p class="card-text">Project Description and skills goes here, Project
-                                                    Description and skills goes here, Project Description and skills goes
-                                                    here, Project Description and skills goes here</p>
-
-                                                <a href="#" class="btn btn-primary">View Detail</a>
-                                            </div>
-                                        </div>
-
-                                        <a href="" class="btn btn-secondary" style="float:right">View All</a>
+                                        {% endfor %}
+                                        <a href="/mentor_help_posts/" class="btn btn-secondary" style="float:right">View All</a>
 
 
                                     </div>
@@ -460,111 +435,37 @@
                         <!-- End Title -->
                         <!-- Start latest course content -->
                         <div id="mu-latest-course-slide" class="mu-latest-courses-content">
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/1.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Seeking Job</a>
-                                            <span><i class="fa fa-clock-o"></i>90Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
+                            {% for post in posts %}
+                                <div class="col-lg-4 col-md-4 col-xs-12">
+                                    <div class="mu-latest-course-single">
+                                        <figure class="mu-latest-course-img">
+                                            <figcaption class="mu-latest-course-imgcaption">
+                                                {% with postype=post.post_type %}
+                                                {% if postype == "O" %}
+                                                <a href="#">Opportunity</a>
+                                                {% endif %}
+                                                {% if postype == "S" %}
+                                                <a href="#">Seeking Job</a>
+                                                {% endif %}
+                                                {% if postype == "I" %}
+                                                <a href="#">Internship</a>
+                                                {% endif %}
+                                                {% endwith %}
+                                                <!-- <span><i class="fa fa-clock-o"></i>90Days</span> -->
+                                            </figcaption>
+                                        </figure>
+                                        <div class="mu-latest-course-single-content">
+                                            <h4><a href="#">{{post.title}}</a></h4>
+                                            <p>{{post.content | truncatechars:300 | safe}}</p>
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/2.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Job Openings</a>
-                                            <span><i class="fa fa-clock-o"></i>75Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/3.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Intern Oppurtunity</a>
-                                            <span><i class="fa fa-clock-o"></i>45Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/1.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Seeking Job</a>
-                                            <span><i class="fa fa-clock-o"></i>90Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/2.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Job Openings </a>
-                                            <span><i class="fa fa-clock-o"></i>75Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/3.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Intern Oppurtunity</a>
-                                            <span><i class="fa fa-clock-o"></i>45Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
+                            
                         </div>
                         <!-- End latest course content -->
-                        <a href="#" class="btn btn-primary" style="float:right; margin-top:10px;">View All</a>
+                        <a href="/help_desk_page/" class="btn btn-primary" style="float:right; margin-top:10px;">View All</a>
                     </div>
                 </div>
             </div>
