@@ -21,28 +21,28 @@ function delete_post(id) {
   });
 }
 
-function alumni_addchat(id) {
-  const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-  alert(id);
-  const message = document.getElementById("alumni_msg" + id).value;
-  alert(message);
-  console.log("message = " + message);
-  $.ajax({
-    type: "POST",
-    url: "/get_user_interest/",
-    data: { 'message': message, 'id': id, 'csrfmiddlewaretoken': csrftoken,'chat':true},
-    success: function (response) {
-      alert("yes");
-      var x = "#chat" + response["id"];
-      $(x).modal("hide");
-      $("#finance_request_container").html(response.html);
-      alert(response);
-    },
-    error: () => {
-      alert("Something went wrong");
-    },
-  });
-}
+// function alumni_addchat(id) {
+//   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+//   alert(id);
+//   const message = document.getElementById("alumni_msg" + id).value;
+//   alert(message);
+//   console.log("message = " + message);
+//   $.ajax({
+//     type: "POST",
+//     url: "/get_user_interest/",
+//     data: { 'message': message, 'id': id, 'csrfmiddlewaretoken': csrftoken,'chat':true},
+//     success: function (response) {
+//       alert("yes");
+//       var x = "#chat" + response["id"];
+//       $(x).modal("hide");
+//       $("#finance_request_container").html(response.html);
+//       alert(response);
+//     },
+//     error: () => {
+//       alert("Something went wrong");
+//     },
+//   });
+// }
 
 // Get Interest Shown User 
 function get_interest_message(post,user) {
@@ -70,23 +70,19 @@ function get_interest_message(post,user) {
 // Chat with Faculty in Alumni as sponser
 function alumni_addchat(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-  alert(id);
   const message = document.getElementById("alumni_msg" + id).value;
-  alert(message);
   console.log("message = " + message);
   $.ajax({
     type: "POST",
     url: "/alumni_response/",
     data: { message: message, id: id, csrfmiddlewaretoken: csrftoken},
     success: function (response) {
-      alert("yes");
       var x = "#chat" + response["id"];
       $(x).modal("hide");
       $("#alumni_message").html(response.html);
-      alert(response);
     },
     error: () => {
-      alert("Something went wrong");
+      console.log("something went wrong");
     },
   });
 }
@@ -96,12 +92,12 @@ function get_post_id(id) {
   $.ajax({
     type: "POST",
     url: "/get_alumni_message/",
-    data: { id: id},
+    data: { id: id,csrfmiddlewaretoken: csrftoken},
     success: function (response) {
       $("#alumni_message").html(response.html);
     },
     error: () => {
-      alert("Something went wrong");
+      console.log("something went wrong")
     },
   });
 }

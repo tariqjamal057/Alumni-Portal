@@ -2,6 +2,7 @@ from datetime import datetime
 from email import message
 from multiprocessing import context
 from pipes import Template
+from django.conf import settings
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
@@ -13,6 +14,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 from django.core import serializers
 from django.db.models import Q
+import itertools
 
 from portal.forms import FinanceHelpForm, Help_Desk_Form, MentorHelpForm
 from portal.models import *
@@ -76,7 +78,7 @@ def dashboard(request):
 def faculty(request):
     if 'q' in request.GET:
         q=request.GET['q']
-        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(student_name__icontains=q)).order_by('-id')
+        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(name__icontains=q)).order_by('-id')
     else:
         requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
     for req in requests:
@@ -148,47 +150,51 @@ def page404(request):
 
 #create financial request
 def create_Finance_Post(request):
-    form = FinanceHelpForm()
-    print("started")
     if request.method == 'POST':
         form = FinanceHelpForm(request.POST,request.FILES)
-        print(form)
-        print(form.is_valid())
-        print("enter")
         if form.is_valid():
-            addrequest = form.save(commit=False)
-            addrequest.posted_by = request.user
-            addrequest.save()
+            form = form.save(commit=False)
+            form.posted_by = request.user
+            form.save()
             print("work")
             return redirect('/dashboard')
+        else:
+            print(form.errors.as_data())
+            return render(request,'faculty/create_financial_request.html',{'form':form})
+    else:
+        form = FinanceHelpForm()
     return render(request,'faculty/create_financial_request.html',{'form':form})
 
 
 
 def update_Finance_Post(request,pk):
     req = Finance_request.objects.get(id=pk)
-    updateform = FinanceHelpForm(instance=req)
+    form = FinanceHelpForm(instance=req)
     if request.method == 'POST':
-        updateform = FinanceHelpForm(request.POST,request.FILES,instance=req)
-        if updateform.is_valid():
-            addrequest = updateform.save(commit=False)
-            addrequest.posted_by = request.user
-            addrequest.save()
+        form = FinanceHelpForm(request.POST,request.FILES,instance=req)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.posted_by = request.user
+            form.save()
             return redirect('/dashboard')
-    return render(request,'faculty/update_financial_request.html',{'updateform':updateform})
+    return render(request,'faculty/update_financial_request.html',{'form':form})
 
 def view_detail_page(request,pk):
-    request_i = Finance_request.objects.get(id=pk)
-    alumni_interest = Finance_request_Post_Response.objects.filter(post = request_i).order_by('-id')  
-    recent_intetest = Finance_request_Post_Response.objects.filter(post = request_i).order_by('-id')[:5]  
-    amount = featured_Sponser.objects.filter(student_name_id = request_i.id).order_by('-id')[:5]
-    all_sponser = featured_Sponser.objects.filter(student_name_id = request_i.id).order_by('-id')
+    post = Finance_request.objects.get(id=pk)
+    alumni_interest = Finance_request_Post_Response.objects.filter(post = post).order_by('-id')
+    recent_intetest = Finance_request_Post_Response.objects.filter(post = post).order_by('-id')[:5]
+    recent_sponsers = Featured_Sponser.objects.filter(student_name_id = post.id).order_by('-id')[:5]
+    all_sponser = Featured_Sponser.objects.filter(student_name_id = post.id).order_by('-id')
+    total_number_of_interest = len(alumni_interest) # Total Number of Interest Count
+    number_of_sponser = len(all_sponser) # Total Number of Sponser Count
     context = {
-        'request_details' : request_i,
+        'request_details' : post,
         'alumni_interest':alumni_interest,
         'recent_intetest':recent_intetest,
-        'amounts':amount,
+        'recent_sponsers':recent_sponsers,
         'all_sponser':all_sponser,
+        'number_of_sponser':number_of_sponser,
+        'total_number_of_interest':total_number_of_interest,
     }
     return render(request,'faculty/financial_request_detail_page.html',context)
     
@@ -209,7 +215,7 @@ def delete_Finance_Post(request):
 def finance_request_page(request):
     if 'q' in request.GET:
         q=request.GET['q']
-        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(student_name__icontains=q) | Q(description__icontains=q)).order_by('-id')
+        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)).order_by('-id')
     else:
         requests = Finance_request.objects.all().order_by('-id')
     paginator=Paginator(requests,9)
@@ -221,36 +227,45 @@ def finance_request_page(request):
     return render(request,'pages/alumni_as_sponser/financehelp_page.html',context)
 
 def finance_request_detail_page(request,pk):
-    request_i = Finance_request.objects.get(id=pk)
-    all_requests = Finance_request.objects.all().order_by("-id")[:6]
-    interest = Finance_request_Post_Response.objects.get(user_id=request.user.id,post_id=pk)
-    message = Finance_request_Response_Message.objects.filter(post_response_id=interest.id).order_by('-id')[:5]
-    contrib = featured_Sponser.objects.filter(user_id=request.user.id,student_name_id=interest.id)
+    request_details = Finance_request.objects.get(id=pk)
+    related_posts = Finance_request.objects.all().order_by("-id")[:6]
+    if Finance_request_Post_Response.objects.filter(user_id=request.user.id,post_id=pk).exists():
+        is_showed_interest = True
+    else:
+        is_showed_interest = False
+    message = Finance_request_Response_Message.objects.filter(post_response__post=pk).order_by('-id')[:5]
+    contrib = Featured_Sponser.objects.filter(user=request.user,student_name__post=pk)
     context = {
-        'request_details' : request_i,
-        'all_requests':all_requests,
+        'request_details' : request_details,
+        'related_posts':related_posts,
         'message':message,
         'contrib':contrib,
+        'is_showed_interest':is_showed_interest,
     }
     return render(request,'pages/alumni_as_sponser/request_detail.html',context)
 
 @csrf_exempt
 def alumini_message(request):
     data = dict()
-    print("working")
     id = request.POST.get('id')
     message = request.POST.get('message')
     post=Finance_request.objects.get(id=id)
     requser = request.user
-    print(requser)
     interest,created = Finance_request_Post_Response.objects.get_or_create(user=request.user,post=post)
-    Finance_request_Response_Message.objects.create(user_id=requser.id,post_response_id=interest.id,message=message, date=datetime.now())
-    print("done")
-    # return JsonResponse(data)
-    print("Hello World")
-    context = {
-    }
-    return render(request,'pages/alumni_as_sponser/alumni_chat.html',context)
+    if(created):
+        frm = settings.EMAIL_HOST_USER
+        to = User.objects.get(posted_by = post.posted_by)
+        from_email = frm.email
+        to_email = [to.email]
+        send_mail(
+            'You get an new Interest from ALumni',
+            'You get  a new from a ALumni',
+            from_email,
+            to_email,
+        )
+    Finance_request_Response_Message.objects.create(user_id=requser.id,post_response_id=interest.post_id,message=message, date=datetime.now())
+    data['html'] = render_to_string('pages/alumni_as_sponser/alumni_chat.html')
+    return JsonResponse(data)
 
 @csrf_exempt
 def get_alumni_message(request):
@@ -259,71 +274,115 @@ def get_alumni_message(request):
     data["id"] = id
     interest = Finance_request_Post_Response.objects.get(user_id=request.user.id,post_id=id)
     message = Finance_request_Response_Message.objects.filter(post_response_id=interest.id)
-    print("hellllo")
-    print(message)
     data['html'] = render_to_string('pages/alumni_as_sponser/alumni_chat.html', {'message': message,'user': request.user})
     return JsonResponse(data)
 
+def finance_request_chat(request,pk):
+    post = Finance_request.objects.get(id=pk)
+    alumni_interests = Finance_request_Post_Response.objects.filter(post = post).order_by('-id')
+    users = User.objects.all()
+    context = {
+        'alumni_interests':alumni_interests,
+        'users':users,
+    }
+    return render(request,'faculty/message.html',context)
 
-
-@csrf_exempt
-def get_message_interest(request):
+def get_interest(request):
     data = dict()
+    csrf_token = request.POST.get('csrfmiddlewaretoken')
     post_id = request.POST.get('post_id')
     user = request.POST.get('user')
-    messages = Finance_request_Response_Message.objects.filter(post_response = post_id,user = user)
-    faculty_messages = Finance_request_Response_Message.objects.filter(post_response = post_id,user = request.user.id)
-    var = request.POST.get('chatfun')
-    if (var):
-        interestid = request.POST.get('id')
-        message = request.POST.get('message')
-        print(message)
-        # interest = Finance_request_Post_Response.objects.get(user=user,post=post)
-        Finance_request_Response_Message.objects.create(user_id=request.user.id,post_response_id=interestid,message=message, date=datetime.now())
+    interest_user = Finance_request_Post_Response.objects.filter(post = post_id,user = user)
+    context = {
+        'interest_user':interest_user,
+    }
+    data['token'] = csrf_token
+    data['html'] = render_to_string('faculty/finance_chat_header.html',context)
+    return JsonResponse(data)
+
+
+
+def get_interest_message(request):
+    data = dict()
+    csrf_token = request.POST.get('csrfmiddlewaretoken')
+    post_id = request.POST.get('post_id')
+    user = request.POST.get('user')
+    interests = Finance_request_Post_Response.objects.filter(post = post_id,user = user)
+    for inst in interests:
+        interest = inst
+    interest = interest.id
+    messages = Finance_request_Response_Message.objects.filter(post_response = interest,user = user)
+    faculty_messages = Finance_request_Response_Message.objects.filter(post_response = interest,user = request.user.id)
+    all_messages = Finance_request_Response_Message.objects.filter(Q(user_id = user) | Q(user_id = request.user.id))
+    faculty = request.user
     context = {
         'messages':messages,
         'faculty_messages':faculty_messages,
+        'all_messages':all_messages,
         'post_interest':post_id,
         'intest_user':user,
+        'interest':interest,
+        'faculty':faculty,
     }
+    data['token'] = csrf_token
     data['html']  = render_to_string('faculty/chat.html',context)
     return JsonResponse(data)
 
-@csrf_exempt
+def get_finance_request_interest(request):
+    data = dict()
+    csrf_token = request.POST.get('csrfmiddlewaretoken')
+    post_id = request.POST.get('post_id')
+    user = request.POST.get('user')
+    interest = Finance_request_Post_Response.objects.filter(post = post_id,user = user)
+    
+    context = {
+        'interest':interest,
+    }
+    data['token'] = csrf_token
+    data['html'] = render_to_string('faculty/finance_chat_text_container.html',context)
+    return JsonResponse(data)
+
+
+def faculty_addchat(request):
+    data = dict()
+    csrf_token = request.POST.get('csrfmiddlewaretoken')
+    interestid = request.POST.get('id')
+    message = request.POST.get('message')
+    interest = Finance_request_Post_Response.objects.get(id=interestid)
+    Finance_request_Response_Message.objects.create(user_id=request.user.id,post_response_id=interestid,message=message)
+    data['token'] = csrf_token
+    data['html']  = render_to_string('faculty/chat.html')
+    return JsonResponse(data)
+
+
 def add_finance_amount(request):
     data = dict()
-    print("hsajh")
+    csrf_token = request.POST.get('csrfmiddlewaretoken')
     postid = request.POST.get('post_id')
     user = request.POST.get('user')
-    print(postid)
-    print(user)
     inst = Finance_request_Post_Response.objects.get(user_id = user,post_id = postid)
-    print(inst.post_id)
-    print(inst.user_id)
-    print("jdkjdhkuhudfsghudf")
     context = {
-        'student_name':inst.post.student_name,
+        'student_name':inst.post.name,
         'alumni_name':inst.user.username,
         'postid':inst.post_id,
         'alumniid':inst.user_id,
     }
+    data['token'] = csrf_token
     data['html']  = render_to_string('faculty/add_sponser.html',context)
     return JsonResponse(data)
 
-@csrf_exempt
 def add_sponser(request):
-    # data = dict()
-    # studentname = request.POST.get('studentname')
-    # alumniname = request.POST.get('alumniname')
+    data =dict()
+    csrf_token = request.POST.get('csrfmiddlewaretoken')
     amount = request.POST.get('amount')
     postid = request.POST.get('postid')
     alumniid = request.POST.get('alumniid')
-    featured_Sponser.objects.create(student_name_id=postid,user_id=alumniid,amount=amount,date=datetime.now())
-    return render(request,'faculty/add_sponser.html')
-
+    Featured_Sponser.objects.create(student_name_id=postid,user_id=alumniid,amount=amount,date=datetime.now())
+    data['token'] = csrf_token
+    data['html']  = render_to_string('faculty/add_sponser.html',context)
+    return JsonResponse(data)
 
 # Help Desk Section
-
 #create help desk post
 def create_help_desk_post(request):
     form = Help_Desk_Form()

@@ -81,6 +81,15 @@
                         </li>
                         <li><a href="/gallery">Gallery</a></li>
                         <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities <span
+                                    class="fa fa-angle-down"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/mentor_help_posts">Alumni as Mentor</a></li>
+                                <li><a href="/finance_requests">Alumni as Sponsor</a></li>
+                                <li><a href="/help_desk_page">Alumni Help Desk</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <span
                                     class="fa fa-angle-down"></span></a>
                             <ul class="dropdown-menu" role="menu">
@@ -89,7 +98,18 @@
                             </ul>
                         </li>
                         <li><a href="/contact">Contact</a></li>
-                        <li><a href="/404">404 Page</a></li>
+                        {% if user.is_authenticated %}
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user}}<span
+                                        class="fa fa-angle-down"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="/dashboard">dashboard <i class="fa fa-user"></i></a></li>
+                                    <li><a href="/">logout <i class="fa fa-sign-out"></i></a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li><a href="/login">Login</a></li>
+                        {% endif %}
                         <li><a href="/" id="mu-search-icon"><i class="fa fa-search"></i></a></li>
                     </ul>
                 </div>
@@ -123,7 +143,7 @@
                         <h2>Alumini As a Sponser</h2>
                         <ol class="breadcrumb">
                             <li><a href="/home">Home</a></li>
-                            <li class="active">Financial Request</li>
+                            <li class="active">Finance Request</li>
                         </ol>
                     </div>
                 </div>
@@ -139,7 +159,7 @@
                         <div class="row" style="margin-bottom: 20px;">
                             <div style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;padding: 0 20px !important;">
                                 <div style="display: flex;">
-                                    <h2>Financial Request</h2>
+                                    <h2>Finance Request</h2>
                                 </div>
                                 <form>
                                     <div class="input-group" style="display: flex;justify-content: center;align-items: center;">
@@ -147,6 +167,7 @@
                                         <div class="input-group-append">
                                         <button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
                                         </div>
+                                        <a href="/dashboard" class="btn btn-danger" id="button-addon2">Cancel</a>
                                     </div>
                                 </form>
                             </div>
@@ -166,9 +187,10 @@
                                             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
                                             position: relative;
                                             background: #fff;
+                                            min-height: 230px;
                                             ">
                                                 <div style="display: flex;flex-direction: column;">
-                                                    <div style="display: flex" class="post-container">
+                                                    <div style="display: flex;min-height: 155px;" class="post-container">
                                                         <div class="img-square-wrapper" style="margin-right: 10px">
                                                             <img style="width: 100px; height: 100px;border-radius:50%;"
                                                                 class="" src="{{ request.image.url }}"
@@ -180,10 +202,25 @@
     
                                                             </div>
                                                             <div style="display: flex;">
-                                                                <p class="card-text">name : {{ request.student_name }}</p>
-                                                                &nbsp;&nbsp;
-                                                                <p class="card-text">Year : {{ request.year }}<sup>rd</sup>
-                                                                    {{request.department}}</p>
+                                                                {% with year=request.year %}
+                                                                    {% if year == '1' %}
+                                                                    <p class="card-text">name : {{ request.name }}
+                                                                        &nbsp;{{ year }}<sup>st</sup>
+                                                                            {{request.department}}</p>
+                                                                    {% elif year == '2' %}
+                                                                    <p class="card-text">name : {{ request.name }}
+                                                                        &nbsp;{{ year }}<sup>nd</sup>
+                                                                            {{request.department}}</p>
+                                                                    {% elif year == '3' %}
+                                                                    <p class="card-text">name : {{ request.name }}
+                                                                        &nbsp;{{ year }}<sup>rd</sup>
+                                                                            {{request.department}}</p>
+                                                                    {% else %}
+                                                                    <p class="card-text">name : {{ request.name }}
+                                                                        &nbsp;{{ year }}<sup>th</sup>
+                                                                            {{request.department}}</p>
+                                                                    {% endif %}
+                                                                {% endwith %}
                                                             </div>
                                                             <p style="font-size: 15px !important;">Description :
                                                                 {{request.description | truncatechars:50}}</p>

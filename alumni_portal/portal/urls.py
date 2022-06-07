@@ -29,18 +29,23 @@ urlpatterns = [
     path('404/',views.page404,name = "page404")
     ,
 
-    path('request/create-finance-post/',views.create_Finance_Post,name = "create-finance-post"),
+    path('create-finance-request/',views.create_Finance_Post,name = "create-finance-request"),
     path('request/update-finance-post/<int:pk>',views.update_Finance_Post,name = "update-finance-post"),
     path('request/delete-finance-post/',views.delete_Finance_Post,name = "delete-finance-post"),
     path('request/view_datails/<int:pk>',views.view_detail_page , name="request_details"),
     path('finance_requests/',views.finance_request_page,name="finance_request"),
     path('request_detail_page/<int:pk>',views.finance_request_detail_page,name="request_detail_page")
     ,
+
+    path('finance_request_chat/<int:pk>',views.finance_request_chat,name = "finance_request_chat"),
+    path('get_finance_request_messages/',views.get_interest_message,name="get_finance_request_messages"),
+    path('faculty_chat/',views.faculty_addchat,name="faculty_chat"),
+    path('get_interest/',views.get_interest,name='get_interest'),
+    path('finance_response_interest/',views.get_finance_request_interest,name="finance_response_interest"),
     path('alumni_response/',views.alumini_message,name="alumini_message"),
-    path('get_interest/',views.get_message_interest,name = "get_interest"),
+    path('get_alumni_message/',views.get_alumni_message,name = "get_alumni_message"),
     path('add_amount/',views.add_finance_amount,name = "add_amount"),
-    path('add_sponser/',views.add_sponser,name = "add_sponser"),
-    path('get_alumni_message/',views.get_alumni_message,name = "get_alumni_message")
+    path('add_sponser/',views.add_sponser,name = "add_sponser")
     ,
 
     path('request/create_help_desk_post/',views.create_help_desk_post, name='create_help_desk_post'),
@@ -50,6 +55,7 @@ urlpatterns = [
     path('help_desk_page/',views.help_desk_page,name="help_desk_page"),
     path('post_detail/<int:pk>',views.post_detail,name="post_detail")
     ,
+
     path('get_user_interest/',views.get_user_interest,name = "get_user_interest"),
     path('user_response/',views.user_message,name="user_message"),
     path('get_user_message/',views.get_user_message,name = "get_user_message")
@@ -62,9 +68,9 @@ urlpatterns = [
     path('mentor_help_posts/',views.mentor_help_page,name="mentor_help_posts"),
     path('mentorhelp_post_details/<int:pk>',views.mentorhelp_post_details,name="mentorhelp_post_details")
     ,
+
     path('mentor_message/',views.mentor_message,name="mentor_message"),
     path('get_mentor_message/',views.get_mentor_message,name = "get_mentor_message")
     ,
-
 
 ]

@@ -38,15 +38,8 @@
     <![endif]-->
 
     <style>
-        ::-webkit-scrollbar
-        {
-            width: 0px;
-            background: #0000ff;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 20px;
-            height: 50px;
+        html {
+            font-size: 100%;
         }
         .card {
             margin-bottom: 50px;
@@ -56,40 +49,11 @@
             float: right;
         }
 
-        .login-container {
-            height: 100vh;
-            width: 100%;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-innercontainer {
-            width: 300px;
-            height: 360px;
-            box-shadow: 0px 0px 12px rgba(0, 0, 0, .2);
-            border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            overflow-x: hidden!important;
-        }
-        .login-innercontainer h2 {
-            text-align: center;
-            padding: 10px 0px;
-            margin-bottom: 20px;
-        }
-        .Form {
-            padding: 0px 10px;
-            overflow-y: hidden;
-        }
-        .Form a {
-            text-decoration: none;
-            color: #888;
-            font-size: 15px;
-        }
         .btn {
             margin: 20px 0px!important;
+        }
+        .modal.fade.in {
+            background-color: rgba(0,0,0,0.01) !important;
         }
     </style>
     <title>{% block title %} {% endblock title %}</title>
@@ -128,7 +92,15 @@
         })(window['adrum-config'] || (window['adrum-config'] = {}));
      </script>
      <script src='//cdn.appdynamics.com/adrum/adrum-latest.js' type='text/javascript' charset='UTF-8'></script>
-
+     <script>
+         $(function() {
+  $('input[type=file]').change(function(){
+    var t = $(this).val();
+    var labelText = 'File : ' + t.substr(12, t.length);
+    $(this).prev('label').text(labelText);
+  })
+});
+     </script>
     {% block javascript %}
     {% endblock javascript %}
 </body>

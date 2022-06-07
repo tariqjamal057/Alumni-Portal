@@ -4,8 +4,6 @@
 {% load social_share %}
 
 {% block style %}
-<style>
-</style>
 <link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
 {% endblock style %}
 
@@ -28,15 +26,29 @@
                      <div class="col-md-12">
                        <article class="mu-blog-single-item">
                          <figure class="mu-blog-single-img">
-                           <div style="margin: 10px 0px 0px 10px;display: flex;justify-content: center;align-items: center;flex-direction: column;">
-                            <h2 class="text-info" style="margin-bottom: 50px;">{{ request_details.title}}</h2>
+                           <div style="margin: 10px 0px 0px 10px;">
+                            <h2 class="text-info" style="margin-bottom: 10px;">{{ request_details.title}}</h2>
                             <img style="width: 150px; height: 150px;border-radius:50%;" class=""
                                     src="{{ request_details.image.url }}" alt="Card image cap" />
                             </div>
-                           <figcaption class="mu-blog-caption" style="margin: 20px 0;;display: flex;justify-content: center;align-items: center;flex-direction: column;">
+                           <figcaption class="mu-blog-caption" style="margin: 20px 0;;">
                                
-                            <h3 class="card-text">{{ request_details.student_name }}</h3>
-                            <h5 class="card-text">{{ request_details.year }}<sup>rd</sup> Year</h5>
+                            <h3 class="card-text">{{ request_details.name }}</h3>
+                            {% with year=request_details.year %}
+                              {% if year == '1' %}
+                                <h4 class="card-text">{{ year }}<sup>st</sup> Year</h4>
+                              {% endif %}
+                              {% if year == '2' %}
+                                <h4 class="card-text">{{ year }}<sup>nd</sup> Year</h4>
+                              {% endif %}
+                              {% if year == '3' %}
+                                <h4 class="card-text">{{ year }}<sup>rd</sup> Year</h4>
+                              {% endif %}
+                              {% if year == '4' %}
+                                <h4 class="card-text">{{ year }}<sup>th</sup> Year</h4>
+                              {% endif %}
+                            {% endwith %}
+                            
 
                            </figcaption>                      
                          </figure>
@@ -61,66 +73,44 @@
                          <div class="mu-blog-social">
                            <ul class="mu-news-social-nav">
                              <li>SOCIAL SHARE :</li>
-                             <button class="btn btn-sm btn-info" >{% post_to_whatsapp object_or_url "whatsapp" %}</button>
-                             <button class="btn btn-sm btn-info" >{% post_to_facebook object_or_url "facebook" %}</button>
-                             <button class="btn btn-sm btn-info" >{% post_to_twitter object_or_url "twitter" %}</button>
-                             <button class="btn btn-sm btn-info" >{% post_to_gplus object_or_url "google" %}</button>
-                             <button class="btn btn-sm btn-info" >{% post_to_linkedin object_or_url "linkedin" %}</button>
-                             <button class="btn btn-sm btn-info" >{% send_email object_or_url "email" %}</button>
+                             <button class="btn btn-sm btn-info" >{% post_to_whatsapp object_or_url '<i class="fa fa-whatsapp"></i>' %}</button>
+                             <button class="btn btn-sm btn-info" >{% post_to_facebook object_or_url '<i class="fa fa-facebook"></i>' %}</button>
+                             <button class="btn btn-sm btn-info" >{% post_to_gplus object_or_url '<i class="fa fa-google-plus"></i>' %}</button>
                            </ul>
                            <!-- <hr> -->
                          </div>
                          <!-- End blog social share -->
                          <div class="col-md-12 bg-light text-right" style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
-                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#chatModels{{ request_details.id}}">
-                                Chat with Alumni
-                            </button>
+                            <a href="{% url 'finance_request_chat' request_details.id %}" target="_blank" class="btn btn-info">View Messages</a>
                             
                             <!-- Modal -->
                             <div class="modal fade"id="chatModels{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="chatModels{{ request_details.id}}Label" aria-hidden="true">
                                 <div class="modal-dialog modal-sm" role="document">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-info">
+                                    <div class="modal-header" style="background-color: #5bc0de;">
                                         <h5 class="modal-title modaltitle" id="chatModels{{ request_details.id}}Label">Alumni Interest</h5>
                                         <button type="button" class="close closebtn" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
 
-                                    <div class="modal-body bg-in">
-                                        <div class="Container-left" style="height: 35vh;overflow-y: scroll;">
-                                            {% for interest in alumni_interest %}
-                                                <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')" data-toggle="modal" data-target="#messagemodel{{ request_details.id}}">{{interest.user}}</button>
-                                                <br>
-                                                <hr style="margin-bottom: 5px !important">
-                                            {% endfor %}
+                                    <div class="modal-body ">
+                                        <div class="Container-left" style="height: 35vh;overflow-y: scroll;scrollbar-width: 0;">
+                                          {% with total_interest=total_number_of_interest %}
+                                            {% if total_interest >= 1 %}
+                                              {% for interest in alumni_interest %}
+                                                  <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')">{{interest.user}}</button>
+                                                  <br>
+                                                  <hr style="margin-bottom: 5px !important">
+                                              {% endfor %}
+                                            {% else %}
+                                              <p style="text-align: left !important;">Currently you don't have any Interst for this Request</p>
+                                            {% endif %}
+                                          {% endwith %}
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary btn-sm" style="margin: 10px 0 !important;" data-dismiss="modal">Close</button>
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="modal fade"id="messagemodel{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="messagemodel{{ request_details.id}}Label" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-info">
-                                        <h5 class="modal-title modaltitle" id="messagemodel{{ request_details.id}}Label"></h5>
-                                        <button type="button" class="close closebtn" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                            <div id="msg_container">
-                                                {% include 'faculty/chat.html' %}
-                                            </div>
-                                    </div>
-                                    <!-- <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div> -->
+                                    <button type="button" class="btn btn-danger btn-sm" style="margin: 10px 0 !important;" data-dismiss="modal">Close</button>
                                 </div>
                                 </div>
                             </div>
@@ -138,12 +128,20 @@
                    <div class="mu-single-sidebar">
                      <h3>Recent Interests</h3>
                      <ul class="mu-sidebar-catg">
-                       {% for inst in recent_intetest %}
-                        <li style="cursor: pointer;" data-toggle="modal" data-target="#chatModels{{ request_details.id}}">
-                          <a>{{ inst.user }}</a>
-                        </li>
-                       {% endfor %}
-                       <button type="button" data-toggle="modal" data-target="#chatModels{{ request_details.id}}" class="btn btn-sm btn-info">view all</button>
+                       {% with total_interest=total_number_of_interest %}
+                        {% if total_interest >= 1 %}
+                          {% for inst in recent_intetest %}
+                            <li style="cursor: pointer;">
+                              <a href="{% url 'finance_request_chat' request_details.id %}" target="_blank">{{ inst.user }}</a>
+                            </li>
+                          {% endfor %}
+                          {% if total_interest > 5 %}
+                            <a href="{% url 'finance_request_chat' request_details.id %}" target="_blank"  class="btn btn-sm btn-info">View All Interest</a>
+                          {% endif %}
+                        {% else %}
+                            <p>Currently you don't have any Interst for this Request</p>
+                        {% endif %}
+                      {% endwith %}
                      </ul>
                    </div>
                    <!-- end single sidebar -->
@@ -151,11 +149,19 @@
                    <div class="mu-single-sidebar">
                      <h3>Sponsers</h3>
                      <ul class="mu-sidebar-catg mu-sidebar-archives">
-                       {% for amount in amounts %}
-                        <li style="cursor: pointer;"><a>{{amount.amount}}.00</a> by <span>{{amount.user}}</span></li>
-                       {% endfor %}
+                       {% with sponsers=number_of_sponser %}
+                        {% if sponsers > 0 %}
+                          {% for recent_sponser in recent_sponsers %}
+                            <li style="cursor: pointer;"><a>{{recent_sponser.amount}}.00<span>by {{recent_sponser.user}}</span></a></li>
+                          {% endfor %}
+                        {% else %}
+                        <li style="cursor: pointer;">Currently no sponsers for this Request</li>
+                        {% endif %}
                      </ul>
-                     <button type="button" data-toggle="modal" data-target="#sponser_list" class="btn btn-sm btn-info">view all sponser</button>
+                      {% if sponsers > 5 %}
+                        <button type="button" data-toggle="modal" data-target="#sponser_list" class="btn btn-sm btn-info">View All Sponsers</button>
+                      {% endif %}
+                     {% endwith %}
                      <!-- sponsers list modal  -->
                      {% include 'faculty/all_sponsers.html' %}
                    </div>

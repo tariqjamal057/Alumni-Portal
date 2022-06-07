@@ -48,7 +48,7 @@ class Batch(models.Model):
     entry_year = models.IntegerField()
     passed_out = models.IntegerField()
     def __str__(self):
-        return self.entry_year + "-" + self.passed_out
+        return str(self.entry_year) + "-" + str(self.passed_out)
 
 
 class Department(models.Model):
@@ -85,7 +85,7 @@ class User(AbstractBaseUser , PermissionsMixin):
     gender = models.CharField(choices=gender_options,max_length=1,null=True,blank=True)
     dob = models.DateField(blank=True,null=True)    
     mobile_no=models.CharField(max_length=10,null=True,blank=True)
-    profile_photo=models.ImageField(upload_to="profile_picture",null=True,blank=True)
+    profile_photo=models.ImageField(upload_to='profile_picture',null=True,blank=True,)
     department = models.ForeignKey(Department,on_delete=models.CASCADE,null=True,blank=True)
     register_number = models.IntegerField(blank=True, null=True)
     batch = models.ForeignKey(Batch,on_delete=models.CASCADE,null=True,blank=True)
@@ -166,13 +166,13 @@ class ExperienceDetail(models.Model):
     def __str__(self):
         return self.user.first_name + self.designation
 
-
+year_option = (('1','1'),('2','2'),('3','3'),('4','4'),)
 class Finance_request(models.Model):
     title = models.CharField(max_length=100)
     image = models.ImageField(upload_to ='student_images')
-    student_name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     department = models.ForeignKey(Department,on_delete = models.CASCADE)
-    year = models.IntegerField()
+    year = models.CharField(choices=year_option,max_length=1)
     description = models.TextField()
     achievements = models.TextField(null=True)
     other_performance = models.TextField(null=True)
@@ -180,7 +180,7 @@ class Finance_request(models.Model):
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.student_name
+        return self.name
 
     def get_interested_alumni(self):
         return Finance_request_Post_Response.objects.filter(post=self)
@@ -196,11 +196,11 @@ class Finance_request_Response_Message(models.Model):
     user = models.ForeignKey(User , on_delete=models.CASCADE,null=True)
     post_response = models.ForeignKey(Finance_request_Post_Response , on_delete= models.CASCADE)
     message = models.TextField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(auto_now_add=True)
 
 
-class featured_Sponser(models.Model):
-    student_name = models.ForeignKey(Finance_request_Post_Response,on_delete=models.CASCADE,related_name='student_name',null=True)
+class Featured_Sponser(models.Model):
+    student_name = models.ForeignKey(Finance_request,on_delete=models.CASCADE,related_name='student_name',null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,related_name='alumni')
     amount = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
@@ -212,7 +212,7 @@ post_type_options = (
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = RichTextUploadingField()
-    post_type = models.CharField(choices=post_type_options,max_length=1,blank=True)
+    post_type = models.CharField(choices=post_type_options,max_length=1)
     date = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(User , on_delete=models.CASCADE , related_name='postedby')
 

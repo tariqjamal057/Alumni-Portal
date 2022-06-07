@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'crispy_forms',
     'django_social_share',
+    'import_export',
 ]
 
 # CKEDITOR_UPLOADER_PATH = 'media/'
@@ -87,7 +88,7 @@ WSGI_APPLICATION = 'alumni_portal.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  
-        'NAME': 'db2',
+        'NAME': 'portal',
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'USER': 'root',
@@ -161,3 +162,10 @@ CKEDITOR_CONFIGS = {
         'width': 'full', 
     },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = '19ita57@karpagamtech.ac.in'
+EMAIL_HOST_PASSWORD = 'Jamal@123'

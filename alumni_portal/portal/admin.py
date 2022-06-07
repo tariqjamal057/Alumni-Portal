@@ -1,42 +1,101 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from portal.models import *
+from django.contrib.auth.hashers import make_password
 
 admin.site.site_header = 'Karpagam Institute of Technology'
 admin.site.site_title = 'Admin'
 admin.site.index_title = ''
 
-class AdminConfig(admin.ModelAdmin):
+
+class AdminConfig(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ['username','email','registered_on']
-    
+
+    def save_model(self, request, obj, form, change):
+        if 'password' in form.changed_data:
+            obj.password = make_password(form.cleaned_data.get('password'))
+            # obj.car.confirm =_('approved')
+            # obj.car.save()
+            super().save_model(request, obj, form, change)
+      
 admin.site.register(User,AdminConfig)
 
-admin.site.register(Country)
-admin.site.register(State)
-admin.site.register(District)
-admin.site.register(Batch)
-admin.site.register(Department)
-admin.site.register(PostEducationDetail)
-admin.site.register(ExperienceDetail)
-admin.site.register(Post)
-admin.site.register(PostResponse)
-admin.site.register(ResponseMessage)
-admin.site.register(Tech_Help_Post)
-admin.site.register(Tech_Help_PostResponse)
-admin.site.register(Tech_Help_ResponseMessage)
+class CountryConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['name']
 
-class Finance_request_Config(admin.ModelAdmin):
-    list_display = ['title','student_name','year','department','posted_by']
+admin.site.register(Country,CountryConfig)
+
+class StateConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['name']
+
+admin.site.register(State,StateConfig)
+
+class DistrictConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['name','state']
+
+admin.site.register(District,DistrictConfig)
+
+class BatchConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['entry_year','passed_out']
+admin.site.register(Batch,BatchConfig)
+
+class DepartmentConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['short_name','name']
+
+admin.site.register(Department,DepartmentConfig)
+
+class PostEducationDetailConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['user','degree','institute_or_university','currently_pursing']
+
+admin.site.register(PostEducationDetail,PostEducationDetailConfig)
+
+class ExperienceDetailConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['user','designation','organization','currently_working_here']
+
+admin.site.register(ExperienceDetail,ExperienceDetailConfig)
+
+class PostConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['title','posted_by','date']
+admin.site.register(Post,PostConfig)
+
+class PostResponseConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['user','post']
+
+admin.site.register(PostResponse,PostResponseConfig)
+
+class ResponseMessageConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['user','post_response','message','date']
+
+admin.site.register(ResponseMessage,ResponseMessageConfig)
+
+class Tech_Help_PostConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['title','stack','posted_by','date']
+
+admin.site.register(Tech_Help_Post,Tech_Help_PostConfig)
+
+class Tech_Help_PostResponseConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['user','post']
+
+admin.site.register(Tech_Help_PostResponse,Tech_Help_PostResponseConfig)
+
+class Tech_Help_ResponseMessageConfig(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['user','post_response','message','date']
+
+admin.site.register(Tech_Help_ResponseMessage,Tech_Help_ResponseMessageConfig)
+
+class Finance_request_Config(ImportExportModelAdmin,admin.ModelAdmin):
+    list_display = ['title','name','year','department','posted_by']
 admin.site.register(Finance_request,Finance_request_Config)
 
-class Finance_request_Post_Response_Config(admin.ModelAdmin):
+class Finance_request_Post_Response_Config(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ['post','user']
 admin.site.register(Finance_request_Post_Response,Finance_request_Post_Response_Config)
 
-class Finance_request_Response_Message_Config(admin.ModelAdmin):
+class Finance_request_Response_Message_Config(ImportExportModelAdmin,admin.ModelAdmin):
     list_display = ['user','post_response','message','date']
 admin.site.register(Finance_request_Response_Message,Finance_request_Response_Message_Config)
 
-# class featured_Sponser_config(admin.ModelAdmin):
+# class Featured_Sponser_config(ImportExportModelAdmin,admin.ModelAdmin):
 #     list_display = ['student_name','user','amount','date']
 
-admin.site.register(featured_Sponser)
+admin.site.register(Featured_Sponser)

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="upper_container">
+    {% for interest in interest_user %}
+        <p>Chat With {{ interest.user}}</p>
+        <button type="button" class="btn btn-sm btn-info" style="margin: 10px 0 !important;"
+        onclick="add_amount('{{interest.post.id}}','{{interest.user.id}}')" data-toggle="modal" data-target="#addamount">Add
+        Amount</button>
+    <!-- Add Sponser Modal  -->
+  
+    <!-- Modal -->
+    <div class="modal fade" id="addamount" tabindex="-1" aria-labelledby="addamountLabel" aria-hidden="true"
+      data-backdrop="false">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #5bc0de;display: flex;align-items: center;width: 100%;" >
+            <h5 class="modal-title modaltitle" id="addamountLabel">Modal title</h5>
+            <button type="button" style="position: absolute;right: 15px;" class="btn-close closebtn" data-dismiss="modal" aria-label="Close">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div id="sponser">
+              {% include 'faculty/add_sponser.html' %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

@@ -4,6 +4,12 @@
 
 {% block style %}
 <link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
+<style>
+	.search-btn {
+		border-top-left-radius: 0% !important;
+		border-bottom-left-radius: 0% !important;
+	}
+</style>
 {% endblock style %}
 
 {% block content %}
@@ -18,21 +24,26 @@
 			<div class="col-md-12">
 				<div class="mu-course-content-area">
 					<div class="row" style="margin-bottom: 20px;">
-						<div style="display: flex;justify-content: space-between;align-items: center;flex-wrap: wrap;">
-							<div style="display: flex;">
-								<h2>Financial Request</h2>
-								<a href="/request/create-finance-post"
-									style="margin-top: 5px!important;margin-left: 20px!important;"
-									class="btn btn-primary btn-sm">
-									Add Request
-								</a>
-							</div>
+						<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+							<h2>Finance Request</h2>
+						</div>
+						<div class="col-lg-3 col-md-3 col-sm-6 col-12">
+							<a href="/create-finance-request"
+									style="margin-top: 5px!important;"
+									class="btn btn-primary bt">
+									Create Finance Request
+							</a>
+						</div>
+						<div class="col-lg-1 col-md-1 col-sm-0">
+						</div>
+						<div class="col-lg-4 col-md-4 col-sm-12">
 							<form style="margin-top: -20px !important;">
 								<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
 									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
 									<div class="input-group-append">
-									<button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
+									<button class="btn btn-primary Search search-btn" type="submit" id="button-addon2">Search</button>
 									</div>
+									<a href="/dashboard" class="btn btn-danger" id="button-addon2">Cancel</a>
 								</div>
 							</form>
 						</div>
@@ -67,9 +78,10 @@
 										box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
 										position: relative;
 										background: #fff;
+										min-height: 230px;
 										">
 											<div style="display: flex;flex-direction: column;">
-												<div style="display: flex" class="post-container">
+												<div style=" display: flex;min-height: 155px;" class="post-container">
 													<div class="img-square-wrapper" style="margin-right: 10px">
 														<img style="width: 100px; height: 100px;border-radius:50%;"
 															class="" src="{{ request.image.url }}"
@@ -77,7 +89,7 @@
 													</div>
 													<div style="flex: 1">
 														<div style="display: flex;justify-content: space-between;">
-															<h4>{{ request.title | truncatechars:20}}</h4>
+															<h4 style="word-wrap: wrap;">{{ request.title | truncatechars:15}}</h4>
 															<div
 																style="display: flex;align-items: center;justify-content: center;">
 																<a class="btn btn-sm btn-primary"
@@ -94,7 +106,7 @@
 																<div class="modal fade" id="deleteRequest{{request.id}}"
 																	tabindex="-1" role="dialog"
 																	aria-labelledby="deleteRequest{{request.id}}"
-																	aria-hidden="true">
+																	aria-hidden="true" data-backdrop="false">
 																	<div class="modal-dialog" role="document">
 																		<div class="modal-content">
 																			<div class="modal-header">
@@ -112,7 +124,7 @@
 																			<div class="modal-body">
 																				<p>Do you want to delete the financial
 																					request of
-																					<b>{{ request.student_name}}</b>
+																					<b>{{ request.name}}</b>
 																				</p>
 																			</div>
 																			<div class="modal-footer">
@@ -133,10 +145,26 @@
 
 														</div>
 														<div style="display: flex;">
-															<p class="card-text">name : {{ request.student_name }}</p>
-															&nbsp;&nbsp;
-															<p class="card-text">Year : {{ request.year }}<sup>rd</sup>
-																{{request.department}}</p>
+															{% with year=request.year %}
+																{% if year == '1' %}
+																<p class="card-text">Name : {{ request.name }}
+																&nbsp;{{ year }}<sup>st</sup>
+																	{{request.department}}</p>
+																{% elif year == '2' %}
+																<p class="card-text">Name : {{ request.name }}
+																&nbsp;{{ year }}<sup>nd</sup>
+																	{{request.department}}</p>
+																{% elif year == '3' %}
+																<p class="card-text">Name : {{ request.name }}
+																&nbsp;{{ year }}<sup>rd</sup>
+																	{{request.department}}</p>
+																{% else %}
+																<p class="card-text">Name : {{ request.name }}
+																&nbsp;{{ year }}<sup>th</sup>
+																	{{request.department}}</p>
+																{% endif %}
+																{% endwith %}
+															
 														</div>
 														<p style="font-size: 15px !important;">Description :
 															{{request.description | truncatechars:50}}</p>
@@ -147,7 +175,7 @@
 													<a href="{% url 'request_details' request.id %}"
 														class="btn btn-primary"
 														style="margin: 0 !important;margin-top: 10px !important;">
-														View details
+														View Details
 													</a>
 												</div>
 											</div>

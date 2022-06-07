@@ -22,23 +22,16 @@ function delete_post(id) {
 // Chat with Alumni for Finance Request
 function faculty_addchat(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-  alert(id);
-  const message = document.getElementById("alumni_msg" + id).value;
-  alert(message);
-  console.log("message = " + message);
+  const message = document.getElementById("alumni_msg").value;
   $.ajax({
     type: "POST",
-    url: "/get_interest/",
-    data: { 'message': message, 'id': id, 'csrfmiddlewaretoken': csrftoken,'chatfun':true},
+    url: "/faculty_chat/",
+    data: { 'message': message, 'id': id, 'csrfmiddlewaretoken': csrftoken},
     success: function (response) {
-      alert("yes");
-      var x = "#chat" + response["id"];
-      $(x).modal("hide");
-      $("#finance_request_container").html(response.html);
-      alert(response);
+      $(".message_container").html(response.html);
     },
     error: () => {
-      alert("Something went wrong");
+      comsole.log("Something went wrong in faculty chat");
     },
   });
 }
@@ -48,13 +41,43 @@ function get_interest_message(post,user) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
   $.ajax({
     type: "POST",
-    url: "/get_interest/",
-    data: {'post_id':post,'user' :user},
+    url: "/get_finance_request_messages/",
+    data: {'post_id':post,'user' :user,'csrfmiddlewaretoken': csrftoken},
     success: function (response) {
-      $("#msg_container").html(response.html);
+      $(".message_container").html(response.html);
     },
     error: () => {
-      alert("Something went wrong")
+      console.log("Something went wrong in get message interest")
+    },
+  });
+}
+
+function get_interest(post,user) {
+  const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  $.ajax({
+    type: "POST",
+    url: "/get_interest/",
+    data: {'post_id':post,'user' :user,'csrfmiddlewaretoken': csrftoken},
+    success: function (response) {
+      $(".upper_container").html(response.html);
+    },
+    error: () => {
+      console.log("Something went wrong in get interest")
+    },
+  });
+}
+function get_text_area_interest(post,user) {
+  const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+  $.ajax({
+    type: "POST",
+    url: "/finance_response_interest/",
+    data: {'post_id':post,'user' :user,'csrfmiddlewaretoken': csrftoken},
+    success: function (response) {
+      $(".text_area_container").html(response.html);
+      console.log(response.html)
+    },
+    error: () => {
+      comsole.log("Something went wrong in get_text_area_interest")
     },
   });
 }
@@ -65,13 +88,13 @@ function add_amount(post,user) {
   $.ajax({
     type: "POST",
     url: '/add_amount/',
-    data: {'post_id':post,'user' :user,},
+    data: {'post_id':post,'user' :user,'csrfmiddlewaretoken':csrftoken},
     success: (response) => {
-      $("#sponser").html(response.html);
+      $("#sponser").html(response.html)
       console.log("post interest recieved")
     },
     error: ()=> {
-      alert("Something went wrong")
+      console.log("Something went wrong")
     },
   });
 }
@@ -85,13 +108,19 @@ function add_sponser(postid,alumniid) {
   $.ajax({
     type: "POST",
     url: '/add_sponser/',
-    data: {'studentname':studentname,'alumniname':alumniname,'amount':amount,'postid':postid,"alumniid":alumniid},
+    data: {'studentname':studentname,'alumniname':alumniname,'amount':amount,'postid':postid,"alumniid":alumniid,
+  "csrfmiddlewaretoken":csrftoken},
     success: (response) => {
-      $('$#addamount').modal("hide")
-      alert("Sponser Added")
+      $('#addamount').modal('hide');
+      swal({
+        title: "Amount Added",
+        text: "Amount added for Student",
+        icon: "success",
+        button: "Done",
+      });
     },
     error: ()=> {
-      alert("Something went wrong")
+      console.log("Something went wrong")
     },
   });
 }
