@@ -1,3 +1,5 @@
 # Virtual environment folder
 /venv
+
+# data
 /data
