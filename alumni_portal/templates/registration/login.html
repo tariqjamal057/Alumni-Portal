@@ -2,27 +2,42 @@
 {% load crispy_forms_tags %}
 {% load static %}
 
-{% block title %}Karpagam Institute of Technology Alumni Association | Kitizens | Home{% endblock title %}
 
-{% block style %}
-	<link rel="stylesheet" href="{% static 'css/scrollbar_style.css' %}">
-{% endblock style %}
-
-{% block content %}
-	<div class="container">
-		<img src="{% static 'image/logo.jpg' %}" alt="logo" style="width: 200px;margin: 20px 0 0 0;">
-		<div class="login-container" >
-			<div class="login-innercontainer" >
-				<h2 class="w-100 bg-primary">Login</h2>
-				<form class="Form" method="POST" novalidate style="overflow-y: scroll;">
-					{% csrf_token %}
-					{{form | crispy}}
-					<a href="{% url 'password_reset' %}">forgot password</a>
-					<div class="d-flex justify-content-center">
-						<button class="btn btn-primary btn-block btn-lg gradient-custom-4 text-body">Login</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-{% endblock content %}
+<head>
+	<title>{% block title %}Karpagam Institute of Technology Alumni Association | Kitizens | Home{% endblock %}</title>
+	{% block style %}
+		<link rel="stylesheet" href="{% static 'css/scrollbar_style.css' %}">
+	{% endblock %}
+</head>
+<body>
+	{% block content %}
+	<div class="limiter" id="login">
+        <div class="container-login100" style="background-image:url('{% static 'assets/img/counter-bg2.jpg' %}')">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <div class="col-md-5 col-md-offset-1">
+                        <div class="login_topimg">
+                        </div>
+                        <div class="wrap-login100">
+                            <form class="login100-form validate-form" class="Form" method="POST" style="display: flex;flex-direction: column;"> 
+								<span class="login100-form-title "> Login </span> 
+								<span class="login100-form-subtitle m-b-16"> to your account </span>
+								{% csrf_token %}
+                                {{ form | crispy }}
+								<!-- <input type="submit" value="loh"> -->
+                                <div class="flex-sb-m w-full p-b-30">
+                                    <div>
+                                        <a href="{% url 'password_reset' %}">Forgot Password</a>
+                                    </div>
+                                </div>
+                                <div class="container-login100-form-btn p-t-25"> <button type="submit" class="login100-form-btn"> Login </button> </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	{% endblock %}
+</body>

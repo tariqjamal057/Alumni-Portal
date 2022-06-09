@@ -8,12 +8,33 @@
 {% endblock style %}
 
 {% block content %}
-{% include 'dashboard-navigation/navigation.html' %}
 
+	<!--START SCROLL TOP BUTTON -->
+	<a class="scrollToTop" href="#">
+		<i class="fa fa-angle-up"></i>
+	</a>
+	<!-- END SCROLL TOP BUTTON -->
+  <!-- Page breadcrumb -->
+  <section id="mu-page-breadcrumb">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="mu-page-breadcrumb-area">
+                      <h2>Dashboard</h2>
+                      <ol class="breadcrumb">
+                          <li><a href="{% url 'home' %}">Home</a></li>
+                          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                          <li class="active">Finance Request Details</li>
+                      </ol>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- End breadcrumb -->
 
-
-{% csrf_token %}
-<section id="mu-course-content">
+  {% csrf_token %}
+  <section id="mu-course-content">
     <div class="container">
       <div class="row">
         <div class="col-md-12">
@@ -26,31 +47,31 @@
                      <div class="col-md-12">
                        <article class="mu-blog-single-item">
                          <figure class="mu-blog-single-img">
-                           <div style="margin: 10px 0px 0px 10px;">
-                            <h2 class="text-info" style="margin-bottom: 10px;">{{ request_details.title}}</h2>
-                            <img style="width: 150px; height: 150px;border-radius:50%;" class=""
-                                    src="{{ request_details.image.url }}" alt="Card image cap" />
-                            </div>
-                           <figcaption class="mu-blog-caption" style="margin: 20px 0;;">
-                               
-                            <h3 class="card-text">{{ request_details.name }}</h3>
-                            {% with year=request_details.year %}
-                              {% if year == '1' %}
-                                <h4 class="card-text">{{ year }}<sup>st</sup> Year</h4>
-                              {% endif %}
-                              {% if year == '2' %}
-                                <h4 class="card-text">{{ year }}<sup>nd</sup> Year</h4>
-                              {% endif %}
-                              {% if year == '3' %}
-                                <h4 class="card-text">{{ year }}<sup>rd</sup> Year</h4>
-                              {% endif %}
-                              {% if year == '4' %}
-                                <h4 class="card-text">{{ year }}<sup>th</sup> Year</h4>
-                              {% endif %}
-                            {% endwith %}
-                            
-
-                           </figcaption>                      
+                          <figcaption class="mu-blog-caption" style="margin: 20px 0;;">
+                            <div class="row">
+                              <div class="col-lg-3 col-md-3 col-sm-12 col-12">
+                                <img style="width: 150px; height: 150px;box-shadow: 1px 1px 10px rgba(0,0,0,.2),-1px -1px 10px rgba(0,0,0,.2);margin-bottom: 10px;" class="" src="{{ request_details.image.url }}" alt="Card image cap" />
+                              </div>
+                              <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                                <h2 class="text-info" style="margin-bottom: 10px;">{{ request_details.title}}</h2>
+                                <h3 class="card-text">{{ request_details.name }}</h3>
+                                {% with year=request_details.year %}
+                                  {% if year == '1' %}
+                                    <h4 class="card-text">{{ year }}<sup>st</sup> Year</h4>
+                                  {% endif %}
+                                  {% if year == '2' %}
+                                    <h4 class="card-text">{{ year }}<sup>nd</sup> Year</h4>
+                                  {% endif %}
+                                  {% if year == '3' %}
+                                    <h4 class="card-text">{{ year }}<sup>rd</sup> Year</h4>
+                                  {% endif %}
+                                  {% if year == '4' %}
+                                    <h4 class="card-text">{{ year }}<sup>th</sup> Year</h4>
+                                  {% endif %}
+                                {% endwith %}
+                              </div>
+                            </div> 
+                          </figcaption>                    
                          </figure>
                          <div class="mu-blog-description">
                              <blockquote>
@@ -81,7 +102,7 @@
                          </div>
                          <!-- End blog social share -->
                          <div class="col-md-12 bg-light text-right" style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
-                            <a href="{% url 'finance_request_chat' request_details.id %}" target="_blank" class="btn btn-info">View Messages</a>
+                            <a href="{% url 'finance_request_chat' request_details.id %}" class="btn btn-info">View Messages</a>
                             
                             <!-- Modal -->
                             <div class="modal fade"id="chatModels{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="chatModels{{ request_details.id}}Label" aria-hidden="true">
@@ -132,11 +153,11 @@
                         {% if total_interest >= 1 %}
                           {% for inst in recent_intetest %}
                             <li style="cursor: pointer;">
-                              <a href="{% url 'finance_request_chat' request_details.id %}" target="_blank">{{ inst.user }}</a>
+                              <a href="{% url 'finance_request_chat' request_details.id %}">{{ inst.user }}</a>
                             </li>
                           {% endfor %}
                           {% if total_interest > 5 %}
-                            <a href="{% url 'finance_request_chat' request_details.id %}" target="_blank"  class="btn btn-sm btn-info">View All Interest</a>
+                            <a href="{% url 'finance_request_chat' request_details.id %}"  class="btn btn-sm btn-info">View All Interest</a>
                           {% endif %}
                         {% else %}
                             <p>Currently you don't have any Interst for this Request</p>

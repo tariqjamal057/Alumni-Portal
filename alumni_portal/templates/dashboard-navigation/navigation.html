@@ -1,12 +1,7 @@
-{% extends 'base.html' %}
 {% load static %}
 
 {% block content %}
-    <!--START SCROLL TOP BUTTON -->
-    <a class="scrollToTop" href="#">
-        <i class="fa fa-angle-up"></i>
-    </a>
-    <!-- END SCROLL TOP BUTTON -->
+   
 
     <!-- Start header  -->
     <header id="mu-header">
@@ -75,6 +70,15 @@
                             <ul class="dropdown-menu" role="menu">
                                 <li><a href="/course">Course Archive</a></li>
                                 <li><a href="/course-detail">Course Detail</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities <span
+                                    class="fa fa-angle-down"></span></a>
+                            <ul class="dropdown-menu" role="menu">
+                                <li><a href="/mentor_help_posts">Alumni as Mentor</a></li>
+                                <li><a href="/finance_requests">Alumni as Sponsor</a></li>
+                                <li><a href="/help_desk_page">Alumni Help Desk</a></li>
                             </ul>
                         </li>
                         <li><a href="/gallery">Gallery</a></li>

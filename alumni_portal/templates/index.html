@@ -10,135 +10,8 @@
     </a>
     <!-- END SCROLL TOP BUTTON -->
 
-    <!-- Start header  -->
-    <header id="mu-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="mu-header-area">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                <div class="mu-header-top-left">
-                                    <div class="mu-top-email">
-                                        <i class="fa fa-envelope"></i>
-                                        <span>alumniaffairs@karpagamtech.ac.in</span>
-                                    </div>
-                                    <div class="mu-top-phone">
-                                        <i class="fa fa-phone"></i>
-                                        <span>(+91) 9500974355 | 7538833202</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                <div class="mu-header-top-right">
-                                    <nav>
-                                        <ul class="mu-top-social-nav">
-                                            <li><a href="https://www.facebook.com/karpagamtechcbe"><span
-                                                        class="fa fa-facebook"></span></a></li>
-                                            <li><a href="https://twitter.com/Karpagamitech"><span
-                                                        class="fa fa-twitter"></span></a></li>
-                                            <li><a href="https://www.instagram.com/_karpagam_itech/"><span
-                                                        class="fa fa-instagram"></span></a></li>
-                                            <li><a href="https://youtube.com/c/Karpagamitech"><span
-                                                        class="fa fa-youtube"></span></a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- End header  -->
-    <!-- Start menu -->
-    <section id="mu-menu">
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <!-- FOR MOBILE VIEW COLLAPSED BUTTON -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <!-- LOGO -->
-                    <!-- TEXT BASED LOGO -->
-                    <a class="navbar-brand" href="/home"><img src="{% static 'image/logo.jpg' %}" alt="logo" style="width: 150px"></a>
-                    <!-- IMG BASED LOGO  -->
-                    <!-- <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/logo.png' %}" alt="logo"></a> -->
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
-                        <li class="active"><a href="/home">Home</a></li>
-                        <li class="dropdown active">
-                            <a href="/" class="dropdown-toggle active" data-toggle="dropdown">Course <span
-                                    class="fa fa-angle-down"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/course">Course Archive</a></li>
-                                <li><a href="/course-detail">Course Detail</a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">About us <span
-                                    class="fa fa-angle-down"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/course-detail.html">Alumni Association</a></li>
-                                <li><a href="https://karpagamtech.ac.in/about-us/college-profile/">About KIT</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/gallery">Gallery</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities <span
-                                    class="fa fa-angle-down"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/mentor_help_posts">Alumni as Mentor</a></li>
-                                {% if is_alumini %}
-                                    <li><a href="/finance_requests">Alumni as Sponsor</a></li>
-                                {% endif %}
-                                <li><a href="/help_desk_page">Alumni Help Desk</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/contact">Contact</a></li>
-                        {% if user.is_authenticated %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user}}<span
-                                        class="fa fa-angle-down"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="/dashboard">dashboard <i class="fa fa-user"></i></a></li>
-                                    <li><a href="/">logout <i class="fa fa-sign-out"></i></a></li>
-                                </ul>
-                            </li>
-                        {% else %}
-                            <li><a href="/login">Login</a></li>
-                        {% endif %}
 
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
-            </div>
-        </nav>
-    </section>
-    <!-- End menu -->
-    <!-- Start search box -->
-    <div id="mu-search">
-        <div class="mu-search-area">
-            <button class="mu-search-close"><span class="fa fa-close"></span></button>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form class="mu-search-form">
-                            <input type="search" placeholder="Type Your Keyword(s) & Hit Enter">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End search box -->
+    
     <!-- Start Slider -->
     <section id="mu-slider">
         <!-- Start single slider item -->
@@ -481,7 +354,7 @@
     </section>
     <!-- End latest course section -->
 
-
+    <div style="border: 1px solid #ccc;width: 100%"></div>
     <!-- Start footer -->
     <footer id="mu-footer">
         <!-- start footer top -->
@@ -495,9 +368,9 @@
                                 <ul>
                                     <li><a href="https://karpagamtech.ac.in/about-us/college-profile/">About KIT</a></li>
                                     <li><a href="">Alumni Association</a></li>
-                                    <li><a href="/gallery">Gallery</a></li>
+                                    <li><a href="{% url 'gallery' %}">Gallery</a></li>
                                     <li><a href="">Annual Report</a></li>
-                                    <li><a href="/contact">Contact</a></li>
+                                    <li><a href="{% url 'contact' %}">Contact</a></li>
                                     <li><a href="">Term Of Use</a></li>
                                 </ul>
                             </div>
@@ -506,9 +379,9 @@
                             <div class="mu-footer-widget">
                                 <h4>Alumni Activities</h4>
                                 <ul>
-                                    <li><a href="">Alumni as Mentor</a></li>
-                                    <li><a href="#">Alumni as Sponsor</a></li>
-                                    <li><a href="">Alumni Help Desk</a></li>
+                                    <li><a href="{% url 'mentor_help_posts' %}">Alumni as Mentor</a></li>
+                                    <li><a href="{% url 'finance_request' %}">Alumni as Sponsor</a></li>
+                                    <li><a href="{% url 'help_desk_page' %}">Alumni Help Desk</a></li>
                                     <li><a href="https://karpagamtech.ac.in/">Institution Website</a></li>
 
                                 </ul>
@@ -551,10 +424,6 @@
                         </div>
                         <div Class="col-6">
                             <p>Developed by <a style="color:blue;">Technology Innovation Center, Karpagam Tech.</a></p>
-                        </div>
-                        <div Class="col-3">
-                            <p>Template Credits to <a href="http://www.markups.io/" style="color:blue;"
-                                    rel="nofollow">MarkUps.io</a></p>
                         </div>
                     </div>
 

@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{{interest}}
-{% for injs in interest %}
-{{injs}}
-{% endfor %}
+
+{% for inst in interest %}
     <div id="text_area_container" style="display: flex;justify-content: space-between;align-items: center;margin: 10px 0px;">
         <Textarea class="form-control" rows="2" id="alumni_msg" style="width: 100% !important;"
         placeholder="enter message..."></Textarea>
-        <button type="button" onclick="faculty_addchat('{{interest.id}}')"
+        <button type="button" onclick="faculty_addchat('{{inst.id}}')"
         style="height: 40px !important;background: none;border: none;outline: none;" class="text-info"><i
             class="fa fa-paper-plane" style="transform: rotate(40deg);"></i></button>
     </div>
+{% endfor %}
 {% endblock %}

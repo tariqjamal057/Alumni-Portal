@@ -1,50 +1,17 @@
-{% extends 'base.html' %}
-{% block content %}
-
 <div id="finance_chat_container"
   style="display: flex;justify-content: space-between;align-items: center;flex-direction: column;width: 100%;">
 
-  <div class="message_container">
-    {% for msg in all_messages %}
-    {% with interest_id=msg.post_response.id %}
-    {% if interest_id == interest %}
-    {% if msg.user == faculty %}
-    <span
-      style="float: right;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;padding: 8px;margin: 10px 0;overflow-wrap: break-word;"
-      class="bg-primary">
-      {{msg.message}}
-      <br>
-      <span style="font-size: 12px !important;">{{msg.date}}</span>
-    </span>
-    <div style="margin: 5px 0px"></div>
-    {% endif %}
-    {% if msg.user != faculty %}
-    <span
-      style="float: left;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;padding: 8px;margin: 10px 0;overflow-wrap: break-word;"
-      class="bg-info">
-      {{msg.message}}
-      <br>
-      <span style="font-size: 12px !important;">{{msg.date}}</span>
-    </span>
-    <div style="margin: 5px 0px"></div>
-    {% endif %}
-    <br>
-    {% endif %}
-    {% endwith %}
-    {% endfor %}
+  <div class="message_container" id="message_container">
+    {% include 'faculty/user_messages.html' %}
   </div>
-
+  <div style="display: flex;flex-direction: column;width: 100%;background-color: #f0f2f5;padding: 10px;height: 15vh;">
+    <div id="text_area_container"
+      style="display: flex;justify-content: space-between;align-items: center;margin: 10px 0px;">
+      <Textarea class="form-control" rows="2" id="alumni_msg" style="width: 100% !important;"
+        placeholder="Enter Message..."></Textarea>
+      <button type="button" style="height: 40px !important;background: none;border: none;outline: none;">
+        <i class="fa fa-paper-plane" id="message_send_button" style="transform: rotate(40deg);font-size: 20px;color: #64737d;"></i>
+      </button>
+    </div>
+  </div>
 </div>
-
-{% block javascript %}
-  <script>
-    document.getElementById('finance_chat_container').addEventListener("load",()=> {
-      var id = '{{interest}}'
-      alert("ifknjkdv")
-      alert(id)
-      // get_interest_id(id)
-    });
-  </script>
-{% endblock javascript %}
-
-{% endblock content %}

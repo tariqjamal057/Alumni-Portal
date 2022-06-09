@@ -22,10 +22,10 @@ from portal.models import *
 # from portal.models import allowed_user
 
 # Create your views here.
-def is_alumini(user):
-    return user.groups.filter(name='alumini').exists()
+# def is_alumini(user):
+#     return user.groups.filter(name='alumini').exists()
 
-
+@login_required()
 def home(request):
     user = request.user
     help_desk_post = Post.objects.all().order_by('-id')[:6]
@@ -76,19 +76,19 @@ def dashboard(request):
 
 @login_required()
 def faculty(request):
-    if 'q' in request.GET:
-        q=request.GET['q']
-        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(name__icontains=q)).order_by('-id')
+    if 'search_query' in request.GET:
+        search_query=request.GET['search_query']
+        requests=Finance_request.objects.filter(Q(title__icontains=search_query) | Q(name__icontains=search_query),posted_by = request.user).order_by('-id')
     else:
         requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
-    for req in requests:
-        if req.posted_by != request.user:
-            requests = Finance_request.objects.filter(posted_by = request.user).order_by('-id')
+        search_query = None
     paginator=Paginator(requests,9)
     page_num=request.GET.get('page',1)
     requests=paginator.page(page_num)
     context = {
         "requests" : requests,
+        'is_alumini': is_alumini(request.user),
+        'search_query':search_query
     }
     return render(request,'faculty/faculty-dashboard.html',context)
 
@@ -107,6 +107,7 @@ def alumini(request):
     posts=paginator.page(page_num)
     context = {
         'posts' :  posts,
+        'is_alumini': is_alumini(request.user),
     }
     return render(request,'alumini/alumini-dashboard.html', context)
 
@@ -125,19 +126,20 @@ def student(request):
     posts=paginator.page(page_num)
     context = {
         'posts' :  posts,
+        'is_alumini': is_alumini(request.user),
     }
     return render(request,'student/student-dashboard.html',context)
 
-def dashtobarchive (request):
+def blog (request):
     return render (request,'blog-archive.html')
 
-def dashtobsingle (request):
+def blog_single (request):
     return render (request,'blog-single.html')
 
 def contact(request):
     return render (request,'contact.html')
 
-def dashtocourse (request):
+def course (request):
     return render (request,'course-detail.html')
 
 def gallery(request):
@@ -199,32 +201,36 @@ def view_detail_page(request,pk):
     return render(request,'faculty/financial_request_detail_page.html',context)
     
     
-# delete financial Request 
+# delete financial Request
 def delete_Finance_Post(request):
     data = dict()
     id = request.POST.get('id')
     financial_request = Finance_request.objects.filter(id=id)
     financial_request.delete()
-    data["id"] = id
     requests = Finance_request.objects.filter(posted_by=request.user)
-    data['html'] = render_to_string('faculty/faculty-dashboard.html', {'requests': requests, })
+    data['html'] = render_to_string('faculty/finance_request.html', {'requests': requests, })
     data["success"] = True
     return JsonResponse(data)
 
 # Finance Request page 
+@login_required()
 def finance_request_page(request):
-    if 'q' in request.GET:
-        q=request.GET['q']
-        requests=Finance_request.objects.filter(Q(title__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)).order_by('-id')
+    if 'search_query' in request.GET:
+        search_query=request.GET['search_query']
+        requests=Finance_request.objects.filter(Q(title__icontains=search_query) | Q(name__icontains=search_query) | Q(description__icontains=search_query)).order_by('-id')
     else:
         requests = Finance_request.objects.all().order_by('-id')
+        search_query = None
     paginator=Paginator(requests,9)
     page_num=request.GET.get('page',1)
     requests=paginator.page(page_num)
     context = {
         'finance_post' :  requests,
+        'search_query':search_query,
+        'is_alumini': is_alumini(request.user),
     }
     return render(request,'pages/alumni_as_sponser/financehelp_page.html',context)
+
 
 def finance_request_detail_page(request,pk):
     request_details = Finance_request.objects.get(id=pk)
@@ -234,56 +240,71 @@ def finance_request_detail_page(request,pk):
     else:
         is_showed_interest = False
     message = Finance_request_Response_Message.objects.filter(post_response__post=pk).order_by('-id')[:5]
-    contrib = Featured_Sponser.objects.filter(user=request.user,student_name__post=pk)
+    contributions = Featured_Sponser.objects.filter(user=request.user,student_name=request_details)
+
     context = {
         'request_details' : request_details,
         'related_posts':related_posts,
         'message':message,
-        'contrib':contrib,
+        'contributions':contributions,
         'is_showed_interest':is_showed_interest,
+        'is_alumini': is_alumini(request.user),
     }
     return render(request,'pages/alumni_as_sponser/request_detail.html',context)
 
-@csrf_exempt
+
+def alumni_as_sponser_chat(request,pk):
+    post = Finance_request.objects.get(id = pk)
+    messages = Finance_request_Response_Message.objects.filter(post_response__post=pk)
+    contrib = Featured_Sponser.objects.filter(user_id = request.user.id , student_name_id = pk) 
+    context = {
+        'messages':messages,
+        'contrib':contrib,
+        'post':post,
+        'is_alumini': is_alumini(request.user),
+    }
+    return render(request,'pages/alumni_as_sponser/message.html',context)
+
 def alumini_message(request):
     data = dict()
-    id = request.POST.get('id')
+    post_id = request.POST.get('id')
     message = request.POST.get('message')
-    post=Finance_request.objects.get(id=id)
+    post=Finance_request.objects.get(id=post_id)
+    posted_by = post.posted_by.email
     requser = request.user
     interest,created = Finance_request_Post_Response.objects.get_or_create(user=request.user,post=post)
     if(created):
-        frm = settings.EMAIL_HOST_USER
-        to = User.objects.get(posted_by = post.posted_by)
-        from_email = frm.email
-        to_email = [to.email]
+        from_email = settings.EMAIL_HOST_USER
+        to_email = [post.posted_by.email]
+        subject = 'You get a new Interest from Post'
+        message = 'You get a new Interest from '+ interest.user
         send_mail(
-            'You get an new Interest from ALumni',
-            'You get  a new from a ALumni',
+            subject,
+            message,
             from_email,
             to_email,
         )
-    Finance_request_Response_Message.objects.create(user_id=requser.id,post_response_id=interest.post_id,message=message, date=datetime.now())
-    data['html'] = render_to_string('pages/alumni_as_sponser/alumni_chat.html')
-    return JsonResponse(data)
-
-@csrf_exempt
-def get_alumni_message(request):
-    data = dict()
-    id = request.POST.get('id')
-    data["id"] = id
-    interest = Finance_request_Post_Response.objects.get(user_id=request.user.id,post_id=id)
-    message = Finance_request_Response_Message.objects.filter(post_response_id=interest.id)
-    data['html'] = render_to_string('pages/alumni_as_sponser/alumni_chat.html', {'message': message,'user': request.user})
+    Finance_request_Response_Message.objects.create(user=requser,post_response=interest,message=message)
+    messages = Finance_request_Response_Message.objects.filter(post_response=interest)
+    context = {
+        'messages':messages,
+    }
+    data['html'] = render_to_string('pages/alumni_as_sponser/alumni_chat.html',context,request)
     return JsonResponse(data)
 
 def finance_request_chat(request,pk):
     post = Finance_request.objects.get(id=pk)
-    alumni_interests = Finance_request_Post_Response.objects.filter(post = post).order_by('-id')
+    if 'interest_search_query' in request.GET:
+        interest_search_query=request.GET['interest_search_query']
+        alumni_interests = Finance_request_Post_Response.objects.filter(Q(user__first_name__icontains=interest_search_query) | Q(user__last_name__icontains=interest_search_query),post = post).order_by('-id')
+    else:
+        alumni_interests = Finance_request_Post_Response.objects.filter(post = post).order_by('-id')
+        interest_search_query = None
     users = User.objects.all()
     context = {
         'alumni_interests':alumni_interests,
         'users':users,
+        'post':post,
     }
     return render(request,'faculty/message.html',context)
 
@@ -307,51 +328,36 @@ def get_interest_message(request):
     csrf_token = request.POST.get('csrfmiddlewaretoken')
     post_id = request.POST.get('post_id')
     user = request.POST.get('user')
-    interests = Finance_request_Post_Response.objects.filter(post = post_id,user = user)
-    for inst in interests:
-        interest = inst
-    interest = interest.id
-    messages = Finance_request_Response_Message.objects.filter(post_response = interest,user = user)
-    faculty_messages = Finance_request_Response_Message.objects.filter(post_response = interest,user = request.user.id)
-    all_messages = Finance_request_Response_Message.objects.filter(Q(user_id = user) | Q(user_id = request.user.id))
+    interest_id = request.POST.get('interest_id')
+    interest = interest_id
+    print(interest)
+    messages = Finance_request_Response_Message.objects.filter(post_response__id = interest)
     faculty = request.user
     context = {
         'messages':messages,
-        'faculty_messages':faculty_messages,
-        'all_messages':all_messages,
         'post_interest':post_id,
         'intest_user':user,
         'interest':interest,
         'faculty':faculty,
     }
     data['token'] = csrf_token
-    data['html']  = render_to_string('faculty/chat.html',context)
-    return JsonResponse(data)
+    data['interest_id'] = interest_id
+    data['html']  = render_to_string('faculty/user_messages.html',context,request)
+    return JsonResponse(data) 
 
-def get_finance_request_interest(request):
-    data = dict()
-    csrf_token = request.POST.get('csrfmiddlewaretoken')
-    post_id = request.POST.get('post_id')
-    user = request.POST.get('user')
-    interest = Finance_request_Post_Response.objects.filter(post = post_id,user = user)
-    
-    context = {
-        'interest':interest,
-    }
-    data['token'] = csrf_token
-    data['html'] = render_to_string('faculty/finance_chat_text_container.html',context)
-    return JsonResponse(data)
 
 
 def faculty_addchat(request):
     data = dict()
-    csrf_token = request.POST.get('csrfmiddlewaretoken')
-    interestid = request.POST.get('id')
+    interest_id = request.POST.get('id')
     message = request.POST.get('message')
-    interest = Finance_request_Post_Response.objects.get(id=interestid)
-    Finance_request_Response_Message.objects.create(user_id=request.user.id,post_response_id=interestid,message=message)
-    data['token'] = csrf_token
-    data['html']  = render_to_string('faculty/chat.html')
+    Finance_request_Response_Message.objects.create(user_id=request.user.id,post_response_id=interest_id,message=message)
+    messages = Finance_request_Response_Message.objects.filter(post_response__id = interest_id)
+    context = {
+        'messages':messages,
+    }
+    data['html']  = render_to_string('faculty/user_messages.html',context,request)
+    print(data['html'])
     return JsonResponse(data)
 
 
@@ -373,14 +379,12 @@ def add_finance_amount(request):
 
 def add_sponser(request):
     data =dict()
-    csrf_token = request.POST.get('csrfmiddlewaretoken')
     amount = request.POST.get('amount')
-    postid = request.POST.get('postid')
-    alumniid = request.POST.get('alumniid')
-    Featured_Sponser.objects.create(student_name_id=postid,user_id=alumniid,amount=amount,date=datetime.now())
-    data['token'] = csrf_token
-    data['html']  = render_to_string('faculty/add_sponser.html',context)
+    post_id = request.POST.get('postid')
+    alumni_id = request.POST.get('alumniid')
+    Featured_Sponser.objects.create(student_name_id=post_id,user_id=alumni_id,amount=amount)
     return JsonResponse(data)
+
 
 # Help Desk Section
 #create help desk post
@@ -390,24 +394,24 @@ def create_help_desk_post(request):
     if request.method == 'POST':
         form = Help_Desk_Form(request.POST,request.FILES)
         if form.is_valid():
-            addpost = form.save(commit=False)
-            addpost.posted_by = request.user
-            addpost.save()
+            form = form.save(commit=False)
+            form.posted_by = request.user
+            form.save()
             print("work")
             return redirect('/dashboard')
     return render(request,'alumini/create_post.html',{'form':form})
 
 def update_help_desk_post(request,pk):
     req = Post.objects.get(id=pk)
-    updateform = Help_Desk_Form(instance=req)
+    form = Help_Desk_Form(instance=req)
     if request.method == 'POST':
-        updateform = Help_Desk_Form(request.POST,request.FILES,instance=req)
-        if updateform.is_valid():
-            addpost = updateform.save(commit=False)
-            addpost.posted_by = request.user
-            addpost.save()
+        form = Help_Desk_Form(request.POST,request.FILES,instance=req)
+        if form.is_valid():
+            form = form.save(commit=False)
+            form.posted_by = request.user
+            form.save()
             return redirect('/dashboard')
-    return render(request,'alumini/update_post.html',{'updateform':updateform})
+    return render(request,'alumini/update_post.html',{'form':form})
 
 # delete help desk post
 def delete_post(request):

@@ -1,29 +1,27 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% load static %}
-
-
-{% block content %}
-<div style="padding: 5px;">
-    {% for msg in message %}
-        {% if msg.user == user %}
-            <span style="float: right;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;padding: 8px;margin: 10px 0;overflow-wrap: break-word;" class="bg-info">
-                {{msg.message}}
-                <br>
-                <span style="font-size: 12px !important;">{{msg.date}}</span>
-            </span>
-            <div style="margin: 5px 0px"></div>
-        {% endif %}
-        {% if msg.user != user %}
-            <span style="float: left;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;padding: 8px;margin: 10px 0;overflow-wrap: break-word;" class="bg-primary">
-                {{msg.message}}
-                <br>
-                <span style="font-size: 12px !important;">{{msg.date}}</span>
-            </span>
-            <div style="margin: 5px 0px"></div>
-        {% endif %}
-        <br>
-        <!-- <p>{{msg.message}}</p> -->
-    {% endfor %}
+<div id="finance_chat_container"
+    style="display: flex;justify-content: space-between;align-items: center;flex-direction: column;width: 100%;">
+    <div class="message_container">
+        {% for message in messages %}
+            {% if message.user == user %}
+                <span
+                    style="float: right;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;padding: 8px;margin: 10px 0;overflow-wrap: break-word;background-color: #d9fdd3;">
+                    {{message.message}}
+                    <br>
+                    <span style="font-size: 12px !important;">{{message.date}}</span>
+                </span>
+                <div style="margin: 5px 0px"></div>
+            {% endif %}
+            {% if message.user != user %}
+                <span
+                    style="float: left;max-width: 70%;width: 100%;text-align: left;border-radius: 10px;padding: 8px;margin: 10px 0;overflow-wrap: break-word;background-color: #fff;"
+                    >
+                    {{message.message}}
+                    <br>
+                    <span style="font-size: 12px !important;">{{message.date}}</span>
+                </span>
+                <div style="margin: 5px 0px"></div>
+            {% endif %}
+            <br>
+        {% endfor %}
+    </div>
 </div>
-{% endblock content %}

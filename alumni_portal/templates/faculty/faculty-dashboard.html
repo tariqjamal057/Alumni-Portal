@@ -8,226 +8,121 @@
 	.search-btn {
 		border-top-left-radius: 0% !important;
 		border-bottom-left-radius: 0% !important;
+		margin-right: 10px !important;
 	}
 </style>
 {% endblock style %}
 
 {% block content %}
-{% include 'dashboard-navigation/navigation.html' %}
+	<!--START SCROLL TOP BUTTON -->
+	<a class="scrollToTop" href="#">
+		<i class="fa fa-angle-up"></i>
+	</a>
+	<!-- END SCROLL TOP BUTTON -->
+    <!-- Page breadcrumb -->
+    <section id="mu-page-breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-page-breadcrumb-area">
+                        <h2>Dashboard</h2>
+                        <ol class="breadcrumb">
+                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li class="active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb -->
 
 
-
-
-<section id="mu-course-content">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="mu-course-content-area">
-					<div class="row" style="margin-bottom: 20px;">
-						<div class="col-lg-4 col-md-4 col-sm-6 col-12">
-							<h2>Finance Request</h2>
-						</div>
-						<div class="col-lg-3 col-md-3 col-sm-6 col-12">
-							<a href="/create-finance-request"
-									style="margin-top: 5px!important;"
-									class="btn btn-primary bt">
-									Create Finance Request
-							</a>
-						</div>
-						<div class="col-lg-1 col-md-1 col-sm-0">
-						</div>
-						<div class="col-lg-4 col-md-4 col-sm-12">
-							<form style="margin-top: -20px !important;">
-								<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
-									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
-									<div class="input-group-append">
-									<button class="btn btn-primary Search search-btn" type="submit" id="button-addon2">Search</button>
-									</div>
-									<a href="/dashboard" class="btn btn-danger" id="button-addon2">Cancel</a>
-								</div>
-							</form>
-						</div>
-					</div>
-					<!-- <div class="row" style="margin-bottom: 20px;">
-						<div style="display: flex;justify-content: space-between;">
-							<div style="display: flex;">
-								<h2>Financial Request</h2>
+	{% comment %} Main Section {% endcomment %}
+	<section id="mu-course-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="mu-course-content-area">
+						<div class="row" style="margin-bottom: 20px;">
+							<div class="col-lg-4 col-md-4 col-sm-6 col-12">
+								<h2>Finance Request</h2>
 							</div>
-							<form>
-								<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
-									<input type="text" name="q" class="form-control form-control-lg" placeholder="Search" />
-									<div class="input-group-append">
-									<button class="btn btn-primary Search" type="submit" id="button-addon2">Search</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div> -->
-					<div class="row">
-						<div class="col-md-12" id="finance_request_container"
-							style="background-color:#fff; padding: 20px;">
-							<!-- start finance-request content container -->
-							<div class="mu-course-container">
-								<div class="row">
-									{% for request in requests %}
-									<div class="col-md-4 col-sm">
-										<div style="
-										padding: 10px;
-										margin: 10px 0px;
-										border-radius: 7px;
-										box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.19);
-										position: relative;
-										background: #fff;
-										min-height: 230px;
-										">
-											<div style="display: flex;flex-direction: column;">
-												<div style=" display: flex;min-height: 155px;" class="post-container">
-													<div class="img-square-wrapper" style="margin-right: 10px">
-														<img style="width: 100px; height: 100px;border-radius:50%;"
-															class="" src="{{ request.image.url }}"
-															alt="Card image cap" />
-													</div>
-													<div style="flex: 1">
-														<div style="display: flex;justify-content: space-between;">
-															<h4 style="word-wrap: wrap;">{{ request.title | truncatechars:15}}</h4>
-															<div
-																style="display: flex;align-items: center;justify-content: center;">
-																<a class="btn btn-sm btn-primary"
-																	href="{% url 'update-finance-post' request.id %}"
-																	style="margin-top: 0px !important;"><i
-																		class="fa fa-pencil-square-o"></i></a>
-																<button type="button" class="btn btn-danger btn-sm"
-																	style="margin-top: 0px !important;margin-left: 5px !important;"
-																	data-toggle="modal"
-																	data-target="#deleteRequest{{request.id}}">
-																	<i class="fa fa-trash"></i>
-																</button>
-																<!-- Delete particular Finance request post start  -->
-																<div class="modal fade" id="deleteRequest{{request.id}}"
-																	tabindex="-1" role="dialog"
-																	aria-labelledby="deleteRequest{{request.id}}"
-																	aria-hidden="true" data-backdrop="false">
-																	<div class="modal-dialog" role="document">
-																		<div class="modal-content">
-																			<div class="modal-header">
-																				<h5 class="modal-title"
-																					id="deleteRequest{{request.id}}">
-																					Delete Financial
-																					Request</h5>
-																				<button type="button" class="close"
-																					data-dismiss="modal"
-																					aria-label="Close">
-																					<span
-																						aria-hidden="true">&times;</span>
-																				</button>
-																			</div>
-																			<div class="modal-body">
-																				<p>Do you want to delete the financial
-																					request of
-																					<b>{{ request.name}}</b>
-																				</p>
-																			</div>
-																			<div class="modal-footer">
-																				<button type="button"
-																					class="btn btn-danger"
-																					onclick="delete_post('{{request.id}}')"
-																					style="margin: 0!important;">Delete</button>
-																				<button type="button"
-																					class="btn btn-primary"
-																					data-dismiss="modal"
-																					style="margin: 0!important;">Close</button>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-																<!-- Delete particular Finance request post end  -->
-															</div>
+							<div class="col-lg-3 col-md-3 col-sm-6 col-12">
+								<a href="/create-finance-request"
+										style="margin-top: 5px!important;"
+										class="btn btn-primary bt">
+										Create Finance Request
+								</a>
+							</div>
 
-														</div>
-														<div style="display: flex;">
-															{% with year=request.year %}
-																{% if year == '1' %}
-																<p class="card-text">Name : {{ request.name }}
-																&nbsp;{{ year }}<sup>st</sup>
-																	{{request.department}}</p>
-																{% elif year == '2' %}
-																<p class="card-text">Name : {{ request.name }}
-																&nbsp;{{ year }}<sup>nd</sup>
-																	{{request.department}}</p>
-																{% elif year == '3' %}
-																<p class="card-text">Name : {{ request.name }}
-																&nbsp;{{ year }}<sup>rd</sup>
-																	{{request.department}}</p>
-																{% else %}
-																<p class="card-text">Name : {{ request.name }}
-																&nbsp;{{ year }}<sup>th</sup>
-																	{{request.department}}</p>
-																{% endif %}
-																{% endwith %}
-															
-														</div>
-														<p style="font-size: 15px !important;">Description :
-															{{request.description | truncatechars:50}}</p>
-													</div>
-												</div>
-												<div class="col-md-12 bg-light text-right"
-													style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
-													<a href="{% url 'request_details' request.id %}"
-														class="btn btn-primary"
-														style="margin: 0 !important;margin-top: 10px !important;">
-														View Details
-													</a>
-												</div>
-											</div>
-
+							{% csrf_token %}
+							<div class="col-lg-1 col-md-1 col-sm-0">
+							</div>
+							<div class="col-lg-4 col-md-4 col-sm-12">
+								<form style="margin-top: -20px !important;">
+									<div class="input-group" style="display: flex;justify-content: center;align-items: center;">
+										<input type="text" name="search_query" class="form-control form-control-lg" placeholder="Search" {% if search_query %} value={{ search_query }} {% endif %} />
+										<div class="input-group-append">
+										<button class="btn btn-primary Search search-btn" type="submit" id="button-addon2">Search</button>
 										</div>
+										<a href="/dashboard" class="btn btn-danger" id="button-addon2">Cancel</a>
 									</div>
-									{% endfor %}
-									<!-- end finance-request content container -->
-								</div>
+								</form>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-12" id="finance_request_container"
+								style="background-color:#fff; padding: 20px;">
+								<!-- start finance-request content container -->
+								<div class="mu-course-container">
+									<div class="row" id="finance_request_div">
+										{% include 'faculty/finance_request.html' %}
+										<!-- end finance-request content container -->
+									</div>
 
 
-								<div class="col-md-3">
-									<!-- start sidebar -->
-									<aside class="mu-sidebar">
+									<div class="col-md-3">
+										<!-- start sidebar -->
+										<aside class="mu-sidebar">
 
-										<!-- end single sidebar -->
-										<!-- start single sidebar -->
+											<!-- end single sidebar -->
+											<!-- start single sidebar -->
 
-									</aside>
+										</aside>
+									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-					<div class="row" style="background-color:#fff;">
-						<div class="col-md-9">
-							{% if requests.has_other_pages %}
-								<!-- Pagination -->
-								<nav class="my-3 container">
-									<ul class="pagination">
-										{% if requests.has_previous %}
-									<li class="page-item"><a class="page-link" href="?page={{requests.previous_page_number}}">Previous</a></li>
-									{% endif %}
-									{% for i in requests.paginator.page_range %}
-									{% if requests.number == i %}
-									<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
-									{% else %}
-									<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-									{% endif %}
-									{% endfor %}
-									{% if requests.has_next %}
-									<li class="page-item"><a class="page-link" href="?page={{requests.next_page_number}}">Next</a></li>
-									{% endif %}
-									</ul>
-								</nav>
-							{% endif %}
+						<div class="row" style="background-color:#fff;">
+							<div class="col-md-9">
+								{% if requests.has_other_pages %}
+									<!-- Pagination -->
+									<nav class="my-3 container">
+										<ul class="pagination">
+											{% if requests.has_previous %}
+										<li class="page-item"><a class="page-link" href="?page={{requests.previous_page_number}}">Previous</a></li>
+										{% endif %}
+										{% for i in requests.paginator.page_range %}
+										{% if requests.number == i %}
+										<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
+										{% else %}
+										<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
+										{% endif %}
+										{% endfor %}
+										{% if requests.has_next %}
+										<li class="page-item"><a class="page-link" href="?page={{requests.next_page_number}}">Next</a></li>
+										{% endif %}
+										</ul>
+									</nav>
+								{% endif %}
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</section>
+	</section>
 {% endblock content %}
 
 {% block javascript %}

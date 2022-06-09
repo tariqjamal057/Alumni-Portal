@@ -21,28 +21,6 @@ function delete_post(id) {
   });
 }
 
-// function alumni_addchat(id) {
-//   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-//   alert(id);
-//   const message = document.getElementById("alumni_msg" + id).value;
-//   alert(message);
-//   console.log("message = " + message);
-//   $.ajax({
-//     type: "POST",
-//     url: "/get_user_interest/",
-//     data: { 'message': message, 'id': id, 'csrfmiddlewaretoken': csrftoken,'chat':true},
-//     success: function (response) {
-//       alert("yes");
-//       var x = "#chat" + response["id"];
-//       $(x).modal("hide");
-//       $("#finance_request_container").html(response.html);
-//       alert(response);
-//     },
-//     error: () => {
-//       alert("Something went wrong");
-//     },
-//   });
-// }
 
 // Get Interest Shown User 
 function get_interest_message(post,user) {
@@ -66,25 +44,28 @@ function get_interest_message(post,user) {
 
 
 //Finance Request section 
-
 // Chat with Faculty in Alumni as sponser
 function alumni_addchat(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
-  const message = document.getElementById("alumni_msg" + id).value;
-  console.log("message = " + message);
-  $.ajax({
-    type: "POST",
-    url: "/alumni_response/",
-    data: { message: message, id: id, csrfmiddlewaretoken: csrftoken},
-    success: function (response) {
-      var x = "#chat" + response["id"];
-      $(x).modal("hide");
-      $("#alumni_message").html(response.html);
-    },
-    error: () => {
-      console.log("something went wrong");
-    },
-  });
+  const message = document.getElementById("alumni_msg").value;
+  if(message != '') {
+    $.ajax({
+      type: "POST",
+      url: "/alumni_response/",
+      data: { message: message, id: id, csrfmiddlewaretoken: csrftoken},
+      success: function (response) {
+        $(".message_box").html(response.html);
+        document.getElementById("alumni_msg").value = "";
+        scroll_to_bottom();
+      },
+      error: () => {
+        console.log("something went wrong");
+      },
+    });
+  }
+  else {
+    alert("Enter Your Message")
+  }
 }
 
 function get_post_id(id) {
@@ -103,8 +84,8 @@ function get_post_id(id) {
 }
 
 
-//Alumni as Mentor Section
 
+//Alumni as Mentor Section
 // Chat with student as Alumni as mentor 
 function addchat(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
@@ -122,6 +103,7 @@ function addchat(id) {
     },
   });
 }
+
 
 function get_mentor_messages(id) {
   const csrftoken = $("[name=csrfmiddlewaretoken]").val();
