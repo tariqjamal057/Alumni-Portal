@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% load social_share %}
+{% block title %}{{ request_details.title | title }} Details{% endblock title %}
+
+{% block content %}
+
+	<!--START SCROLL TOP BUTTON -->
+	<a class="scrollToTop" href="#">
+		<i class="fa fa-angle-up"></i>
+	</a>
+	<!-- END SCROLL TOP BUTTON -->
+  <!-- Page breadcrumb -->
+  <section id="mu-page-breadcrumb">
+      <div class="container">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="mu-page-breadcrumb-area">
+                      <h2>Dashboard</h2>
+                      <ol class="breadcrumb">
+                          <li><a href="{% url 'home' %}">Home</a></li>
+                          <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                          <li class="active">{{ request_details.title | title }} Details</li>
+                      </ol>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+  <!-- End breadcrumb -->
+
+  {% csrf_token %}
+  <section id="mu-course-content">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="mu-course-content-area">
+             <div class="row">
+               <div class="col-md-9">
+                 <!-- start course content container -->
+                 <div class="mu-course-container mu-blog-single">
+                   <div class="row">
+                     <div class="col-md-12">
+                       <article class="mu-blog-single-item">
+                         <figure class="mu-blog-single-img">
+                          <figcaption class="mu-blog-caption" style="margin: 20px 0;;">
+                            <div class="row">
+                              <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                                <h2 class="text-info" style="margin-bottom: 10px;">{{ request_details.title| title }}</h2>
+                              </div>
+                            </div> 
+                          </figcaption>                    
+                         </figure>
+                         <h4 style="margin: 10px 20px">Post Type : 
+                          <span style="font-size: medium;">
+                            {% with post_type=request_details.post_type %}
+                              {% if post_type == "O" %} 
+                                Opportunity
+                              {% elif podt_type == "S" %}
+                                Seeking Job
+                              {% else %}
+                                Internship
+                              {% endif %}
+                            {% endwith %}
+                          </span>
+                        </h4>
+                         <p style="margin: 10px 20px">Posted By: &nbsp;{{ request_details.posted_by }} at {{ request_details.date }}</p>
+                         <div class="mu-blog-description">
+                             <blockquote>
+                                 Content                           
+                             </blockquote>
+                           <p>{{ request_details.content | safe }}</p>
+                         </div>
+                         <!-- start blog social share -->
+                         <div class="mu-blog-social">
+                           <ul class="mu-news-social-nav">
+                             <li>SOCIAL SHARE :</li>
+                             <button class="btn btn-sm btn-info" >{% post_to_whatsapp object_or_url '<i class="fa fa-whatsapp"></i>' %}</button>
+                             <button class="btn btn-sm btn-info" >{% post_to_facebook object_or_url '<i class="fa fa-facebook"></i>' %}</button>
+                             <button class="btn btn-sm btn-info" >{% post_to_gplus object_or_url '<i class="fa fa-google-plus"></i>' %}</button>
+                           </ul>
+                           <!-- <hr> -->
+                         </div>
+                         <!-- End blog social share -->
+                         <div class="col-md-12 bg-light text-right" style="border-top: .5px solid rgba(0, 0, 0, 0.19);">
+
+                          {% with total_interest=total_number_of_interest %}
+                            {% if total_interest >= 1 %}
+                              <a href="{% url 'help_desk_post_chat' request_details.id %}" class="btn btn-info">View Messages</a>
+                            {% else %}
+                              <a class="btn btn-info" style="cursor: not-allowed;">View Messages</a>
+                            {% endif %}
+                          {% endwith %}
+                            
+                            <!-- Modal -->
+                            <div class="modal fade"id="chatModels{{ request_details.id}}" tabindex="-1" role="dialog" aria-labelledby="chatModels{{ request_details.id}}Label" aria-hidden="true">
+                                <div class="modal-dialog modal-sm" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color: #5bc0de;">
+                                        <h5 class="modal-title modaltitle" id="chatModels{{ request_details.id}}Label">Alumni Interest</h5>
+                                        <button type="button" class="close closebtn" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body ">
+                                        <div class="Container-left" style="height: 35vh;overflow-y: scroll;scrollbar-width: 0;">
+                                          {% with total_interest=total_number_of_interest %}
+                                            {% if total_interest >= 1 %}
+                                              {% for interest in alumni_interest %}
+                                                  <button type="button" class="interest" onclick="get_interest_message('{{interest.post_id}}','{{interest.user_id}}')">{{interest.user}}</button>
+                                                  <br>
+                                                  <hr style="margin-bottom: 5px !important">
+                                              {% endfor %}
+                                            {% else %}
+                                              <p style="text-align: left !important;">Currently you don't have any Interst for this Request</p>
+                                            {% endif %}
+                                          {% endwith %}
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger btn-sm" style="margin: 10px 0 !important;" data-dismiss="modal">Close</button>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                       </article>
+                     </div>                                   
+                   </div>
+                 </div>
+                 <!-- end course content container -->
+               </div>
+               <div class="col-md-3">
+                 <!-- start sidebar -->
+                 <aside class="mu-sidebar">
+                   <!-- start single sidebar -->
+                   <div class="mu-single-sidebar">
+                     <h3>Recent Interests</h3>
+                     <ul class="mu-sidebar-catg">
+                       {% with total_interest=total_number_of_interest %}
+                        {% if total_interest >= 1 %}
+                          {% for inst in recent_intetest %}
+                            <li style="cursor: pointer;">
+                              <a href="{% url 'help_desk_post_chat' request_details.id %}">{{ inst.user }}</a>
+                            </li>
+                          {% endfor %}
+                          {% if total_interest > 5 %}
+                            <a href="{% url 'help_desk_post_chat' request_details.id %}"  class="btn btn-sm btn-info">View All Interest</a>
+                          {% endif %}
+                        {% else %}
+                            <p>Currently you don't have any message for this post</p>
+                        {% endif %}
+                      {% endwith %}
+                     </ul>
+                   </div>
+                   <!-- end single sidebar -->
+                 </aside>
+                 <!-- / end sidebar -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/alumni/alumni.js' %}"></script>
+{% endblock javascript %}

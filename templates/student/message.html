@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ post.title | title }} Chat{% endblock title %}
+
+{% block style %}
+<style>
+    .left_container::-webkit-scrollbar {
+        width: 0px;
+        background: transparent;
+    }
+
+    .message_container::-webkit-scrollbar {
+        width: 6px;
+        background: transparent;
+    }
+
+    .message_container::-webkit-scrollbar-thumb {
+        background: #64737d;
+        border-radius: 7px;
+        height: 200px;
+    }
+
+    #mu-course-content {
+        padding: 50px 0 !important;
+    }
+
+    .left_container {
+        position: relative;
+        overflow-y: scroll;
+    }
+
+    .right_container {
+        height: 90vh;
+    }
+
+    .right_container {
+        border-left: 1px solid #ccc;
+    }
+
+    .interest {
+        outline: none !important;
+        border: none !important;
+        width: 100% !important;
+        float: left !important;
+        background-color: #e1e1e1 !important;
+        transition: .5s;
+        padding: 20px;
+        border-bottom: 1px solid #cccccc;
+    }
+
+    .interest:hover {
+        background-color: #f0f2f5 !important;
+    }
+
+    .col-lg-3.col-md-3.col-sm-12.col-12,
+    .col-lg-9.col-md-9.col-sm-12.col-12 {
+        padding: 0px !important;
+    }
+
+    .upper_container {
+        width: 100%;
+        height: 10vh;
+        background-color: #f0f2f5;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        z-index: 1;
+    }
+
+    .upper_container p {
+        margin: 0px !important;
+    }
+
+    .search-container {
+        width: 100%;
+        height: 10vh;
+        background-color: #f0f2f5;
+        position: sticky;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .search-container .search-box {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .search-container .search-box form {
+        background-color: #fff;
+        width: 90%;
+        height: 70%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 7px;
+        padding: 4px;
+    }
+
+    .search-container .search-box input,
+    .search-container .search-box button {
+        border: none !important;
+        outline: none !important;
+        background: transparent !important;
+    }
+
+    .search-container .search-box input {
+        width: 100%;
+        height: 100%;
+        font-size: 17px;
+        box-shadow: inset 0 0px 0px rgb(0 0 0 / 8%) !important;
+        -webkit-box-shadow: inset 0 0px 0px rgb(0 0 0 / 8%);
+    }
+
+    .message_container {
+        height: 65vh;
+        padding: 10px;
+        width: 100%;
+        background-color: #dadadb;
+        overflow-y: scroll;
+    }
+    .hide_modal {
+        display: none !important;
+    }
+    .modal {
+        z-index: 1;
+    }
+    .modal-backdrop, .modal-backdrop.fade.in{
+        opacity: 0.1;
+        z-index: -1;
+    }
+</style>
+<link rel="stylesheet" href="{% static 'css/faculty/faculty.css' %}">
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<!-- Page breadcrumb -->
+<section id="mu-page-breadcrumb">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="mu-page-breadcrumb-area">
+                    <h2>Dashboard</h2>
+                    <ol class="breadcrumb">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                        <li><a href="{% url 'mentor_help_post_detail' post.id %}">{{ post.title | title }} Details</a></li>
+                        <li class="active">{{ post.title | title }} Chat</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End breadcrumb -->
+
+<section id="mu-course-content">
+    <div class="container">
+        <div class="row" style="background-color: #f0f2f5;border: 1px solid #ccc;">
+            <div class="col-lg-3 col-md-3 col-sm-12 col-12 left_container">
+                <div class="search-container">
+                    <div class="search-box">
+                        <form method="post">
+                            <input type="text" class="form-control" name="interest_search_query" placeholder="search for interest">
+                            <button type="submit" class="search_button"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </form>
+                    </div>
+                </div>
+                <div class="interest_container">
+                    {% for interest in alumni_interests %}
+                        <button type="button" class="interest" onclick="get_message_header('{{interest.post_id}}','{{interest.user_id}}'); get_helpdesk_interest_message('{{interest.post_id}}','{{interest.user_id}}','{{interest.id}}');" style="padding: 15px !important;">
+                            <div style="display: flex;justify-content: start;align-items: center;" >
+                                <img src="/uploads/{{ interest.user.profile_photo }}" alt="profile photo" style="width: 40px;border-radius: 100%;margin-right: 20px;">
+                                {{interest.user}}
+                            </div>
+                        </button>
+                    {% empty %}
+                    <h3>No Interest Found</h3>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-12 col-12 right_container">
+                {% include 'student/mentor_help_chat_header.html' %}
+                <div class="message_box">
+                    {% include 'student/chat.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/student/student.js' %}"></script>
+<script>
+    function scroll_to_bottom() {
+        var elem = document.getElementById('message_container');
+        elem.scrollTop = elem.scrollHeight;
+    }
+    function hide_modal() {
+        document.querySelector('.sponser_modal').classList.add('hide');
+    }
+</script>
+{% endblock javascript %}
