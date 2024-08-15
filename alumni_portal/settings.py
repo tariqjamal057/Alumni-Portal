@@ -85,22 +85,28 @@ WSGI_APPLICATION = 'alumni_portal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
+# DATABASES = {
 
-   'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'portal',
-        'USER': 'root',
-        'PASSWORD': 'Jamal@123',
-        'HOST': '127.0.0.1',
-        'PORT': '3300',
-        'OPTIONS': {
-        'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
+#    'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'portal',
+#         'USER': 'root',
+#         'PASSWORD': 'Jamal@123',
+#         'HOST': '127.0.0.1',
+#         'PORT': '3300',
+#         'OPTIONS': {
+#         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         },
         
+#     }
+# }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR/'db.sqlite3',
     }
 }
-
 
 
 # Password validation
