@@ -24,7 +24,7 @@ STATIC_DIR = os.path.join(BASE_DIR2, 'static')
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-nj@^0^n%be!u=8!o5ui7efi*b7)iad2(jgw06^flv=z4i$z%7_'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -85,28 +85,13 @@ WSGI_APPLICATION = 'alumni_portal.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-# DATABASES = {
-
-#    'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'portal',
-#         'USER': 'root',
-#         'PASSWORD': 'Jamal@123',
-#         'HOST': '127.0.0.1',
-#         'PORT': '3300',
-#         'OPTIONS': {
-#         'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         },
-        
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR/'db.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 
 # Password validation
@@ -161,7 +146,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'dashboard'
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
     'default': {
@@ -170,10 +157,10 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-EMAIL_ADMIN = 'admin@gmail.com'
+EMAIL_ADMIN = os.environ.get('EMAIL_ADMIN')
 
-EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
-EMAIL_HOST_USER = '59094ce4730ab7'
-EMAIL_HOST_PASSWORD = '18d8b3100f6049'
-EMAIL_PORT = '2525'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
 

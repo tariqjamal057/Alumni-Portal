@@ -12,6 +12,7 @@ django-ckeditor = "^6.7.1"
 django-crispy-forms = "^2.3"
 django-social-share = "^2.3.0"
 django-import-export = "^4.1.1"
+pillow = "^10.4.0"
 
 
 [build-system]

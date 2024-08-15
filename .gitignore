@@ -4,3 +4,9 @@ env
 # cache files
 .cache
 __pycache__
+
+# Enviroment
+.env
+
+# Database
+db.sqlite3
