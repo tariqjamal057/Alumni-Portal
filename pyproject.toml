@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "alumni-portal"
+version = "0.1.0"
+description = ""
+authors = ["Tariq Jamal A <tariqjamal4267324@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.1"
+django-ckeditor = "^6.7.1"
+django-crispy-forms = "^2.3"
+django-social-share = "^2.3.0"
+django-import-export = "^4.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
