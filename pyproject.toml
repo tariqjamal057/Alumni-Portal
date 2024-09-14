@@ -18,3 +18,25 @@ pillow = "^10.4.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 99
+
+[tool.isort]
+profile = "black"
+
+[tool.docformatter]
+recursive = true
+wrap-summaries = 99
+wrap-descriptions = 99
+
+[tool.djlint]
+blank_line_after_tag="load,extends,include"
+blank_line_before_tag="load,extends,include"
+close_void_tags=true
+exclude=".venv,venv,env"
+format_attribute_template_tags=true
+format_css=true
+format_js=true
+indent_size=4
+max_line_length=120

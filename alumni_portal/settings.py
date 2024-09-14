@@ -151,11 +151,16 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_CONFIGS = {
-    'default': {
-        'height': 'full', 
-        'width': 'full', 
-    },
+    'default':
+        {
+            'toolbar': 'full',
+            'width': 'auto',
+            'extraPlugins': ','.join([
+                'codesnippet',
+            ]),
+        },
 }
+
 
 EMAIL_ADMIN = os.environ.get('EMAIL_ADMIN')
 
