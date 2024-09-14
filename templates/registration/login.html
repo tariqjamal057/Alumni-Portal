@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
 {% load static %}
 
 
@@ -27,7 +26,7 @@
 <br>
 								
 				{% csrf_token %}
-                                {{ form | crispy }}
+                                {{ form }}
 								<!-- <input type="submit" value="loh"> -->
                                 <div class="flex-sb-m w-full p-b-20">
                                     <div>
