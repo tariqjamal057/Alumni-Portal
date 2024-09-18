@@ -1,21 +1,22 @@
 {% extends 'base.html' %}
+
 {% load crispy_forms_tags %}
+
 {% load static %}
 
-{% block title %}Faculty Dashboard | Finance Request | Karpagam Institute of Technology{% endblock title %}
-
-{% block user %} active {% endblock %}
-
+{% block title %}
+    Faculty Dashboard | Finance Request | Karpagam Institute of Technology
+{% endblock title %}
+{% block user %}active{% endblock %}
 {% block style %}
-	<link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}" />
 {% endblock style %}
-
 {% block content %}
-	<!--START SCROLL TOP BUTTON -->
-	<a class="scrollToTop" href="#">
-		<i class="fa fa-angle-up"></i>
-	</a>
-	<!-- END SCROLL TOP BUTTON -->
+    <!--START SCROLL TOP BUTTON -->
+    <a class="scrollToTop" href="#">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- END SCROLL TOP BUTTON -->
     <!-- Page breadcrumb -->
     <section id="mu-page-breadcrumb">
         <div class="container">
@@ -24,7 +25,9 @@
                     <div class="mu-page-breadcrumb-area">
                         <h2>Dashboard</h2>
                         <ol class="breadcrumb">
-                            <li><a href="{% url 'home' %}">Home</a></li>
+                            <li>
+                                <a href="{% url 'home' %}">Home</a>
+                            </li>
                             <li class="active">Dashboard</li>
                         </ol>
                     </div>
@@ -33,93 +36,101 @@
         </div>
     </section>
     <!-- End breadcrumb -->
+    {% comment %} Main Section {% endcomment %}
+    <section id="mu-course-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-course-content-area">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                                <h2>Finance Request</h2>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                                <a href="/create-finance-request"
+                                   class="btn btn-primary bt"
+                                   id="create-btn">Create Finance Request</a>
+                            </div>
+                            {% csrf_token %}
+                            <div class="col-lg-1 col-md-1 col-sm-0"></div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <form id="search_form">
+                                    <div class="input-group" id="flex_container">
+                                        <input type="text"
+                                               name="search_query"
+                                               class="form-control form-control-lg"
+                                               placeholder="Search"
+                                               id="search_query" />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary Search"
+                                                    id="search-btn"
+                                                    type="button"
+                                                    id="button-addon2"
+                                                    onclick="faculty_post_search()">Search</button>
+                                        </div>
+                                        <a href="/dashboard" class="btn btn-danger" id="button-addon2">Cancel</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="bg_white pd_20 col-md-12">
+                                <!-- start finance-request content container -->
+                                <div class="mu-course-container">
+                                    <div class="row" id="finance_request_div">
 
+                                        {% include 'faculty/finance_request.html' %}
 
-	{% comment %} Main Section {% endcomment %}
-	<section id="mu-course-content">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="mu-course-content-area">
-						<div class="row">
-							<div class="col-lg-4 col-md-4 col-sm-6 col-12">
-								<h2>Finance Request</h2>
-							</div>
-							<div class="col-lg-3 col-md-3 col-sm-6 col-12">
-								<a href="/create-finance-request"
-										class="btn btn-primary bt" id="create-btn">
-										Create Finance Request
-								</a>
-							</div>
-
-							{% csrf_token %}
-							<div class="col-lg-1 col-md-1 col-sm-0">
-							</div>
-							<div class="col-lg-4 col-md-4 col-sm-12">
-								<form id="search_form">
-									<div class="input-group" id="flex_container">
-										<input type="text" name="search_query" class="form-control form-control-lg" placeholder="Search" id="search_query" />
-										<div class="input-group-append">
-										<button class="btn btn-primary Search" id="search-btn" type="button" id="button-addon2" onclick="faculty_post_search()">Search</button>
-										</div>
-										<a href="/dashboard" class="btn btn-danger" id="button-addon2">Cancel</a>
-									</div>
-								</form>
-							</div>
-						</div>
-						<div class="row">
-							<div class="bg_white pd_20 col-md-12">
-								<!-- start finance-request content container -->
-								<div class="mu-course-container">
-									<div class="row" id="finance_request_div">
-										{% include 'faculty/finance_request.html' %}
-										<!-- end finance-request content container -->
-									</div>
-
-
-									<div class="col-md-3">
-										<!-- start sidebar -->
-										<aside class="mu-sidebar">
-
-											<!-- end single sidebar -->
-											<!-- start single sidebar -->
-
-										</aside>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="bg_white row">
-							<div class="col-md-9">
-								{% if requests.has_other_pages %}
-									<!-- Pagination -->
-									<nav class="my-3 container">
-										<ul class="pagination">
-											{% if requests.has_previous %}
-										<li class="page-item"><a class="page-link" href="?page={{requests.previous_page_number}}">Previous</a></li>
-										{% endif %}
-										{% for i in requests.paginator.page_range %}
-										{% if requests.number == i %}
-										<li class="page-item active"><a class="page-link" href="#">{{i}}</a></li>
-										{% else %}
-										<li class="page-item"><a class="page-link" href="?page={{i}}">{{i}}</a></li>
-										{% endif %}
-										{% endfor %}
-										{% if requests.has_next %}
-										<li class="page-item"><a class="page-link" href="?page={{requests.next_page_number}}">Next</a></li>
-										{% endif %}
-										</ul>
-									</nav>
-								{% endif %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+                                        <!-- end finance-request content container -->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!-- start sidebar -->
+                                        <aside class="mu-sidebar">
+                                            <!-- end single sidebar -->
+                                            <!-- start single sidebar -->
+                                        </aside>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg_white row">
+                            <div class="col-md-9">
+                                {% if requests.has_other_pages %}
+                                    <!-- Pagination -->
+                                    <nav class="my-3 container">
+                                        <ul class="pagination">
+                                            {% if requests.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ requests.previous_page_number }}">Previous</a>
+                                                </li>
+                                            {% endif %}
+                                            {% for i in requests.paginator.page_range %}
+                                                {% if requests.number == i %}
+                                                    <li class="page-item active">
+                                                        <a class="page-link" href="#">{{ i }}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if requests.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ requests.next_page_number }}">Next</a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}
-
 {% block javascript %}
-<script src="{% static 'js/faculty/faculty.js' %}"></script>
+    <script src="{% static 'js/faculty/faculty.js' %}"></script>
 {% endblock javascript %}

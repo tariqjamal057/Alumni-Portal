@@ -15,6 +15,12 @@ django-import-export = "^4.1.1"
 pillow = "^10.4.0"
 
 
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+isort = "^5.13.2"
+docformatter = "^1.7.5"
+djlint = "^1.35.2"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

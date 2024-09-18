@@ -1,72 +1,83 @@
 {% block style %}
-<style>
-    p {
-        font-size: 15px !important;
-    }
-</style>
+    <style>
+        p {
+            font-size: 15px !important;
+        }
+    </style>
 {% endblock %}
-
 {% for post in posts %}
-<div class="col-md-4 col-sm">
-    <div class="post_container">
-        <div class="post_inner_container">
-            <div class="inner_top_container">   
-                <div class="flex_1">
-                    <div id="flex_between">
-                        <h4 class="text-wrap"><a href="{% url 'help_desk_post_detail' post.id %}"><u>{{post.title | truncatechars:15 | title }}</u></a></h4>
-                        <div class="flex_container">
-                            <a class="btn btn-sm btn-primary btn_top" href="{% url 'update_help_desk_post' post.id %}">
-                                <i class="fa fa-pencil-square-o"></i>
-                            </a>
-                            <button type="button" class="btn btn-danger btn-sm post_delete_btn" data-toggle="modal"
-                                data-target="#deleteRequest{{post.id}}">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            <!-- Delete particular Finance request post start  -->
-                            <div class="modal fade" id="deleteRequest{{post.id}}" tabindex="-1" role="dialog"
-                                aria-labelledby="deleteRequest{{post.id}}" aria-hidden="true" data-backdrop="false">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="deleteRequest{{post.id}}">
-                                                Delete Financial
-                                                Request</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Do you want to delete&nbsp;
-                                                <b>{{ post.title}}</b>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn_top btn btn-danger"
-                                                onclick="help_desk_post_delete('{{post.id}}')">Delete</button>
-                                            <button type="button" class="btn_top btn btn-primary" data-dismiss="modal">Close</button>
+    <div class="col-md-4 col-sm">
+        <div class="post_container">
+            <div class="post_inner_container">
+                <div class="inner_top_container">
+                    <div class="flex_1">
+                        <div id="flex_between">
+                            <h4 class="text-wrap">
+                                <a href="{% url 'help_desk_post_detail' post.id %}"><u>{{ post.title | truncatechars:15 | title }}</u></a>
+                            </h4>
+                            <div class="flex_container">
+                                <a class="btn btn-sm btn-primary btn_top"
+                                   href="{% url 'update_help_desk_post' post.id %}">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </a>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm post_delete_btn"
+                                        data-toggle="modal"
+                                        data-target="#deleteRequest{{ post.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <!-- Delete particular Finance request post start  -->
+                                <div class="modal fade"
+                                     id="deleteRequest{{ post.id }}"
+                                     tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="deleteRequest{{ post.id }}"
+                                     aria-hidden="true"
+                                     data-backdrop="false">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="deleteRequest{{ post.id }}">
+                                                    Delete Financial
+                                                    Request
+                                                </h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    Do you want to delete&nbsp;
+                                                    <b>{{ post.title }}</b>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                        class="btn_top btn btn-danger"
+                                                        onclick="help_desk_post_delete('{{ post.id }}')">
+                                                    Delete
+                                                </button>
+                                                <button type="button" class="btn_top btn btn-primary" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Delete particular Finance request post end  -->
                             </div>
-                            <!-- Delete particular Finance request post end  -->
                         </div>
-
+                        <p class="post_desc">
+                            Description :
+                            {{ post.content | truncatechars:50 | safe }}
+                        </p>
                     </div>
-                    
-                    <p class="post_desc">Description :
-                        {{post.content | truncatechars:50 | safe}}
-                    </p>
+                </div>
+                <div class="inner_bottom_container col-md-12 bg-light text-right">
+                    <a href="{% url 'help_desk_post_detail' post.id %}"
+                       class="detail_btn btn btn-primary">View Details</a>
                 </div>
             </div>
-            <div class="inner_bottom_container col-md-12 bg-light text-right">
-                <a href="{% url 'help_desk_post_detail' post.id %}" class="detail_btn btn btn-primary">
-                    View Details
-                </a>
-            </div>
         </div>
-
     </div>
-</div>
 {% empty %}
-<h4 class="text_center">No Help Desk Post Found</h4>
+    <h4 class="text_center">No Help Desk Post Found</h4>
 {% endfor %}

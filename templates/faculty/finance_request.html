@@ -1,89 +1,107 @@
 {% for request in requests %}
-<div class="col-md-4 col-sm">
-    <div class="post_container">
-        <div class="post_inner_container">
-            <div class="inner_top_container">
-                <div class="img-square-wrapper">
-                    <img class="post_image" src="{{ request.image.url }}"
-                        alt="Card image cap" />
-                </div>
-                <div class="flex_1">
-                    <div id="flex_between">
-                        <h4 class="text-wrap"><a href="{% url 'request_details' request.id %}"><u>{{request.title | truncatechars:15 | title }}</u></a></h4>
-                        <div class="flex_container">
-                            <a class="btn btn-sm btn-primary btn_top" href="{% url 'update-finance-post' request.id %}">
-                                <i class="fa fa-pencil-square-o"></i>
-                            </a>
-                            <button type="button" class="btn btn-danger btn-sm post_delete_btn" data-toggle="modal"
-                                data-target="#deleteRequest{{request.id}}">
-                                <i class="fa fa-trash"></i>
-                            </button>
-                            <!-- Delete particular Finance request post start  -->
-                            <div class="modal fade" id="deleteRequest{{request.id}}" tabindex="-1" role="dialog"
-                                aria-labelledby="deleteRequest{{request.id}}" aria-hidden="true" data-backdrop="false">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="deleteRequest{{request.id}}">
-                                                Delete Financial
-                                                Request</h4>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p>Do you want to delete the financial
-                                                request of
-                                                <b>{{ request.name}}</b>
-                                            </p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn_top btn btn-danger"
-                                                onclick="delete_post('{{request.id}}')">Delete</button>
-                                            <button type="button" class="btn_top btn btn-primary" data-dismiss="modal">Close</button>
+    <div class="col-md-4 col-sm">
+        <div class="post_container">
+            <div class="post_inner_container">
+                <div class="inner_top_container">
+                    <div class="img-square-wrapper">
+                        <img class="post_image" src="{{ request.image.url }}" alt="Card image cap" />
+                    </div>
+                    <div class="flex_1">
+                        <div id="flex_between">
+                            <h4 class="text-wrap">
+                                <a href="{% url 'request_details' request.id %}"><u>{{ request.title | truncatechars:15 | title }}</u></a>
+                            </h4>
+                            <div class="flex_container">
+                                <a class="btn btn-sm btn-primary btn_top"
+                                   href="{% url 'update-finance-post' request.id %}">
+                                    <i class="fa fa-pencil-square-o"></i>
+                                </a>
+                                <button type="button"
+                                        class="btn btn-danger btn-sm post_delete_btn"
+                                        data-toggle="modal"
+                                        data-target="#deleteRequest{{ request.id }}">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                <!-- Delete particular Finance request post start  -->
+                                <div class="modal fade"
+                                     id="deleteRequest{{ request.id }}"
+                                     tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="deleteRequest{{ request.id }}"
+                                     aria-hidden="true"
+                                     data-backdrop="false">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="deleteRequest{{ request.id }}">
+                                                    Delete Financial
+                                                    Request
+                                                </h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>
+                                                    Do you want to delete the financial
+                                                    request of
+                                                    <b>{{ request.name }}</b>
+                                                </p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                        class="btn_top btn btn-danger"
+                                                        onclick="delete_post('{{ request.id }}')">Delete</button>
+                                                <button type="button" class="btn_top btn btn-primary" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- Delete particular Finance request post end  -->
                             </div>
-                            <!-- Delete particular Finance request post end  -->
                         </div>
-
+                        <div class="flex">
+                            {% with year=request.year %}
+                                {% if year == '1' %}
+                                    <p class="card-text">
+                                        Name : {{ request.name }}
+                                        &nbsp;{{ year }}<sup>st</sup>
+                                        {{ request.department }}
+                                    </p>
+                                {% elif year == '2' %}
+                                    <p class="card-text">
+                                        Name : {{ request.name }}
+                                        &nbsp;{{ year }}<sup>nd</sup>
+                                        {{ request.department }}
+                                    </p>
+                                {% elif year == '3' %}
+                                    <p class="card-text">
+                                        Name : {{ request.name }}
+                                        &nbsp;{{ year }}<sup>rd</sup>
+                                        {{ request.department }}
+                                    </p>
+                                {% else %}
+                                    <p class="card-text">
+                                        Name : {{ request.name }}
+                                        &nbsp;{{ year }}<sup>th</sup>
+                                        {{ request.department }}
+                                    </p>
+                                {% endif %}
+                            {% endwith %}
+                        </div>
+                        <p class="post_desc">
+                            Description :
+                            {{ request.description | truncatechars:50 }}
+                        </p>
                     </div>
-                    <div class="flex">
-                        {% with year=request.year %}
-                        {% if year == '1' %}
-                        <p class="card-text">Name : {{ request.name }}
-                            &nbsp;{{ year }}<sup>st</sup>
-                            {{request.department}}</p>
-                        {% elif year == '2' %}
-                        <p class="card-text">Name : {{ request.name }}
-                            &nbsp;{{ year }}<sup>nd</sup>
-                            {{request.department}}</p>
-                        {% elif year == '3' %}
-                        <p class="card-text">Name : {{ request.name }}
-                            &nbsp;{{ year }}<sup>rd</sup>
-                            {{request.department}}</p>
-                        {% else %}
-                        <p class="card-text">Name : {{ request.name }}
-                            &nbsp;{{ year }}<sup>th</sup>
-                            {{request.department}}</p>
-                        {% endif %}
-                        {% endwith %}
-
-                    </div>
-                    <p class="post_desc">Description :
-                        {{request.description | truncatechars:50}}</p>
+                </div>
+                <div class="inner_bottom_container col-md-12 bg-light text-right">
+                    <a href="{% url 'request_details' request.id %}"
+                       class="detail_btn btn btn-primary">View Details</a>
                 </div>
             </div>
-            <div class="inner_bottom_container col-md-12 bg-light text-right">
-                <a href="{% url 'request_details' request.id %}" class="detail_btn btn btn-primary">
-                    View Details
-                </a>
-            </div>
         </div>
-
     </div>
-</div>
 {% empty %}
-<h4 class="text_center">No Finance Request Found</h4>
+    <h4 class="text_center">No Finance Request Found</h4>
 {% endfor %}

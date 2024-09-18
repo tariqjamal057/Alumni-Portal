@@ -1,8 +1,25 @@
 {% block content %}
     <form method="post" class="sponser_form">
-        <input type="text" class="form-control add_sponser" name="studentname" value="{{student_name}}" id="studentname" readonly>
-        <input type="text" class="form-control add_sponser" name="alumniname" value="{{alumni_name}}" id="alumniname" readonly>
-        <input type="number" class="form-control add_sponser" name="amount" id="amount" placeholder="enter amount...">
-        <button type="button" class="btn btn-lg btn-info" id="add_btn" onclick="add_sponser('{{postid}}','{{alumniid}}')" >Add</button>
+        <input type="text"
+               class="form-control add_sponser"
+               name="studentname"
+               value="{{ student_name }}"
+               id="studentname"
+               readonly />
+        <input type="text"
+               class="form-control add_sponser"
+               name="alumniname"
+               value="{{ alumni_name }}"
+               id="alumniname"
+               readonly />
+        <input type="number"
+               class="form-control add_sponser"
+               name="amount"
+               id="amount"
+               placeholder="enter amount..." />
+        <button type="button"
+                class="btn btn-lg btn-info"
+                id="add_btn"
+                onclick="add_sponser('{{ postid }}','{{ alumniid }}')">Add</button>
     </form>
-{% endblock content %}  
+{% endblock content %}
