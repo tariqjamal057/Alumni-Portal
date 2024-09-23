@@ -41,7 +41,7 @@ def home(request):
         "mentor_help_post": mentor_help_post,
         "feautured_sponser": feautured_sponser,
     }
-    return render(request, "index.html", context)
+    return render(request, "public/index.html", context)
 
 
 def login(request):

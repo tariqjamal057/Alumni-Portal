@@ -1,0 +1,43 @@
+{% extends 'public/layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}Karpagam Institute of Technology Alumni Association | Collegeizens | Home{% endblock %}
+{% block home %}active{% endblock %}
+{% block content %}
+    <!--START SCROLL TOP BUTTON -->
+    <a class="scrollToTop" href="#">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- END SCROLL TOP BUTTON -->
+    <!-- Start Slider -->
+
+    {% include 'public/components/home/slider.html' %}
+
+    <!-- End Slider -->
+    <!-- Start service  -->
+
+    {% include 'public/components/home/service.html' %}
+
+    <!-- End service  -->
+    <!-- Start about us -->
+
+    {% include 'public/components/home/about.html' %}
+
+    <!-- End about us -->
+    <!-- Start about us counter -->
+
+    {% include 'public/components/home/counter.html' %}
+
+    <!-- End about us counter -->
+    <!-- Start features section -->
+
+    {% include 'public/components/home/featured_mentor.html' %}
+
+    <!-- End features section -->
+    <!-- Start footer -->
+
+    {% include 'public/layouts/footer.html' %}
+
+    <!-- End footer -->
+{% endblock %}
