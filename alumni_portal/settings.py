@@ -172,3 +172,7 @@ EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
+
+LOGIN_URL = os.environ.get("LOGIN_URL")
+LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL")
+LOGOUT_REDIRECT_URL = os.environ.get("LOGOUT_REDIRECT_URL")

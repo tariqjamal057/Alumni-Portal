@@ -3,15 +3,16 @@ from django.views.generic.base import TemplateView
 
 
 class Home(TemplateView):
-    template_name = 'public/index.html'
+    template_name = "public/index.html"
 
 
 class About(TemplateView):
-    template_name = 'public/about.html'
+    template_name = "public/about.html"
 
 
 class Gallery(TemplateView):
-    template_name = 'public/gallery.html'
+    template_name = "public/gallery.html"
+
 
 class Contact(TemplateView):
-    template_name = 'public/contact.html'
+    template_name = "public/contact.html"

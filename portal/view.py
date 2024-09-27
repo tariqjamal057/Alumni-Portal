@@ -15,7 +15,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 
-from portal.forms import FinanceHelpForm, Help_Desk_Form, MentorHelpForm
+from portal.form import FinanceHelpForm, Help_Desk_Form, MentorHelpForm
 from portal.models import *
 
 # from portal.models import allowed_user

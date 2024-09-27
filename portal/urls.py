@@ -12,11 +12,12 @@ from django.contrib.auth.views import (
 from django.urls import path
 from django.urls import re_path as url
 
+from portal.views import auth, public
+
 from . import view
-from portal.views import public
 
 urlpatterns = [
-    path("login/", LoginView.as_view(), name="login"),
+    # path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
     path("password_reset/", PasswordResetView.as_view(), name="password_reset"),
     path(
@@ -97,13 +98,9 @@ urlpatterns = [
         "help_desk_detail_page/<int:pk>", view.help_desk_detail_page, name="help_desk_detail_page"
     ),
     path("help_desk_chat/<int:pk>", view.help_desk_chat, name="help_desk_chat"),
-    path(
-        "help_desk_users_message/", view.help_desk_users_message, name="help_desk_users_message"
-    ),
+    path("help_desk_users_message/", view.help_desk_users_message, name="help_desk_users_message"),
     path("student_post_search/", view.student_post_search, name="student_post_search"),
-    path(
-        "create_mentor_help_post/", view.create_mentor_help_post, name="create_mentor_help_post"
-    ),
+    path("create_mentor_help_post/", view.create_mentor_help_post, name="create_mentor_help_post"),
     path(
         "update_mentor_help_post/<int:pk>/",
         view.update_mentor_help_post,
@@ -114,9 +111,7 @@ urlpatterns = [
         view.mentor_help_post_detail,
         name="mentor_help_post_detail",
     ),
-    path(
-        "delete_mentor_help_post/", view.delete_mentor_help_post, name="delete_mentor_help_post"
-    ),
+    path("delete_mentor_help_post/", view.delete_mentor_help_post, name="delete_mentor_help_post"),
     path(
         "mentor_help_post_chat/<int:pk>", view.mentor_help_post_chat, name="mentor_help_post_chat"
     ),
@@ -145,6 +140,10 @@ urlpatterns = [
     ),
 ]
 
+urlpatterns += [
+    path("login/", auth.LoginView.as_view(), name="login"),
+    path("signup/", auth.SignUpView.as_view(), name="signup"),
+]
 
 urlpatterns += [
     path("", public.Home.as_view(), name="home"),
