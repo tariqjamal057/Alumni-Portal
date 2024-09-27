@@ -19,47 +19,53 @@
                 <!-- LOGO -->
                 <!-- TEXT BASED LOGO -->
                 <a class="navbar-brand" href="{% url 'home' %}">
-                    <img src="{% static 'image/logo.jpg' %}"
+                    <img src="{% static 'image/logo.svg' %}"
                          alt="logo"
                          height="auto"
-                         width="150px" />
+                         width="40px" />
                 </a>
                 <!-- IMG BASED LOGO  -->
                 <!-- <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/logo.png' %}" alt="logo" /></a> -->
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
-                    <li class="{% block home %} {% endblock %}">
+                    <li class=" 
+                        {% block home %}{% endblock %}">
                         <a href="{% url 'home' %}">Home</a>
                     </li>
-                    <li class="dropdown {% block activity %}{% endblock %}">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities &nbsp;<span class="fa fa-angle-down"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li>
-                                <a href="{% url 'mentor_help_page' %}">Alumni as mentor</a>
-                            </li>
-                            {% if is_alumini %}
+                    {% if user.is_authenticated %}
+                        <li class="dropdown 
+                            {% block activity %}{% endblock %}">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities &nbsp;<span class="fa fa-angle-down"></span></a>
+                            <ul class="dropdown-menu" role="menu">
                                 <li>
-                                    <a href="{% url 'finance_request' %}">Alumni as sponser</a>
+                                    <a href="{% url 'mentor_help_page' %}">Alumni as mentor</a>
                                 </li>
-                            {% endif %}
-                            <li>
-                                <a href="{% url 'help_desk_post' %}">Helpdesk</a>
-                            </li>
-                        </ul>
-                    </li>
+                                {% if is_alumini %}
+                                    <li>
+                                        <a href="{% url 'finance_request' %}">Alumni as sponser</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a href="{% url 'help_desk_post' %}">Helpdesk</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
                     <li>
-                        <a target="_blank"
-                           href="https://karpagamtech.ac.in/about-us/college-profile/">About Us</a>
+                        <a href="{% url 'about' %}">About Us</a>
                     </li>
-                    <li class="{% block gallery %} {% endblock %}">
+                    <li class=" 
+                        {% block gallery %}{% endblock %}">
                         <a href="{% url 'gallery' %}">Gallery</a>
                     </li>
-                    <li class="{% block contact-us %} {% endblock %}">
+                    <li class=" 
+                        {% block contact-us %}{% endblock %}">
                         <a href="/contact">Contact</a>
                     </li>
                     {% if user.is_authenticated %}
-                        <li class="dropdown {% block user %}{% endblock %}">
+                        <li class="dropdown 
+                            {% block user %}{% endblock %}">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user }} &nbsp;<span class="fa fa-angle-down"></span></a>
                             <ul class="dropdown-menu" role="menu">
                                 <li>

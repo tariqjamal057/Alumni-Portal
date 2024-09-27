@@ -1,0 +1,19 @@
+{% extends 'public/layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}College of Engineering and Technology | Collegeizens | About Us{% endblock %}
+
+{% block content %}
+
+    <section id="about-us">
+        <img src="{% static 'image/dummy_college.jpg' %}"
+             alt="img"
+             height="40vh"
+             width="100%"
+             class="h-70vh" />
+    </section>
+
+    {% include 'public/components/home/about.html' %}
+
+{% endblock content %}

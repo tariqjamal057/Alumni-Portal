@@ -2,14 +2,12 @@
 
 {% load static %}
 
-{% block title %}Karpagam Institute of Technology Alumni Association | Collegeizens | Home{% endblock %}
+{% block title %}College of Engineering and Technology | Collegeizens | Home{% endblock %}
+
 {% block home %}active{% endblock %}
+
 {% block content %}
-    <!--START SCROLL TOP BUTTON -->
-    <a class="scrollToTop" href="#">
-        <i class="fa fa-angle-up"></i>
-    </a>
-    <!-- END SCROLL TOP BUTTON -->
+
     <!-- Start Slider -->
 
     {% include 'public/components/home/slider.html' %}
@@ -35,9 +33,4 @@
     {% include 'public/components/home/featured_mentor.html' %}
 
     <!-- End features section -->
-    <!-- Start footer -->
-
-    {% include 'public/layouts/footer.html' %}
-
-    <!-- End footer -->
 {% endblock %}
