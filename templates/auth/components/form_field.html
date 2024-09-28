@@ -1,0 +1,7 @@
+{% load custom_tags %}
+
+<div class="form-group my-2">
+    <label for="{{ field.id_for_label }}" class="{{ label_class }}">{{ field.label }}</label>
+    {{ field|add_class:form_class }}
+    {% for error in field.errors %}<p class="text-danger pt-1 font-small">{{ error }}</p>{% endfor %}
+</div>

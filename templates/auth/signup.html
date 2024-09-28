@@ -6,26 +6,20 @@
 
 {% block content %}
 
+    <div class="text-primary text-center">
+        <h3>Create Account</h3>
+        <p class="font-small opacity-75">Hey enter your details to create account</p>
+    </div>
     <form class="text-start" method="post">
         {% csrf_token %}
 
         {% include "auth/components/form_errors.html" %}
 
-        <div class="form-group my-2">
-            <label for="{{ form.email.id_for_label }}" class="sr-only">{{ form.email.label }}</label>
-            {{ form.email|add_class:"form-control" }}
-            {% for error in form.email.errors %}<p class="text-danger pt-1 font-small">{{ error }}</p>{% endfor %}
-        </div>
-        <div class="form-group my-2">
-            <label for="{{ form.password1.id_for_label }}" class="sr-only">{{ form.password1.label }}</label>
-            {{ form.password1|add_class:"form-control" }}
-            {% for error in form.password1.errors %}<p class="text-danger pt-1 font-small">{{ error }}</p>{% endfor %}
-        </div>
-        <div class="form-group my-2">
-            <label for="{{ form.password2.id_for_label }}" class="sr-only">{{ form.password2.label }}</label>
-            {{ form.password2|add_class:"form-control" }}
-            {% for error in form.password2.errors %}<p class="text-danger pt-1 font-small">{{ error }}</p>{% endfor %}
-        </div>
+        {% render_form_field form.email %}
+
+        {% render_form_field form.password1 %}
+        {% render_form_field form.password2 %}
+
         <button class="btn btn-primary m-0 w-100" type="submit">Create Account</button>
         <p class="text-center my-2">
             Already have an account? <a href="{% url 'login' %}"

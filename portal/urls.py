@@ -19,18 +19,18 @@ from . import view
 urlpatterns = [
     # path("login/", LoginView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(next_page="login"), name="logout"),
-    path("password_reset/", PasswordResetView.as_view(), name="password_reset"),
-    path(
-        "password_reset_confirm/<uidb64>/<token>",
-        PasswordResetConfirmView.as_view(),
-        name="password_reset_confirm",
-    ),
-    path("password_reset_done/", PasswordResetDoneView.as_view(), name="password_reset_done"),
-    path(
-        "password_reset_complete/",
-        PasswordResetCompleteView.as_view(),
-        name="password_reset_complete",
-    ),
+    # path("password_reset/", PasswordResetView.as_view(), name="password_reset"),
+    # path(
+    #     "password_reset_confirm/<uidb64>/<token>",
+    #     PasswordResetConfirmView.as_view(),
+    #     name="password_reset_confirm",
+    # ),
+    # path("password_reset_done/", PasswordResetDoneView.as_view(), name="password_reset_done"),
+    # path(
+    #     "password_reset_complete/",
+    #     PasswordResetCompleteView.as_view(),
+    #     name="password_reset_complete",
+    # ),
     url(r"^password/$", view.change_password, name="change_password"),
     path("home/", view.home, name="home"),
     path("dashboard/", view.dashboard, name="dashboard"),
@@ -143,6 +143,18 @@ urlpatterns = [
 urlpatterns += [
     path("login/", auth.LoginView.as_view(), name="login"),
     path("signup/", auth.SignUpView.as_view(), name="signup"),
+    path("password_reset/", auth.PasswordResetView.as_view(), name="password_reset"),
+    path(
+        "password_reset_confirm/<uidb64>/<token>",
+        auth.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path("password_reset_done/", auth.PasswordResetDoneView.as_view(), name="password_reset_done"),
+    path(
+        "password_reset_complete/",
+        auth.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
 ]
 
 urlpatterns += [

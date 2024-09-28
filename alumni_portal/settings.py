@@ -147,8 +147,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR2, "uploads")
 AUTH_USER_MODEL = "portal.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-LOGIN_REDIRECT_URL = "dashboard"
-
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
@@ -168,11 +166,12 @@ CKEDITOR_CONFIGS = {
 
 EMAIL_ADMIN = os.environ.get("EMAIL_ADMIN")
 
+EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
-LOGIN_URL = os.environ.get("LOGIN_URL")
 LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL")
 LOGOUT_REDIRECT_URL = os.environ.get("LOGOUT_REDIRECT_URL")
