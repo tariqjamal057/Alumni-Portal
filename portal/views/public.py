@@ -25,3 +25,6 @@ class Gallery(BasePublicContext):
 
 class Contact(BasePublicContext):
     template_name = "public/contact.html"
+
+class Page404(TemplateView):
+    template_name = "public/404.html"

@@ -12,7 +12,7 @@ from django.contrib.auth.views import (
 from django.urls import path
 from django.urls import re_path as url
 
-from portal.views import auth, public
+from portal.views import auth, public, dasboard
 
 from . import view
 
@@ -33,7 +33,7 @@ urlpatterns = [
     # ),
     url(r"^password/$", view.change_password, name="change_password"),
     path("home/", view.home, name="home"),
-    path("dashboard/", view.dashboard, name="dashboard"),
+    # path("dashboard/", view.dashboard, name="dashboard"),
     path("dashboard/faculty/", view.faculty, name="faculty-dashboard"),
     path("dashboard/alumini", view.alumini, name="alumini-dashboard"),
     path("dashboard/student", view.student, name="student-dashboard"),
@@ -42,7 +42,7 @@ urlpatterns = [
     # path("contact/", view.contact, name="contact"),
     path("course-detail/", view.course, name="course"),
     path("gallery1/", view.gallery, name="gallery"),
-    path("404/", view.page404, name="page404"),
+    # path("404/", view.page404, name="page404"),
     path("faculty_post_search/", view.faculty_post_search, name="faculty_post_search"),
     path("create-finance-request/", view.create_Finance_Post, name="create-finance-request"),
     path("update-finance-post/<int:pk>", view.update_Finance_Post, name="update-finance-post"),
@@ -162,4 +162,11 @@ urlpatterns += [
     path("about", public.About.as_view(), name="about"),
     path("gallery", public.Gallery.as_view(), name="gallery"),
     path("contact", public.Contact.as_view(), name="contact"),
+    path("404", public.Page404.as_view(), name="page404"),
 ]
+
+urlpatterns += [
+    path("dashboard", dasboard.DashboardView.as_view(), name="dashboard"),
+]
+
+# urlpatterns += []
