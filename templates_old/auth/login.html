@@ -1,0 +1,40 @@
+{% extends 'auth/layouts/base.html' %}
+
+{% load static %}
+
+{% load custom_tags %}
+
+{% block content %}
+
+    <div class="text-primary text-center">
+        <h3>Welcome Back!</h3>
+        <p class="font-small opacity-75">Hey enter your details to login into your account</p>
+    </div>
+    <form class="text-start" method="post">
+        {% csrf_token %}
+
+        {% include "auth/components/form_errors.html" %}
+
+        {% render_form_field form.username %}
+
+        {% render_form_field form.password %}
+
+        <div class="d-flex justify-content-between align-items-center my-2">
+            <div class="checkbox mb-3 text-left">
+                <label>
+                    <input type="checkbox" value="remember-me" />
+                    Stay logged in
+                </label>
+            </div>
+            <p class="text-left">
+                <a href="{% url 'password_reset' %}" class="text-danger">forgot password?</a>
+            </p>
+        </div>
+        <button class="btn btn-primary m-0 w-100" type="submit">Let me in</button>
+        <p class="text-center my-2">
+            Don't have an account? <a href="{% url 'signup' %}"
+    class="text-primary text-decoration-underline">Sign Up</a>
+        </p>
+    </form>
+
+{% endblock content %}

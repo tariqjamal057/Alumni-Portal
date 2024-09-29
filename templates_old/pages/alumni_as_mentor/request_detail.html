@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% load social_share %}
+
+{% block title %}
+    {{ request_details.title | title }} Details
+{% endblock title %}
+{% block style %}
+{% endblock style %}
+{% block content %}
+    <div>
+        <!--START SCROLL TOP BUTTON -->
+        <a class="scrollToTop" href="#">
+            <i class="fa fa-angle-up"></i>
+        </a>
+        <!-- END SCROLL TOP BUTTON -->
+        <!-- Page breadcrumb -->
+        <section id="mu-page-breadcrumb">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mu-page-breadcrumb-area">
+                            <h2>Alumini As a Sponser</h2>
+                            <ol class="breadcrumb">
+                                <li>
+                                    <a href="{% url 'home' %}">Home</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'mentor_help_page' %}">Mentor Help Post</a>
+                                </li>
+                                <li class="active">{{ request_details.title | title }} Details</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- End breadcrumb -->
+        <section id="mu-course-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mu-course-content-area">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <!-- start course content container -->
+                                    <div class="mu-course-container mu-blog-single">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <article class="mu-blog-single-item">
+                                                    <figure class="mu-blog-single-img">
+                                                        <figcaption class="mu-blog-caption" style="margin: 20px 0;;">
+                                                            <div class="row">
+                                                                <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                                                                    <h2 class="text-info" style="margin-bottom: 10px;">{{ request_details.title | title }}</h2>
+                                                                </div>
+                                                            </div>
+                                                        </figcaption>
+                                                    </figure>
+                                                    <h4 style="margin: 10px 20px">
+                                                        Stack :
+                                                        <span style="font-size: medium;">{{ request_details.stack }}</span>
+                                                    </h4>
+                                                    <p style="margin: 10px 20px">Posted By &nbsp;{{ request_details.posted_by }} at {{ request_details.date }}</p>
+                                                    <div class="mu-blog-description">
+                                                        <blockquote>
+                                                            Content
+                                                        </blockquote>
+                                                        <p>{{ request_details.content | safe }}</p>
+                                                        <blockquote>
+                                                        </div>
+                                                        <!-- start blog social share -->
+                                                        <div class="mu-blog-social">
+                                                            <ul class="mu-news-social-nav">
+                                                                <li>SOCIAL SHARE :</li>
+                                                                <button class="btn btn-sm btn-info">
+                                                                    {% post_to_whatsapp object_or_url '<i class="fa fa-whatsapp"></i>' %}
+                                                                </button>
+                                                                <button class="btn btn-sm btn-info">
+                                                                    {% post_to_facebook object_or_url '<i class="fa fa-facebook"></i>' %}
+                                                                </button>
+                                                                <button class="btn btn-sm btn-info">
+                                                                    {% post_to_gplus object_or_url '<i class="fa fa-google-plus"></i>' %}
+                                                                </button>
+                                                            </ul>
+                                                        </div>
+                                                        <!-- End blog social share -->
+                                                        <div class="col-md-12 bg-light text-right"
+                                                             style="border-top: .5px solid rgba(0, 0, 0, 0.19)">
+                                                            <!-- Button trigger modal -->
+                                                            {% if is_showed_interest %}
+                                                                <a href="{% url 'mentor_help_chat' request_details.id %}"
+                                                                   class="btn btn-info"
+                                                                   onclick="get_post_id('{{ request_details.id }}')">
+                                                                    Continue Chat
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{% url 'mentor_help_chat' request_details.id %}"
+                                                                   class="btn btn-info"
+                                                                   onclick="get_post_id('{{ request_details.id }}')">
+                                                                    Chat with Staff
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </article>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end course content container -->
+                                        <!-- start related course item -->
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="mu-related-item">
+                                                    <h3>Related Posts</h3>
+                                                    <div class="mu-related-item-area">
+                                                        <div id="mu-related-item-slide">
+                                                            {% for request in related_posts %}
+                                                                {% with id=request_details.id %}
+                                                                    {% if id != request.id %}
+                                                                        <div class="col-md-6">
+                                                                            <article class="mu-blog-single-item">
+                                                                                <figure class="mu-blog-single-img" style="margin: 10px 0px 10px 10px;">
+                                                                                    <h3>
+                                                                                        <a href="#">{{ request.title | truncatechars:20 }}</a>
+                                                                                    </h3>
+                                                                                    <figcaption class="mu-blog-caption"></figcaption>
+                                                                                </figure>
+                                                                                <div class="mu-blog-meta">
+                                                                                    <a href="#">By {{ request.posted_by }}</a>
+                                                                                </div>
+                                                                                <div class="mu-blog-description">
+                                                                                    {{ request.content|truncatechars:100|safe }}
+                                                                                    <br />
+                                                                                    <a href="{% url 'help_desk_detail_page' request.id %}"
+                                                                                       class="btn-info btn btn-sm">Read More</a>
+                                                                                </div>
+                                                                            </article>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endwith %}
+                                                            {% endfor %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end start related course item -->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!-- start sidebar -->
+                                        <aside class="mu-sidebar">
+                                            <!-- start single sidebar -->
+                                            <div class="mu-single-sidebar">
+                                                <h3>Recents Chats</h3>
+                                                <ul class="mu-sidebar-catg">
+                                                    {% for msgs in message %}<p>{{ msgs.message }}</p>{% endfor %}
+                                                    {% if is_showed_interest %}
+                                                        <a href="{% url 'mentor_help_chat' request_details.id %}"
+                                                           class="btn btn-info"
+                                                           onclick="get_post_id('{{ request_details.id }}')">
+                                                            Continue Chat
+                                                        </a>
+                                                    {% else %}
+                                                        <p>No Chats Found</p>
+                                                        <a href="{% url 'mentor_help_chat' request_details.id %}"
+                                                           class="btn btn-info"
+                                                           onclick="get_post_id('{{ request_details.id }}')">
+                                                            Chat with Alumni
+                                                        </a>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                            <!-- end single sidebar -->
+                                        </aside>
+                                        <!-- / end sidebar -->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!-- start sidebar -->
+                                        <aside class="mu-sidebar">
+                                        </aside>
+                                        <!-- / end sidebar -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    {% endblock content %}
+    {% block javascript %}
+        <script src="{% static 'js/alumni/alumni.js' %}"></script>
+    {% endblock javascript %}

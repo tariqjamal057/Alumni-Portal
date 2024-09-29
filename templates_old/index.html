@@ -1,151 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'public/layouts/base.html' %}
+
 {% load static %}
 
 {% block title %}Karpagam Institute of Technology Alumni Association | Kitizens | Home{% endblock %}
-
+{% block home %}active{% endblock %}
 {% block content %}
     <!--START SCROLL TOP BUTTON -->
     <a class="scrollToTop" href="#">
         <i class="fa fa-angle-up"></i>
     </a>
     <!-- END SCROLL TOP BUTTON -->
-
-    <!-- Start header  -->
-    <header id="mu-header">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="mu-header-area">
-                        <div class="row">
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                <div class="mu-header-top-left">
-                                    <div class="mu-top-email">
-                                        <i class="fa fa-envelope"></i>
-                                        <span>alumniaffairs@karpagamtech.ac.in</span>
-                                    </div>
-                                    <div class="mu-top-phone">
-                                        <i class="fa fa-phone"></i>
-                                        <span>(+91) 9500974355 | 7538833202</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                <div class="mu-header-top-right">
-                                    <nav>
-                                        <ul class="mu-top-social-nav">
-                                            <li><a href="https://www.facebook.com/karpagamtechcbe"><span
-                                                        class="fa fa-facebook"></span></a></li>
-                                            <li><a href="https://twitter.com/Karpagamitech"><span
-                                                        class="fa fa-twitter"></span></a></li>
-                                            <li><a href="https://www.instagram.com/_karpagam_itech/"><span
-                                                        class="fa fa-instagram"></span></a></li>
-                                            <li><a href="https://youtube.com/c/Karpagamitech"><span
-                                                        class="fa fa-youtube"></span></a></li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!-- End header  -->
-    <!-- Start menu -->
-    <section id="mu-menu">
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <!-- FOR MOBILE VIEW COLLAPSED BUTTON -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false" aria-controls="navbar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <!-- LOGO -->
-                    <!-- TEXT BASED LOGO -->
-                    <a class="navbar-brand" href="/home"><i class="fa fa-university"></i><span style="font-size: 24px;">Karpagam Institute Of Technology</span></a>
-                    <!-- IMG BASED LOGO  -->
-                    <!-- <a class="navbar-brand" href="index.html"><img src="{% static 'assets/img/logo.png' %}" alt="logo"></a> -->
-                </div>
-                <div id="navbar" class="navbar-collapse collapse">
-                    <ul id="top-menu" class="nav navbar-nav navbar-right main-nav">
-                        <li class="active"><a href="/home">Home</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">About us <span
-                                    class="fa fa-angle-down"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/course-detail.html">Alumni Association</a></li>
-                                <li><a href="https://karpagamtech.ac.in/about-us/college-profile/">About KIT</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/gallery">Gallery</a></li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Activities <span
-                                    class="fa fa-angle-down"></span></a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="/">Alumni as Mentor</a></li>
-                                {% if is_alumini %}
-                                    <li><a href="/finance_requests">Alumni as Sponsor</a></li>
-                                {% endif %}
-                                <li><a href="/help_desk_page">Alumni Help Desk</a></li>
-                            </ul>
-                        </li>
-                        <li><a href="/contact">Contact</a></li>
-                        {% if user.is_authenticated %}
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user}}<span
-                                        class="fa fa-angle-down"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="/dashboard">dashboard <i class="fa fa-user"></i></a></li>
-                                    <li><a href="/">logout <i class="fa fa-sign-out"></i></a></li>
-                                </ul>
-                            </li>
-                        {% else %}
-                            <li><a href="/login">Login</a></li>
-                        {% endif %}
-
-                    </ul>
-                </div>
-                <!--/.nav-collapse -->
-            </div>
-        </nav>
-    </section>
-    <!-- End menu -->
-    <!-- Start search box -->
-    <div id="mu-search">
-        <div class="mu-search-area">
-            <button class="mu-search-close"><span class="fa fa-close"></span></button>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <form class="mu-search-form">
-                            <input type="search" placeholder="Type Your Keyword(s) & Hit Enter">
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End search box -->
     <!-- Start Slider -->
     <section id="mu-slider">
         <!-- Start single slider item -->
         <div class="mu-slider-single">
             <div class="mu-slider-img">
                 <figure>
-                    <img src="{% static 'assets/img/slider/1.jpg' %}" alt="img">
+                    <img src="{% static 'assets/img/slider/1.jpg' %}" alt="img" />
                 </figure>
             </div>
             <div class="mu-slider-content">
                 <h4>Welcome To Karpagam Tech Alumni Association</h4>
-                <span></span>
                 <h2>Together Forever</h2>
-                <p>Some Sentecnce about our Alumni Strength goes here</p>
-
+                <p>Any institutions' alumni are key to its growth.</p>
             </div>
         </div>
         <!-- Start single slider item -->
@@ -153,15 +30,11 @@
         <div class="mu-slider-single">
             <div class="mu-slider-img">
                 <figure>
-                    <img src="{% static 'assets/img/slider/2.jpg' %}" alt="img">
+                    <img src="{% static 'assets/img/slider/2.jpg' %}" alt="img" />
                 </figure>
             </div>
             <div class="mu-slider-content">
                 <h4>Alumnus are Our Identity</h4>
-                <span></span>
-                <h2></h2>
-                <p></p>
-
             </div>
         </div>
         <!-- Start single slider item -->
@@ -169,18 +42,17 @@
         <div class="mu-slider-single">
             <div class="mu-slider-img">
                 <figure>
-                    <img src="{% static 'assets/img/slider/3.jpg' %}" alt="img">
+                    <img src="{% static 'assets/img/slider/3.jpg' %}" alt="img" />
                 </figure>
             </div>
             <div class="mu-slider-content">
                 <h4>Rewind</h4>
-                <span></span>
                 <h2>Grand Alumni Meet</h2>
-                <p>The Grand Alumni Meet 2019 with our Proud Alumnies held on KIT </p>
+                <p>The Grand Alumni Meet 2019 with our Proud Alumnies held on KIT</p>
             </div>
         </div>
         <!-- Start single slider item -->
-    </section>
+    </section>    </section>
     <!-- End Slider -->
     <!-- Start service  -->
     <section id="mu-service">
@@ -190,26 +62,32 @@
                     <div class="mu-service-area">
                         <!-- Start single service -->
                         <div class="mu-service-single">
-                            <span class="fa fa-life-ring"> </span>
+                            <span class="fa fa-life-ring"></span>
                             <h3>Alumni as Mentor</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima officiis, deleniti dolorem
-                                exercitationem praesentium, est!</p>
+                            <p>
+                                Dear KITians Alumni Members, please assist students in resolving any issues they may have about their project and if they wish to
+                                learn about new technologies.
+                            </p>
                         </div>
                         <!-- Start single service -->
                         <!-- Start single service -->
                         <div class="mu-service-single">
                             <span class="fa fa-usd"></span>
                             <h3>Alumni as Sponsor</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima officiis, deleniti dolorem
-                                exercitationem praesentium, est!</p>
+                            <p>
+                                Dear Alumni Members of KITians, This is the Kind info and  request from KIT faculty members, voluntears come  forward to donate the
+                                financial support to our college students.
+                            </p>
                         </div>
                         <!-- Start single service -->
                         <!-- Start single service -->
                         <div class="mu-service-single">
                             <span class="fa fa-thumbs-up"></span>
-                            <h3> Help Desk</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima officiis, deleniti dolorem
-                                exercitationem praesentium, est!</p>
+                            <h3>Help Desk</h3>
+                            <p>
+                                Greetings, KITians Alumni! To assist our students and alumni who are looking for work, we will share information about new
+                                technologies and job opportunities.
+                            </p>
                         </div>
                         <!-- Start single service -->
                     </div>
@@ -218,7 +96,6 @@
         </div>
     </section>
     <!-- End service  -->
-
     <!-- Start about us -->
     <section id="mu-about-us">
         <div class="container">
@@ -233,23 +110,38 @@
                                         <h2>About Us</h2>
                                     </div>
                                     <!-- End Title -->
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rerum pariatur fuga eveniet
-                                        soluta aspernatur rem, nam voluptatibus voluptate voluptates sapiente, inventore.
-                                        Voluptatem, maiores esse molestiae.</p>
+                                    <p>
+                                        Karpagam Institute of Technology is one of the top Private Engineering colleges in India with the mission of providing
+                                        excellent technical education to the students of engineering with dynamic faculty and the state-of-art facilities.
+                                    </p>
                                     <ul>
-                                        <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
-                                        <li>Saepe a minima quod iste libero rerum dicta!</li>
-                                        <li>Voluptas obcaecati, iste porro fugit soluta consequuntur. Veritatis?</li>
-                                        <li>Ipsam deserunt numquam ad error rem unde, omnis.</li>
-                                        <li>Repellat assumenda adipisci pariatur ipsam eos similique, explicabo.</li>
+                                        <li>
+                                            The private engineering college is equipped with latest technological developments and provides the best platform for the
+                                            engineering students to become independent thinkers and employable by the top companies.
+                                        </li>
+                                        <li>
+                                            KIT, one of the best colleges in Coimbatore,
+                                            India offers a dynamic atmosphere for the students of engineering to learn the  best of the technologies and apply the
+                                            learning in their personal life.
+                                        </li>
+                                        <li>
+                                            The percentage of students getting placed in top companies increases every year.The
+                                            engineering students of our college are regularly involved in extra-curricular activities and have made their mark with
+                                            top performances in many academic and sporting events in the recent years.
+                                        </li>
+                                        <li>
+                                            KIT, one of the best Engineering colleges in Coimbatore provides all the support for the college students to participate
+                                            and gain top acclamations in various events across the
+                                            country.
+                                        </li>
                                     </ul>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis quaerat harum
-                                        facilis excepturi et? Mollitia!</p>
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6">
                                 <div class="mu-about-us-right">
-                                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/ux0OsfvYVZs">
+                                    <iframe width="100%"
+                                            height="315"
+                                            src="https://www.youtube.com/embed/ux0OsfvYVZs">
                                     </iframe>
                                 </div>
                             </div>
@@ -260,7 +152,6 @@
         </div>
     </section>
     <!-- End about us -->
-
     <!-- Start about us counter -->
     <section id="mu-abtus-counter">
         <div class="container">
@@ -286,7 +177,6 @@
                                 </div>
                             </div>
                             <!-- End counter item -->
-
                             <!-- Start counter item -->
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="mu-abtus-counter-single no-border">
@@ -296,7 +186,6 @@
                                 </div>
                             </div>
                             <!-- End counter item -->
-
                             <!-- Start counter item -->
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="mu-abtus-counter-single">
@@ -311,12 +200,8 @@
                 </div>
             </div>
         </div>
-
     </section>
     <!-- End about us counter -->
-
-
-
     <!-- Start features section -->
     <section id="mu-features">
         <div class="container">
@@ -326,116 +211,93 @@
                         <!-- Start Title -->
                         <div class="mu-title">
                             <h2>Alumni as Mentor</h2>
-                            <p>Our Alumnis are guiding our students in development and research activities based on their
-                                proficient skill sets.</p>
+                            <p>
+                                Our Alumnis are guiding our students in development and research activities based on their
+                                proficient skill sets.
+                            </p>
                         </div>
                         <!-- End Title -->
                         <!-- Start features content -->
                         <div class="mu-features-content">
                             <div class="row">
-                                <div class="col-lg-8 col-md-8  col-sm-8" style="border-right:1px solid whitesmoke;">
+                                <div class="col-lg-8 col-md-8  col-sm-8"
+                                     style="border-right:1px solid whitesmoke">
                                     <div class="mu-single-feature">
-
                                         <h4>Looking for Mentors</h4>
-
-                                        <div class="card">
-
-                                            <div class="card-body">
-                                                <h5 class="card-title">Project Title</h5>
-                                                <p class="card-text">Project Description and skills goes here, Project
-                                                    Description and skills goes here, Project Description and skills goes
-                                                    here, Project Description and skills goes here</p>
-
-                                                <a href="#" class="btn btn-primary">View Detail</a>
+                                        {% for mentorpost in mentor_help_post %}
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ mentorpost.title }}</h5>
+                                                    <p class="card-text">{{ mentorpost.content | safe | truncatechars:150 }}</p>
+                                                    <a href="{% url 'mentor_help_detail_page' mentorpost.id %}"
+                                                       class="btn btn-primary">View Detail</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <hr>
-                                        <div class="card">
-
-                                            <div class="card-body">
-                                                <h5 class="card-title">Project Title</h5>
-                                                <p class="card-text">Project Description and skills goes here, Project
-                                                    Description and skills goes here, Project Description and skills goes
-                                                    here, Project Description and skills goes here</p>
-
-                                                <a href="#" class="btn btn-primary">View Detail</a>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="card">
-
-                                            <div class="card-body">
-                                                <h5 class="card-title">Project Title</h5>
-                                                <p class="card-text">Project Description and skills goes here, Project
-                                                    Description and skills goes here, Project Description and skills goes
-                                                    here, Project Description and skills goes here</p>
-
-                                                <a href="#" class="btn btn-primary">View Detail</a>
-                                            </div>
-                                        </div>
-
-                                        <a href="" class="btn btn-secondary" style="float:right">View All</a>
-
-
+                                            <hr />
+                                        {% endfor %}
+                                        <a href="/" class="btn btn-secondary" style="float:right">View All</a>
                                     </div>
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-sm-4">
                                     <div class="mu-single-feature">
-
                                         <h4>Featured Mentors</h4>
                                         <div class="card">
                                             <div class="card-horizontal">
                                                 <div class="img-square-wrapper">
-                                                    <img style="width:90px;height:90px;" class=""
-                                                        src="{% static 'assets/img/slider/3.jpg' %}" alt="Card image cap">
+                                                    <img style="width:90px;
+                                                                height:90px"
+                                                         class=""
+                                                         src="{% static 'assets/img/slider/3.jpg' %}"
+                                                         alt="Card image cap" />
                                                 </div>
                                                 <div class="card-body ml-1">
                                                     <h5>Surendharan B</h5>
-                                                    <p class="card-text">Mentoring Project Alumni Portal. Skills : Java,
-                                                        Html.</p>
+                                                    <p class="card-text">
+                                                        Mentoring Project Alumni Portal. Skills : Java,
+                                                        Html.
+                                                    </p>
                                                 </div>
                                             </div>
-
                                         </div>
-
                                         <div class="card">
                                             <div class="card-horizontal">
                                                 <div class="img-square-wrapper">
-                                                    <img style="width:90px;height:90px;" class=""
-                                                        src="{% static 'assets/img/slider/3.jpg' %}" alt="Card image cap">
+                                                    <img style="width:90px;
+                                                                height:90px"
+                                                         class=""
+                                                         src="{% static 'assets/img/slider/3.jpg' %}"
+                                                         alt="Card image cap" />
                                                 </div>
                                                 <div class="card-body ml-1">
                                                     <h5>Surendharan B</h5>
-                                                    <p class="card-text">Mentoring Project Alumni Portal. Skills : Java,
-                                                        Html.</p>
+                                                    <p class="card-text">
+                                                        Mentoring Project Alumni Portal. Skills : Java,
+                                                        Html.
+                                                    </p>
                                                 </div>
                                             </div>
-
                                         </div>
-
-
                                         <div class="card">
                                             <div class="card-horizontal">
                                                 <div class="img-square-wrapper">
-                                                    <img style="width:90px;height:90px;" class=""
-                                                        src="{% static 'assets/img/slider/3.jpg' %}" alt="Card image cap">
+                                                    <img style="width:90px;
+                                                                height:90px"
+                                                         class=""
+                                                         src="{% static 'assets/img/slider/3.jpg' %}"
+                                                         alt="Card image cap" />
                                                 </div>
                                                 <div class="card-body ml-1">
                                                     <h5>Surendharan B</h5>
-                                                    <p class="card-text">Mentoring Project Alumni Portal. Skills : Java,
-                                                        Html.</p>
+                                                    <p class="card-text">
+                                                        Mentoring Project Alumni Portal. Skills : Java,
+                                                        Html.
+                                                    </p>
                                                 </div>
                                             </div>
-
                                         </div>
-
                                         <a href="" class="btn btn-secondary" style="float:right">View All</a>
-
-
                                     </div>
                                 </div>
-
-
                             </div>
                         </div>
                         <!-- End features content -->
@@ -445,134 +307,7 @@
         </div>
     </section>
     <!-- End features section -->
-
-    <!-- Start latest course section -->
-    <section id="mu-latest-courses">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="mu-latest-courses-area">
-                        <!-- Start Title -->
-                        <div class="mu-title">
-                            <h2>Alumni Help Desk</h2>
-                            <p>A Paragraph goes here </p>
-                        </div>
-                        <!-- End Title -->
-                        <!-- Start latest course content -->
-                        <div id="mu-latest-course-slide" class="mu-latest-courses-content">
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/1.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Seeking Job</a>
-                                            <span><i class="fa fa-clock-o"></i>90Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/2.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Job Openings</a>
-                                            <span><i class="fa fa-clock-o"></i>75Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/3.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Intern Oppurtunity</a>
-                                            <span><i class="fa fa-clock-o"></i>45Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/1.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Seeking Job</a>
-                                            <span><i class="fa fa-clock-o"></i>90Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/2.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Job Openings </a>
-                                            <span><i class="fa fa-clock-o"></i>75Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-4 col-xs-12">
-                                <div class="mu-latest-course-single">
-                                    <figure class="mu-latest-course-img">
-                                        <a href="#"><img src="{% static 'assets/img/courses/3.jpg' %}" alt="img"></a>
-                                        <figcaption class="mu-latest-course-imgcaption">
-                                            <a href="#">Intern Oppurtunity</a>
-                                            <span><i class="fa fa-clock-o"></i>45Days</span>
-                                        </figcaption>
-                                    </figure>
-                                    <div class="mu-latest-course-single-content">
-                                        <h4><a href="#">Lorem ipsum dolor sit amet.</a></h4>
-                                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet quod nisi quisquam
-                                            modi dolore, dicta obcaecati architecto quidem ullam quia.</p>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End latest course content -->
-                        <a href="#" class="btn btn-primary" style="float:right; margin-top:10px;">View All</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End latest course section -->
-
-
+    <div style="border: 1px solid #ccc;width: 100%"></div>
     <!-- Start footer -->
     <footer id="mu-footer">
         <!-- start footer top -->
@@ -584,12 +319,24 @@
                             <div class="mu-footer-widget">
                                 <h4>Quick Links</h4>
                                 <ul>
-                                    <li><a href="https://karpagamtech.ac.in/about-us/college-profile/">About KIT</a></li>
-                                    <li><a href="">Alumni Association</a></li>
-                                    <li><a href="/gallery">Gallery</a></li>
+                                    <li>
+                                        <a href="https://karpagamtech.ac.in/about-us/college-profile/">About KIT</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Alumni Association</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'gallery' %}">Gallery</a>
+                                    </li>
+                                    {% comment %}
                                     <li><a href="">Annual Report</a></li>
-                                    <li><a href="/contact">Contact</a></li>
-                                    <li><a href="">Term Of Use</a></li>
+                                    {% endcomment %}
+                                    <li>
+                                        <a href="{% url 'contact' %}">Contact</a>
+                                    </li>
+                                    <li>
+                                        <a href="">Term Of Use</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -597,11 +344,18 @@
                             <div class="mu-footer-widget">
                                 <h4>Alumni Activities</h4>
                                 <ul>
-                                    <li><a href="">Alumni as Mentor</a></li>
-                                    <li><a href="#">Alumni as Sponsor</a></li>
-                                    <li><a href="">Alumni Help Desk</a></li>
-                                    <li><a href="https://karpagamtech.ac.in/">Institution Website</a></li>
-
+                                    <li>
+                                        <a href="{% url 'mentor_help_page' %}">Alumni as Mentor</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'finance_request' %}">Alumni as Sponsor</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'help_desk_post' %}">Alumni Help Desk</a>
+                                    </li>
+                                    <li>
+                                        <a href="https://karpagamtech.ac.in/">Institution Website</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -610,7 +364,7 @@
                                 <h4>News letter</h4>
                                 <p>Get latest update, news & academic offers</p>
                                 <form class="mu-subscribe-form">
-                                    <input type="email" placeholder="Type your Email">
+                                    <input type="email" placeholder="Type your Email" />
                                     <button class="mu-subscribe-btn" type="submit">Subscribe!</button>
                                 </form>
                             </div>
@@ -619,9 +373,11 @@
                             <div class="mu-footer-widget">
                                 <h4>Contact</h4>
                                 <address>
-                                    <p>Center for Alumni Affairs, Karpagam Institue of Technology, Bodipalayam PO,
-                                        Coimbatore, India.</p>
-                                    <p>Phone: (+91) 9500974355 | 7538833202 </p>
+                                    <p>
+                                        Center for Alumni Affairs, Karpagam Institue of Technology, Bodipalayam PO,
+                                        Coimbatore, India.
+                                    </p>
+                                    <p>Phone: (+91) 9500974355 | 7538833202</p>
                                     <p>Website: www.karpagamtech.ac.in</p>
                                     <p>Email: alumniaffairs@karpagamtech.ac.in</p>
                                 </address>
@@ -641,14 +397,11 @@
                             <p>&copy; All Right Reserved.</p>
                         </div>
                         <div Class="col-6">
-                            <p>Developed by <a style="color:blue;">Technology Innovation Center, Karpagam Tech.</a></p>
-                        </div>
-                        <div Class="col-3">
-                            <p>Template Credits to <a href="http://www.markups.io/" style="color:blue;"
-                                    rel="nofollow">MarkUps.io</a></p>
+                            <p>
+                                Developed by <a style="color:#ffff;">Technology Innovation Center, Karpagam Tech.</a>
+                            </p>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>

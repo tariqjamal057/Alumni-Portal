@@ -1,212 +1,138 @@
 {% extends 'base.html' %}
+
 {% load crispy_forms_tags %}
+
 {% load static %}
 
-
+{% block title %}
+    Student Dashboard | Mentor Help Post | Karpagam Institute of Technology
+{% endblock title %}
+{% block user %}active{% endblock %}
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/dashboard_style.css' %}" />
+{% endblock style %}
 {% block content %}
-{% include 'dashboard-navigation/navigation.html' %}
+    <!--START SCROLL TOP BUTTON -->
+    <a class="scrollToTop" href="#">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- END SCROLL TOP BUTTON -->
+    <!-- Page breadcrumb -->
+    <section id="mu-page-breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-page-breadcrumb-area">
+                        <h2>Dashboard</h2>
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="{% url 'home' %}">Home</a>
+                            </li>
+                            <li class="active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb -->
+    {% comment %} Main Section {% endcomment %}
+    <section id="mu-course-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-course-content-area">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                                <h2>Mentor Help Post</h2>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                                <a href="{% url 'create_mentor_help_post' %}"
+                                   class="btn btn-primary bt"
+                                   id="create-btn">Create Mentor Help Post</a>
+                            </div>
+                            {% csrf_token %}
+                            <div class="col-lg-1 col-md-1 col-sm-0"></div>
+                            <div class="col-lg-4 col-md-4 col-sm-12">
+                                <form id="search_form">
+                                    <div class="input-group" id="flex_container">
+                                        <input type="text"
+                                               name="search_query"
+                                               class="form-control form-control-lg"
+                                               placeholder="Search"
+                                               id="search_query" />
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary Search"
+                                                    id="search-btn"
+                                                    type="button"
+                                                    id="button-addon2"
+                                                    onclick="student_post_search()">Search</button>
+                                        </div>
+                                        <a href="{% url 'dashboard' %}"
+                                           class="btn btn-danger"
+                                           id="button-addon2">Cancel</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="bg_white pd_20 col-md-12">
+                                <!-- start finance-request content container -->
+                                <div class="mu-course-container">
+                                    <div class="row" id="finance_request_div">
 
-<!-- Create Financial request section start -->
-<div class="modal fade" id="add_help_desk_post" data-backdrop="false" tabindex="-1" role="dialog"
-	aria-labelledby="add_help_desk_postTitle" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<form method="post" id="create_mentor_help_post" enctype="multipart/form-data">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h3 class="modal-title" id="add_help_desk_postTitle">Create Mentor help Post</h3>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					{% csrf_token %}
-					{{ mentor_help_post_form | crispy }}
-					{{ mentor_help_post_form.media }}
-				</div>
-				<div class="modal-footer">
-					<button type="submit" class="btn btn-primary">Add Post</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div> 
-<!-- Create Financial request section end -->
+                                        {% include 'student/mentor_help_post.html' %}
 
-
-<section id="mu-course-content">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="mu-course-content-area">
-					<div class="row" style="margin-bottom: 20px;">
-						<div style="display: flex;justify-content: space-between;">
-							<div style="display: flex;">
-								<h2>Mentor Help Post</h2>
-								<button type="button" style="margin-top: 5px!important;margin-left: 20px!important;"
-									class="btn btn-primary" data-toggle="modal" data-target="#add_help_desk_post">
-									Add Post
-								</button>
-							</div>
-							<p>Search</p>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-md-9" id="mentor_help_post_container"
-							style="background-color:#fff;">
-							<!-- start finance-request content container -->
-							{% include 'student/mentor_help.html' %}
-							<!-- end finance-request content container -->
-						</div>
-						<div class="col-md-3">
-							<!-- start sidebar -->
-							<aside class="mu-sidebar">
-								<!-- start single sidebar -->
-
-								<!-- end single sidebar -->
-								<!-- start single sidebar -->
-								<div class="mu-single-sidebar">
-									<h3>Featured Sponsors</h3>
-									<div class="mu-sidebar-popular-courses">
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Medical Science</a></h4>
-												<span class="popular-course-price">$200.00</span>
-											</div>
-										</div>
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Web Design</a></h4>
-												<span class="popular-course-price">$250.00</span>
-											</div>
-										</div>
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Health & Sports</a></h4>
-												<span class="popular-course-price">$90.00</span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- end single sidebar -->
-								<!-- start single sidebar -->
-								<div class="mu-single-sidebar">
-									<h3>Featured Mentors</h3>
-									<div class="mu-sidebar-popular-courses">
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Medical Science</a></h4>
-												<span class="popular-course-price">$200.00</span>
-											</div>
-										</div>
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Web Design</a></h4>
-												<span class="popular-course-price">$250.00</span>
-											</div>
-										</div>
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Health & Sports</a></h4>
-												<span class="popular-course-price">$90.00</span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- end single sidebar -->
-								<!-- end single sidebar -->
-
-								<!-- start single sidebar -->
-								<div class="mu-single-sidebar">
-									<h3>My Posts</h3>
-									<div class="mu-sidebar-popular-courses">
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/1.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Medical Science</a></h4>
-												<span class="popular-course-price">$200.00</span>
-											</div>
-										</div>
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/2.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Web Design</a></h4>
-												<span class="popular-course-price">$250.00</span>
-											</div>
-										</div>
-										<div class="media">
-											<div class="media-left">
-												<a href="#">
-													<img class="media-object"
-														src="{% static 'assets/img/courses/3.jpg' %}" alt="img">
-												</a>
-											</div>
-											<div class="media-body">
-												<h4 class="media-heading"><a href="#">Health & Sports</a></h4>
-												<span class="popular-course-price">$90.00</span>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- end single sidebar -->
-
-							</aside>
-							<!-- / end sidebar -->
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+                                        <!-- end finance-request content container -->
+                                    </div>
+                                    <div class="col-md-3">
+                                        <!-- start sidebar -->
+                                        <aside class="mu-sidebar">
+                                            <!-- end single sidebar -->
+                                            <!-- start single sidebar -->
+                                        </aside>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg_white row">
+                            <div class="col-md-9">
+                                {% if posts.has_other_pages %}
+                                    <!-- Pagination -->
+                                    <nav class="my-3 container">
+                                        <ul class="pagination">
+                                            {% if posts.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+                                                </li>
+                                            {% endif %}
+                                            {% for i in posts.paginator.page_range %}
+                                                {% if posts.number == i %}
+                                                    <li class="page-item active">
+                                                        <a class="page-link" href="#">{{ i }}</a>
+                                                    </li>
+                                                {% else %}
+                                                    <li class="page-item">
+                                                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                                    </li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if posts.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+                                                </li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}
-
 {% block javascript %}
-<script src="{% static 'js/student/student.js' %}"></script>
+    <script src="{% static 'js/student/student.js' %}"></script>
 {% endblock javascript %}
