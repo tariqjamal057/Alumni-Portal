@@ -1,0 +1,113 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}College of Engineering and Technology | Collegeizens | Alumni Dasbboard{% endblock %}
+
+{% block content %}
+
+    <section id="mu-course-content">
+        <div class="container">
+            <div class="row align-items-center justify-content-between my-3">
+                <div class="col-lg-6 col-12">
+                    <div class="w-100 d-flex align-items-center justify-content-lg-start justify-content-between">
+                        <div class="w-auto d-flex align-items-center justify-content-sm-between justify-content-md-between">
+                            <h2>Help Desk Post</h2>
+                            <a type="button"
+                               href="{% url 'alumni.help_desk.create' %}"
+                               class="btn btn-primary ms-4">Create Post</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12 my-sm-4">
+                    <form>
+                        <div class="row align-items-center justify-content-lg-end justify-content-sm-start">
+                            <div class="input-group col-lg-6 col-12 d-flex align-items-center">
+                                <input type="text"
+                                       name="search_query"
+                                       id="search_query"
+                                       class="form-control"
+                                       placeholder="Search" />
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary Search"
+                                            id="search-btn"
+                                            type="button"
+                                            id="button-addon2"
+                                            onclick="alumni_post_search()">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="row bg_white pt-3" id="alumni_post_list">
+
+                {% include 'dashboard/alumni/help_desk_post/list.html' %}
+
+            </div>
+            <div class="bg_white row">
+                <div class="col-md-9">
+                    {% if posts.has_other_pages %}
+                        <!-- Pagination -->
+                        <nav class="mb-3 container">
+                            <ul class="pagination">
+                                {% if posts.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ posts.previous_page_number }}">Previous</a>
+                                    </li>
+                                {% endif %}
+                                {% for i in posts.paginator.page_range %}
+                                    {% if posts.number == i %}
+                                        <li class="page-item active">
+                                            <a class="page-link" href="#">{{ i }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if posts.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ posts.next_page_number }}">Next</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}
+
+{% block javascript %}
+
+    <script>
+        function help_desk_post_delete(id) {
+            const csrftoken = $("[name=csrfmiddlewaretoken]").val();
+            $.ajax({
+                type: "POST",
+                url: "alumni/help-desk/delete/" + id,
+                headers: {
+                    "X-CSRFToken": csrftoken
+                },
+                data: {
+                    'id': id
+                },
+                success: function(response) {
+                    console.log("Success response ", response)
+                    if (response["success"] === true) {
+                        swal("success", "Help Desk Post Deleted Successfully", "success");
+                        $("#alumni_post_list").html(response.html);
+                    }
+                },
+                error: function(data) {
+                    alert("No Data Found to delete");
+                },
+            });
+        }
+    </script>
+
+{% endblock javascript %}

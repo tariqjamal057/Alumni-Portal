@@ -1,0 +1,30 @@
+{% extends 'auth/layouts/base.html' %}
+
+{% load static %}
+
+{% load custom_tags %}
+
+{% block content %}
+
+    <div class="text-primary text-center">
+        <h3>Create Account</h3>
+        <p class="font-small opacity-75">Hey enter your details to create account</p>
+    </div>
+    <form class="text-start" method="post">
+        {% csrf_token %}
+
+        {% include "layouts/components/form_errors.html" %}
+
+        {% render_form_field form.email %}
+
+        {% render_form_field form.password1 %}
+        {% render_form_field form.password2 %}
+
+        <button class="btn btn-primary m-0 w-100" type="submit">Create Account</button>
+        <p class="text-center my-2">
+            Already have an account? <a href="{% url 'login' %}"
+    class="text-primary text-decoration-underline">Login</a>
+        </p>
+    </form>
+
+{% endblock content %}

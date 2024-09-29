@@ -1,0 +1,41 @@
+<div id="finance_chat_container"
+     style="display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+            width: 100%">
+    <div class="message_container" id="message_container">
+
+        {% include 'student/user_messages.html' %}
+
+    </div>
+    <div style="display: flex;
+                flex-direction: column;
+                width: 100%;
+                background-color: #f0f2f5;
+                padding: 10px;
+                height: 15vh">
+        <div id="text_area_container"
+             style="display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin: 10px 0px">
+            <textarea class="form-control"
+                      rows="2"
+                      id="alumni_msg"
+                      style="width: 100% !important"
+                      placeholder="Enter Message..."></textarea>
+            <button type="button"
+                    style="height: 40px !important;
+                           background: none;
+                           border: none;
+                           outline: none">
+                <i class="fa fa-paper-plane"
+                   id="message_send_button"
+                   style="transform: rotate(40deg);
+                          font-size: 20px;
+                          color: #64737d"></i>
+            </button>
+        </div>
+    </div>
+</div>

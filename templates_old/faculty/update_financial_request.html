@@ -1,8 +1,162 @@
+{% extends 'base.html' %}
+
 {% load crispy_forms_tags %}
 
+{% load static %}
+
+{% block style %}
+    <style>
+        input,
+        select,
+        textarea,
+        a {
+            padding: 7px;
+            width: 100%;
+        }
+
+        input[type="file"] {
+            /* background: #01bafd; */
+            border-radius: 7px;
+            border: 1px solid #000;
+        }
+
+        .main-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inner-container {
+            width: 70% !important;
+        }
+
+        .col-sm-12 {
+            margin: 10px 0 !important;
+        }
+
+        @media (max-width: 768px) {
+            .inner-container {
+                width: 100% !important;
+            }
+        }
+
+        .require {
+            color: #f76969;
+        }
+    </style>
+{% endblock style %}
 {% block content %}
-    <!-- update Financial request section start -->
-    {% csrf_token %}
-    {{ updateform | crispy }}
-    <!-- update Financial request section end -->
-{% endblock %}
+    <!--START SCROLL TOP BUTTON -->
+    <a class="scrollToTop" href="#">
+        <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- END SCROLL TOP BUTTON -->
+    <!-- Page breadcrumb -->
+    <section id="mu-page-breadcrumb">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mu-page-breadcrumb-area">
+                        <h2>Dashboard</h2>
+                        <ol class="breadcrumb">
+                            <li>
+                                <a href="{% url 'home' %}">Home</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'dashboard' %}">Dashboard</a>
+                            </li>
+                            <li class="active">Update Finance Request</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End breadcrumb -->
+    <form class="Form" method="POST" enctype="multipart/form-data">
+        <div class="main-container"
+             style="display: flex;
+                    justify-content: center;
+                    align-items: center">
+            <div>
+                {% csrf_token %}
+                <div class="container inner-container">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <h2 style="margin: 20px 0px !important;">Update Finance Request</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <label class="form-label" for="title">
+                                {{ form.title.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.title }}
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <span class="control-fileupload">
+                                <label class="form-label" for="image">
+                                    {{ form.image.label }}<span class="require">*</span>
+                                </label>
+                                {{ form.image }}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <label class="form-label" for="name">
+                                {{ form.name.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.name }}
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <label class="form-label" for="department">
+                                {{ form.department.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.department }}
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <label class="form-label" for="year">
+                                {{ form.year.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.year }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <label class="form-label" for="description">
+                                {{ form.description.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.description }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <label class="form-label" for="achievements">
+                                {{ form.achievements.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.achievements }}
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <label class="form-label" for="other-performance">
+                                {{ form.other_performance.label }}<span class="require">*</span>
+                            </label>
+                            {{ form.other_performance }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-0"></div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <input type="submit" class="btn btn-primary btn-block" value="Update" />
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-12">
+                            <a href="{% url 'dashboard' %}" class="btn btn-danger">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock content %}

@@ -1,0 +1,85 @@
+{% load static %}
+
+<section id="mu-menu">
+    <nav class="navbar navbar-expand-lg navbar-while bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'image/logo.svg' %}"
+                     alt="logo"
+                     height="40"
+                     width="auto" />
+            </a>
+            <button class="navbar-toggler mu-bg-primary"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbar"
+                    aria-controls="navbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbar">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item px-1 active">
+                        <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown px-1">
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               id="navbarDropdown"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">Activities</a>
+                            <ul class="dropdown-menu custom_dropdown"
+                                aria-labelledby="navbarDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'mentor_help_page' %}">Alumni as mentor</a>
+                                </li>
+                                {% if is_alumni %}
+                                    <li>
+                                        <a class="dropdown-item" href="{% url 'finance_request' %}">Alumni as sponser</a>
+                                    </li>
+                                {% endif %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'help_desk_post' %}">Helpdesk</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item px-1">
+                        <a class="nav-link" href="{% url 'about' %}">About Us</a>
+                    </li>
+                    <li class="nav-item px-1">
+                        <a class="nav-link" href="{% url 'gallery' %}">Gallery</a>
+                    </li>
+                    <li class="nav-item px-1">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown px-1">
+                            <a class="nav-link dropdown-toggle"
+                               href="#"
+                               id="userDropdown"
+                               role="button"
+                               data-bs-toggle="dropdown"
+                               aria-expanded="false">{{ user }}</a>
+                            <ul class="dropdown-menu custom_dropdown" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item px-1">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+</section>
