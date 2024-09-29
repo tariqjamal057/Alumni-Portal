@@ -54,16 +54,16 @@
                 float: right;
             }
 
-            .btn {
-                margin: 20px 0px !important;
-            }
-
             .modal.fade.in {
                 background-color: rgba(0, 0, 0, 0.01) !important;
             }
 
             .h-70vh {
                 height: 70vh !important;
+            }
+
+            .h-40px {
+                height: 40px !important;
             }
         </style>
         <style>
@@ -101,6 +101,63 @@
 
             .mu-bg-primary {
                 background-color: #01bafd !important;
+            }
+
+            .select2-container {
+                z-index: 9999;
+            }
+
+            .select2-container--default .select2-results__option--highlighted[aria-selected] {
+                background-color: #01bafd !important;
+                color: white !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #01bafd;
+            }
+
+            .select2-container--default .select2-selection--single {
+                border-color: #01bafd;
+            }
+
+            .select2-container--default.select2-container--focus .select2-selection--single {
+                border-color: #01bafd;
+                box-shadow: 0 0 0 0.2rem rgba(1, 186, 253, 0.25);
+            }
+
+            .select2-dropdown {
+                border-color: #01bafd;
+            }
+
+            .card-icons {
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+            }
+
+            .card:hover .card-icons {
+                opacity: 1;
+            }
+
+            .edit-icon {
+                opacity: 0;
+                transform: translateX(60%);
+                transition: opacity 0.3s ease-in-out 0.1s, transform 0.3s ease-in-out 0.1s;
+            }
+
+            .delete-icon {
+                opacity: 0;
+                transform: translateX(60%);
+                transition: opacity 0.3s ease-in-out 0.2s, transform 0.3s ease-in-out 0.2s;
+            }
+
+            .card:hover .edit-icon,
+            .card:hover .delete-icon {
+                opacity: 1;
+                transform: translateX(0);
+            }
+
+            .bg_white {
+                background-color: #fff !important;
             }
         </style>
         <title>
@@ -158,6 +215,8 @@
         <!-- jQuery library -->
         <script src="{% static 'assets/js/jquery.min.js' %}"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script src="{% static 'assets/js/select2.min.js' %}"></script>
+        <script src="{% static 'assets/js/select2.min.css' %}"></script>
         <script src="{% static 'assets/js/bootstrap5.js' %}"></script>
         <!-- Slick slider -->
         <script type="text/javascript" src="{% static 'assets/js/slick.js' %}"></script>
@@ -202,6 +261,36 @@
                     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(200);
                 });
             });
+        </script>
+        <script>
+            function renderFormError(data) {
+                if (Object.keys(JSON.parse(data.non_field_errors)).length > 0) {
+                    let code = JSON.parse(data.non_field_errors)[0].code
+                    if (code != null) {
+                        $('#' + code + '_non_field_error').html('<span id="reason_error" class="ajax-error form_errors text-red-600">' + JSON.parse(data.non_field_errors)[0]['message'] + '</span>')
+                    } else {
+                        $('#non_field_error').html('<span id="reason_error" class="ajax-error form_errors text-red-600">' + JSON.parse(data.non_field_errors)[0]['message'] + '</span>')
+                    }
+                }
+                for (field in JSON.parse(data.field_errors)) {
+                    $('#' + field + '_group').append('<span id="reason_error" class="form_errors ajax-error text-red-600">' + JSON.parse(data.field_errors)[field][0].message + '</span>');
+                }
+            }
+
+            function closeModal(name) {
+                document.getElementById(name).classList.remove("blocker");
+                document.getElementById(name).classList.add("hidden");
+            }
+
+            function openBaseModal(modal = "modal") {
+                document.getElementById(modal).classList.remove("hidden");
+                document.getElementById(modal).classList.add("blocker");
+                removeErrors();
+            }
+
+            function removeErrors() {
+                $(".form_errors").text("");
+            }
         </script>
 
         {% block javascript %}

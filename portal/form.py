@@ -61,7 +61,6 @@ class FinanceHelpForm(ModelForm):
 
 
 class Help_Desk_Form(ModelForm):
-    content = forms.CharField(label="Content", widget=forms.Textarea(attrs={"class": "ckeditor"}))
 
     class Meta:
         model = Post

@@ -236,10 +236,12 @@ class Featured_Sponser(models.Model):
 
 post_type_options = (("O", "Opportunity"), ("S", "Seeking Job"), ("I", "Internship"))
 
+from tinymce.models import HTMLField
+
 
 class Post(models.Model):
     title = models.CharField(max_length=200)
-    content = RichTextUploadingField()
+    content = HTMLField()
     post_type = models.CharField(choices=post_type_options, max_length=1)
     date = models.DateTimeField(auto_now_add=True)
     posted_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="postedby")

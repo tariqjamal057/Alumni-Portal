@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["Tariq Jamal A <tariqjamal4267324@gmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -13,6 +14,7 @@ django-crispy-forms = "^2.3"
 django-social-share = "^2.3.0"
 django-import-export = "^4.1.1"
 pillow = "^10.4.0"
+django-tinymce = "^4.1.0"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "django_social_share",
     "import_export",
+    "tinymce",
 ]
 
 # CKEDITOR_UPLOADER_PATH = 'media/'
@@ -161,6 +162,11 @@ CKEDITOR_CONFIGS = {
             ]
         ),
     },
+}
+
+TINYMCE_DEFAULT_CONFIG = {
+    "theme": "silver",
+    "height": 300,
 }
 
 

@@ -12,7 +12,7 @@ from django.contrib.auth.views import (
 from django.urls import path
 from django.urls import re_path as url
 
-from portal.views import auth, public, dasboard
+from portal.views import alumni, auth, dasboard, public
 
 from . import view
 
@@ -35,7 +35,7 @@ urlpatterns = [
     path("home/", view.home, name="home"),
     # path("dashboard/", view.dashboard, name="dashboard"),
     path("dashboard/faculty/", view.faculty, name="faculty-dashboard"),
-    path("dashboard/alumini", view.alumini, name="alumini-dashboard"),
+    # path("dashboard/alumini", view.alumini, name="alumini-dashboard"),
     path("dashboard/student", view.student, name="student-dashboard"),
     path("blog-archive/", view.blog, name="blog-archive"),
     path("blog-single/", view.blog_single, name="blog-single"),
@@ -71,17 +71,17 @@ urlpatterns = [
     ),
     path("alumni_response/", view.alumini_message, name="alumini_message"),
     path("alumni_post_search/", view.alumni_post_search, name="alumni_post_search"),
-    path("create-help-desk-post/", view.create_help_desk_post, name="create-help-desk-post"),
-    path(
-        "update_help_desk_post/<int:pk>/",
-        view.update_help_desk_post,
-        name="update_help_desk_post",
-    ),
-    path(
-        "help_desk_post_detail/<int:pk>", view.help_desk_post_detail, name="help_desk_post_detail"
-    ),
-    path("delete-help-desk-post/", view.delete_help_desk_post, name="delete-help-desk-post"),
-    path("help_desk_post_chat/<int:pk>", view.help_desk_post_chat, name="help_desk_post_chat"),
+    # path("create-help-desk-post/", view.create_help_desk_post, name="create-help-desk-post"),
+    # path(
+    #     "update_help_desk_post/<int:pk>/",
+    #     view.update_help_desk_post,
+    #     name="update_help_desk_post",
+    # ),
+    # path(
+    #     "help_desk_post_detail/<int:pk>", view.help_desk_post_detail, name="help_desk_post_detail"
+    # ),
+    # path("delete-help-desk-post/", view.delete_help_desk_post, name="delete-help-desk-post"),
+    # path("help_desk_post_chat/<int:pk>", view.help_desk_post_chat, name="help_desk_post_chat"),
     path(
         "get_help_desk_chat_header/",
         view.get_help_desk_chat_header,
@@ -169,4 +169,26 @@ urlpatterns += [
     path("dashboard", dasboard.DashboardView.as_view(), name="dashboard"),
 ]
 
-# urlpatterns += []
+urlpatterns += [
+    path("dashboard/alumni", alumni.AlumniDashboard.as_view(), name="dashboard.alumni"),
+    path(
+        "dashboard/alumni/help-desk/create",
+        alumni.CreateHelpDeskPost.as_view(),
+        name="alumni.help_desk.create",
+    ),
+    path(
+        "dashboard/alumni/help-desk/update/<int:pk>",
+        alumni.UpdateHelpDeskPost.as_view(),
+        name="alumni.help_desk.update",
+    ),
+    path(
+        "dashboard/alumni/help-desk/detail/<int:pk>",
+        alumni.HelpDeskPostDetailView.as_view(),
+        name="alumni.help_desk.detail",
+    ),
+    path(
+        "dashboard/alumni/help-desk/delete/<int:pk>",
+        alumni.DeleteHelpDeskPostView.as_view(),
+        name="alumni.help_desk.delete",
+    ),
+]
