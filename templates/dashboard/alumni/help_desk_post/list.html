@@ -1,5 +1,5 @@
 {% for post in posts %}
-    <div class="col-lg-4">
+    <div class="col-lg-3 col-md-6 col-12">
         <div class="card mb-4 my-2">
             <div class="position-relative">
                 <img src="https://images.unsplash.com/photo-1477862096227-3a1bb3b08330?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60"
@@ -14,7 +14,7 @@
                             <i class="fa fa-edit"></i>
                         </a>
                         <button type="button"
-                                onclick="help_desk_post_delete({{ post.id }})"
+                                onclick="help_desk_post_delete('{{ post.id }}')"
                                 class="btn btn-sm btn-danger ms-1 delete-icon">
                             <i class="fa fa-trash"></i>
                         </button>
