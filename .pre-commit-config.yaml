@@ -1,0 +1,46 @@
+exclude: .versions\/.
+default_stages: [pre-commit, manual] # runs on the staged contents of files by temporarily stashing the unstaged changes while running hooks.
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+    - id: check-yaml
+      name: Check YAML
+      description: Simply check YAML files for parseable syntax.
+    - id: check-merge-conflict
+      name: Check Merge Conflict String
+      description: Check for files that contain merge conflict strings.
+  - repo: https://github.com/Riverside-Healthcare/djlint
+    rev: v1.31.1
+    hooks:
+    - id: djlint
+      name: Djlint Linter and Formatter
+      description: Linter and Formatter for Django templates
+      args: ["--reformat", "--format-css", "--format-js"]
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: poetry run black
+        language: system
+        types: [python]
+  - repo: https://github.com/pycqa/isort 
+    rev: 5.12.0 
+    hooks: 
+    - id: isort 
+      name: Isort Formatter
+      description: Sort Python imports based on the import locality
+  - repo: https://github.com/PyCQA/docformatter
+    rev: v1.7.5
+    hooks:
+    - id: docformatter
+      name: Docformatter
+      description: 'Formats docstrings to follow PEP 257.'
+      additional_dependencies: [tomli]
+      args: [--in-place, --config, ./pyproject.toml] # Hook configured based config added in pyproject.toml
+  # - repo: https://github.com/pylint-dev/pylint
+  #   rev: v2.17.4
+  #   hooks:
+  #   - id: pylint
+  #     name: Pylint
+  #     description: Lint Python code
