@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     "tinymce",
 ]
 
-# CKEDITOR_UPLOADER_PATH = 'media/'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -135,43 +134,27 @@ STATICFILES_FINDERS = [
 
 
 STATIC_URL = "/static/"
-
 STATICFILES_DIRS = [STATIC_DIR]
-
 STATIC_ROOT = os.path.join(BASE_DIR, "/static")
-
 MEDIA_URL = "/uploads/"
 MEDIA_ROOT = os.path.join(BASE_DIR2, "uploads")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-AUTH_USER_MODEL = "portal.User"
+AUTH_USER_MODEL = "portal.models.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_CONFIGS = {
-    "default": {
-        "toolbar": "full",
-        "width": "auto",
-        "extraPlugins": ",".join(
-            [
-                "codesnippet",
-            ]
-        ),
-    },
-}
-
+# configuration for tinymce html field
 TINYMCE_DEFAULT_CONFIG = {
     "theme": "silver",
     "height": 300,
 }
 
-
+# Email configuration
 EMAIL_ADMIN = os.environ.get("EMAIL_ADMIN")
-
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND")
 EMAIL_HOST = os.environ.get("EMAIL_HOST")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
@@ -179,5 +162,6 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
+# login logout redirection urls
 LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL")
 LOGOUT_REDIRECT_URL = os.environ.get("LOGOUT_REDIRECT_URL")
