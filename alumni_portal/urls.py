@@ -1,4 +1,4 @@
-"""alumni_portal URL Configuration
+"""alumni_portal URL Configuration.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.0/topics/http/urls/
@@ -22,6 +22,5 @@ from django.urls import include, path
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("portal.urls")),
-    path("ckeditor/", include("ckeditor_uploader.urls")),
     path("tinymce/", include("tinymce.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
