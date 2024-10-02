@@ -11,7 +11,7 @@ from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
 from portal.form import Help_Desk_Form
-from portal.models import Post, PostResponse
+from portal.models import HelpDesk, HelpDeskInterestMessage
 from portal.utils import is_alumni
 from portal.views.base import BasePublicContext
 
@@ -22,7 +22,7 @@ class AlumniDashboard(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        posts = Post.objects.filter(posted_by=self.request.user)
+        posts = HelpDesk.objects.filter(posted_by=self.request.user)
 
         search_query = self.request.GET.get("s", "")
         if search_query:
@@ -57,20 +57,20 @@ class CreateHelpDeskPost(LoginRequiredMixin, CreateView, BasePublicContext):
 
 
 class UpdateHelpDeskPost(LoginRequiredMixin, UpdateView, BasePublicContext):
-    model = Post
+    model = HelpDesk
     form_class = Help_Desk_Form
     template_name = "dashboard/alumni/help_desk_post/create_and_update.html"
     success_url = reverse_lazy("dashboard.alumni")
 
 
 class HelpDeskPostDetailView(LoginRequiredMixin, DetailView):
-    model = Post
+    model = HelpDesk
     template_name = "dashboard/alumni/help_desk_post/detail.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        post = get_object_or_404(Post, id=self.kwargs.get("pk"))
-        interest = PostResponse.objects.filter(post=post).order_by("-id")
+        post = get_object_or_404(HelpDesk, id=self.kwargs.get("pk"))
+        interest = HelpDeskInterestMessage.objects.filter(post=post).order_by("-id")
         context.update(
             {
                 "alumni_interest": interest,
@@ -86,9 +86,9 @@ class DeleteHelpDeskPostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = {"success": False, "msg_type": "error"}
         try:
-            post = get_object_or_404(Post, id=kwargs.get("pk"), posted_by=request.user)
+            post = get_object_or_404(HelpDesk, id=kwargs.get("pk"), posted_by=request.user)
             post.delete()
-            posts = Post.objects.filter(posted_by=request.user).order_by("-id")
+            posts = HelpDesk.objects.filter(posted_by=request.user).order_by("-id")
             data.update(
                 {
                     "html": render_to_string(
