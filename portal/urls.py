@@ -1,6 +1,7 @@
 from unicodedata import name
 from urllib import request
 
+from django.contrib.auth import views as django_auth_views
 from django.contrib.auth.views import (
     LoginView,
     LogoutView,
@@ -11,6 +12,7 @@ from django.contrib.auth.views import (
 )
 from django.urls import path
 from django.urls import re_path as url
+from django.urls import reverse_lazy
 
 from portal.views import alumni, auth, dasboard, public
 
@@ -157,6 +159,11 @@ urlpatterns += [
         "password_reset_complete/",
         auth.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
+    ),
+    path(
+        "logout/",
+        django_auth_views.LogoutView.as_view(next_page=reverse_lazy("home")),
+        name="logout",
     ),
 ]
 

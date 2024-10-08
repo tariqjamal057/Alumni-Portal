@@ -26,6 +26,8 @@ class HelpDesk(BaseModel, PostUpVoteDownVote):
     post_type = models.ForeignKey(PostType, on_delete=models.CASCADE)
     comments = models.ManyToManyField("HelpDeskComment", related_name="help_desk_comments")
     tags = models.ManyToManyField(Tag, related_name="help_desk_tags")
+    upvotes = models.ManyToManyField("User", related_name="help_desk_upvote", blank=True)
+    downvotes = models.ManyToManyField("User", related_name="help_desk_downvote", blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="help_desk_created_by"
     )

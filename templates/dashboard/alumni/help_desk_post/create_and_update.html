@@ -42,6 +42,11 @@
                                 {% render_form_field form.content %}
 
                             </div>
+                            <div class="col-12">
+
+                                {% render_form_field form.tags %}
+
+                            </div>
                         </div>
                         <div class="d-flex align-items-center justify-content-between">
                             <a href="{% url 'dashboard.alumni' %}" class="btn btn-primary">Cancel</a>
@@ -54,3 +59,13 @@
     </div>
 
 {% endblock content %}
+
+{% block scripts %}
+
+    <script>
+        $(document).ready(function() {
+            $('#id_post_type').select2();
+        });
+    </script>
+
+{% endblock scripts %}

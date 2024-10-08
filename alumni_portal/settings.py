@@ -163,5 +163,6 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
 # login logout redirection urls
+LOGIN_URL = os.environ.get("LOGIN_REDIRECT_URL")
 LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL")
 LOGOUT_REDIRECT_URL = os.environ.get("LOGOUT_REDIRECT_URL")

@@ -14,7 +14,7 @@
                         <h2 class="text-info mb-2">{{ object.title }}</h2>
                         {% if user.is_authenticated %}
                             <div class="d-flex align-items-center">
-                                <a href="{% url 'alumni.help_desk.update' post.id %}"
+                                <a href="{% url 'alumni.help_desk.update' object.id %}"
                                    class="btn btn-sm btn-primary me-1">
                                     <i class="fa fa-edit"></i>
                                 </a>
@@ -32,7 +32,7 @@
                     <p>{{ object.content | safe }}</p>
                     <p class="text-muted ">
                         Type:
-                        <span class="p-2 rounded bg-info w-auto">
+                        <span class="badge bg-info">
                             {% with post_type=object.post_type %}
                                 {% if post_type == "O" %}
                                     Opportunity
@@ -44,7 +44,15 @@
                             {% endwith %}
                         </span>
                     </p>
-                    <p class="text-muted">Posted by: {{ object.posted_by }}</p>
+                    <p class="text-muted">
+                        Tags:
+                        {% for tag in object.tags.all %}
+                            <span class="badge bg-secondary me-1">{{ tag.name }}</span>
+                        {% empty %}
+                            <span class="text-muted">No tags</span>
+                        {% endfor %}
+                    </p>
+                    <p class="text-muted">Posted by: {{ object.created_by }}</p>
                 </div>
             </div>
         </div>
