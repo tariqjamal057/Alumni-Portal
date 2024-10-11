@@ -11,6 +11,7 @@
             <div class="row">
                 <div class="col-lg-9 col-12 bg_white p-3">
                     <div class="d-flex justify-content-between align-items-center">
+                        <!-- Blog Title -->
                         <h2 class="text-info mb-2">{{ object.title }}</h2>
                         {% if user.is_authenticated %}
                             <div class="d-flex align-items-center">
@@ -24,35 +25,37 @@
                             </div>
                         {% endif %}
                     </div>
-                    <img src="https://images.unsplash.com/photo-1477862096227-3a1bb3b08330?ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=60"
-                         alt=""
-                         class="card-img-top"
-                         width="100%"
-                         height="400" />
-                    <p>{{ object.content | safe }}</p>
-                    <p class="text-muted ">
-                        Type:
-                        <span class="badge bg-info">
-                            {% with post_type=object.post_type %}
-                                {% if post_type == "O" %}
-                                    Opportunity
-                                {% elif podt_type == "S" %}
-                                    Seeking Job
-                                {% else %}
-                                    Internship
-                                {% endif %}
-                            {% endwith %}
-                        </span>
-                    </p>
-                    <p class="text-muted">
-                        Tags:
+                    <div class="mb-4 text-muted">
+                        <span>Post Type: <strong>{{ object.post_type }} |</strong></span>
+                        <span>Created by: <strong>{{ object.created_by }} |</strong></span>
+                        <span>Date: <strong>{{ object.created_at|date:"M. d, Y" }}</strong></span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-start">
+                        <button class="btn btn-outline-success btn-sm me-2">
+                            <i class="bi bi-hand-thumbs-up"></i> <span>75</span> Upvotes
+                        </button>
+                        <button class="btn btn-outline-danger btn-sm">
+                            <i class="bi bi-hand-thumbs-down"></i> <span>10</span> Downvotes
+                        </button>
+                    </div>
+                    <hr />
+                    <div class="mb-5">{{ object.content | safe }}</div>
+                    <div class="mb-4">
+                        <h5>Tags:</h5>
                         {% for tag in object.tags.all %}
-                            <span class="badge bg-secondary me-1">{{ tag.name }}</span>
+                            <span class="badge bg-secondary fs-6 fw-light">{{ tag.name }}</span>
                         {% empty %}
                             <span class="text-muted">No tags</span>
                         {% endfor %}
-                    </p>
-                    <p class="text-muted">Posted by: {{ object.created_by }}</p>
+                    </div>
+                    <div class="card mt-5">
+                        <div class="card-header">
+                            <h5>Comments</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>No comments yet. Be the first to comment!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

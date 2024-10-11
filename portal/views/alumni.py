@@ -89,9 +89,9 @@ class DeleteHelpDeskPostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = {"success": False, "msg_type": "error"}
         try:
-            post = get_object_or_404(HelpDesk, id=kwargs.get("pk"), posted_by=request.user)
+            post = get_object_or_404(HelpDesk, id=kwargs.get("pk"), created_by=request.user)
             post.delete()
-            posts = HelpDesk.objects.filter(posted_by=request.user).order_by("-id")
+            posts = HelpDesk.objects.filter(created_by=request.user).order_by("-id")
             data.update(
                 {
                     "html": render_to_string(

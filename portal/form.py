@@ -61,6 +61,11 @@ class FinanceHelpForm(ModelForm):
 
 class Help_Desk_Form(ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["post_type"].empty_label = "Select post type"
+
     class Meta:
         model = HelpDesk
         fields = ["title", "content", "post_type", "tags"]

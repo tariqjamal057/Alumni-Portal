@@ -64,7 +64,10 @@
 
     <script>
         $(document).ready(function() {
-            $('#id_post_type').select2();
+            $('#id_post_type').select2({});
+            $('#id_tags').select2({
+                "placeholder": "Select Tags"
+            });
         });
     </script>
 
