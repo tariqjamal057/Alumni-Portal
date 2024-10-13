@@ -3,17 +3,16 @@ import datetime
 from django import forms
 from django.forms import ModelForm
 
-from .models import Featured_Sponser, Finance_request, Post, Tech_Help_Post
+from .models import FinanceRequest, HelpDesk, TechHelpPost
 
 
 class FinanceHelpForm(ModelForm):
     class Meta:
-        model = Finance_request
+        model = FinanceRequest
         fields = [
             "title",
-            "image",
-            "name",
-            "department",
+            "profile_img",
+            "student",
             "year",
             "description",
             "achievements",
@@ -23,14 +22,14 @@ class FinanceHelpForm(ModelForm):
             "title": forms.TextInput(
                 attrs={"placeholder": "Enter Title", "class": "form-control", "id": "title"}
             ),
-            "image": forms.FileInput(attrs={"class": "form-control", "id": "image"}),
-            "name": forms.TextInput(
-                attrs={
-                    "placeholder": "Enter Name Of The Student",
-                    "class": "form-control",
-                    "id": "name",
-                }
-            ),
+            # "image": forms.FileInput(attrs={"class": "form-control", "id": "image"}),
+            # "name": forms.TextInput(
+            #     attrs={
+            #         "placeholder": "Enter Name Of The Student",
+            #         "class": "form-control",
+            #         "id": "name",
+            #     }
+            # ),
             "department": forms.Select(attrs={"class": "form-control", "id": "department"}),
             "year": forms.Select(attrs={"class": "form-control", "id": "year"}),
             "description": forms.Textarea(
@@ -62,14 +61,23 @@ class FinanceHelpForm(ModelForm):
 
 class Help_Desk_Form(ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["post_type"].empty_label = "Select post type"
+
     class Meta:
-        model = Post
-        fields = ["title", "content", "post_type"]
+        model = HelpDesk
+        fields = ["title", "content", "post_type", "tags"]
         widgets = {
             "title": forms.TextInput(
-                attrs={"placeholder": "enter title", "class": "form-control", "id": "title"}
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter Post Title",
+                }
             ),
-            "post_type": forms.Select(attrs={"class": "form-control", "id": "post_type"}),
+            "post_type": forms.Select(attrs={"class": "form-control"}),
+            "tags": forms.SelectMultiple(attrs={"class": "form-control"}),
         }
 
 
@@ -77,7 +85,7 @@ class MentorHelpForm(ModelForm):
     content = forms.CharField(label="Content", widget=forms.Textarea(attrs={"class": "ckeditor"}))
 
     class Meta:
-        model = Tech_Help_Post
+        model = TechHelpPost
         fields = ["title", "stack", "content"]
         widgets = {
             "title": forms.TextInput(

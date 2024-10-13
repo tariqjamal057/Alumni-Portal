@@ -20,21 +20,16 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-12 my-sm-4">
+                    {% csrf_token %}
                     <form>
-                        <div class="row align-items-center justify-content-lg-end justify-content-sm-start">
-                            <div class="input-group col-lg-6 col-12 d-flex align-items-center">
-                                <input type="text"
-                                       name="search_query"
+                        <div class="row align-items-center justify-content-lg-end justify-content-lg-end justify-content-sm-start">
+                            <div class="input-group col-lg-3 col-md-6 col-12 d-flex align-items-center w-auto">
+                                <input type="search"
+                                       name="s"
                                        id="search_query"
                                        class="form-control"
+                                       value="{{ search_text }}"
                                        placeholder="Search" />
-                                <div class="input-group-append">
-                                    <button class="btn btn-primary Search"
-                                            id="search-btn"
-                                            type="button"
-                                            id="button-addon2"
-                                            onclick="alumni_post_search()">Search</button>
-                                </div>
                             </div>
                         </div>
                     </form>
@@ -82,32 +77,42 @@
 
 {% endblock content %}
 
-{% block javascript %}
+{% block scripts %}
 
     <script>
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+        function showAlert(response) {
+            swal(capitalizeFirstLetter(response.msg_type), response.msg, response.msg_type);
+        }
+
         function help_desk_post_delete(id) {
-            const csrftoken = $("[name=csrfmiddlewaretoken]").val();
             $.ajax({
                 type: "POST",
                 url: "alumni/help-desk/delete/" + id,
                 headers: {
-                    "X-CSRFToken": csrftoken
+                    "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
                 },
                 data: {
                     'id': id
                 },
                 success: function(response) {
-                    console.log("Success response ", response)
-                    if (response["success"] === true) {
-                        swal("success", "Help Desk Post Deleted Successfully", "success");
+                    showAlert(response);
+                    if (response.success === true) {
                         $("#alumni_post_list").html(response.html);
                     }
                 },
-                error: function(data) {
-                    alert("No Data Found to delete");
+                error: function(xhr, status, error) {
+                    let errorResponse = xhr.responseJSON || {};
+                    showAlert({
+                        msg_type: errorResponse.msg_type || "error",
+                        msg: errorResponse.msg || "An unexpected error occurred"
+                    });
                 },
             });
         }
     </script>
 
-{% endblock javascript %}
+{% endblock scripts %}

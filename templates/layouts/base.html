@@ -105,6 +105,32 @@
 
             .select2-container {
                 z-index: 9999;
+                width: 100% !important;
+            }
+
+
+            .select2-container--default .select2-selection--single {
+                background-color: #fff;
+                border: 1px solid #dee2e6 !important;
+                border-radius: 4px;
+                height: 36px !important;
+            }
+
+            .select2-container--default .select2-selection--multiple {
+                background-color: white;
+                border: 1px solid #dee2e6 !important;
+                border-radius: 4px;
+                cursor: text;
+                padding-bottom: 5px;
+                padding-right: 5px;
+                position: relative;
+                height: 36px !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #444;
+                line-height: 28px;
+                padding-top: 1% !important;
             }
 
             .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -140,7 +166,7 @@
 
             .edit-icon {
                 opacity: 0;
-                transform: translateX(60%);
+                transform: translateX(80%);
                 transition: opacity 0.3s ease-in-out 0.1s, transform 0.3s ease-in-out 0.1s;
             }
 
@@ -215,8 +241,10 @@
         <!-- jQuery library -->
         <script src="{% static 'assets/js/jquery.min.js' %}"></script>
         <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script src="{% static 'assets/js/select2.min.js' %}"></script>
-        <script src="{% static 'assets/js/select2.min.css' %}"></script>
+        <!-- Select2 cdn -->
+        <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+              rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
         <script src="{% static 'assets/js/bootstrap5.js' %}"></script>
         <!-- Slick slider -->
         <script type="text/javascript" src="{% static 'assets/js/slick.js' %}"></script>
@@ -293,9 +321,9 @@
             }
         </script>
 
-        {% block javascript %}
+        {% block scripts %}
 
-        {% endblock javascript %}
+        {% endblock scripts %}
 
     </body>
 </html>

@@ -9,12 +9,12 @@ package-mode = false
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.1"
-django-ckeditor = "^6.7.1"
 django-crispy-forms = "^2.3"
 django-social-share = "^2.3.0"
 django-import-export = "^4.1.1"
 pillow = "^10.4.0"
 django-tinymce = "^4.1.0"
+mysqlclient = "^2.2.4"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -22,6 +22,7 @@ black = "^24.8.0"
 isort = "^5.13.2"
 docformatter = "^1.7.5"
 djlint = "^1.35.2"
+pre-commit = "^3.8.0"
 
 [build-system]
 requires = ["poetry-core"]
