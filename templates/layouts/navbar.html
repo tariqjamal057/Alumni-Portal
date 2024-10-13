@@ -35,15 +35,15 @@
                             <ul class="dropdown-menu custom_dropdown"
                                 aria-labelledby="navbarDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'mentor_help_page' %}">Alumni as mentor</a>
+                                    <a class="dropdown-item" href="">Alumni as mentor</a>
                                 </li>
                                 {% if request.user|is_alumni %}
                                     <li>
-                                        <a class="dropdown-item" href="{% url 'finance_request' %}">Alumni as sponser</a>
+                                        <a class="dropdown-item" href="">Alumni as sponser</a>
                                     </li>
                                 {% endif %}
                                 <li>
-                                    <a class="dropdown-item" href="{% url 'help_desk_post' %}">Helpdesk</a>
+                                    <a class="dropdown-item" href="">Helpdesk</a>
                                 </li>
                             </ul>
                         </li>
