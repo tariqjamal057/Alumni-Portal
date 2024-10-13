@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load social_share %}
+
 {% block title %}College of Engineering and Technology | Collegeizens | Create Help Desk Post{% endblock %}
 
 {% block content %}
@@ -9,52 +11,89 @@
     <section id="mu-course-content">
         <div class="container">
             <div class="row">
-                <div class="col-lg-9 col-12 bg_white p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <!-- Blog Title -->
-                        <h2 class="text-info mb-2">{{ object.title }}</h2>
-                        {% if user.is_authenticated %}
+                <div class="col-lg-9 col-12 p-3 py-0">
+                    <div class="w-100 p-3 bg_white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Blog Title -->
+                            <h2 class="text-info mb-2">{{ object.title }}</h2>
+                            {% if user.is_authenticated %}
+                                <div class="d-flex align-items-center">
+                                    <a href="{% url 'alumni.help_desk.update' object.id %}"
+                                       class="btn btn-sm btn-primary me-1">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-sm btn-danger ms-1">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="mb-4 text-muted">
+                            <span>Post Type: <strong>{{ object.post_type }} |</strong></span>
+                            <span>Created by: <strong>{{ object.created_by }} |</strong></span>
+                            <span>Date: <strong>{{ object.created_at|date:"M. d, Y" }}</strong></span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-start">
+                            <button class="btn btn-outline-success btn-sm me-2">
+                                <i class="bi bi-hand-thumbs-up"></i> <span>75</span> Upvotes
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-hand-thumbs-down"></i> <span>10</span> Downvotes
+                            </button>
+                        </div>
+                        <hr />
+                        <div class="mb-5">{{ object.content | safe }}</div>
+                        <div class="mb-4">
+                            <h5>Tags:</h5>
+                            {% for tag in object.tags.all %}
+                                <span class="badge bg-secondary fs-6 fw-light">{{ tag.name }}</span>
+                            {% empty %}
+                                <span class="text-muted">No tags</span>
+                            {% endfor %}
+                        </div>
+                        <!-- View Messages Button -->
+                        <div class="mb-4">
+                            <button class="btn btn-primary">
+                                <a href="{% url 'alumni.help_desk.chat' object.id %}">View Messages</a>
+                            </button>
+                        </div>
+                        <div class="mb-4">
+                            <h5>Social Share :</h5>
                             <div class="d-flex align-items-center">
-                                <a href="{% url 'alumni.help_desk.update' object.id %}"
-                                   class="btn btn-sm btn-primary me-1">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="btn btn-sm btn-danger ms-1">
-                                    <i class="fa fa-trash"></i>
-                                </a>
+                                <button class="btn btn-info me-2">
+                                    {% post_to_whatsapp object_or_url '<i class="fa fa-whatsapp" aria-hidden="true"></i>' %}
+                                </button>
+                                <button class="btn btn-info me-2">
+                                    {% post_to_facebook object_or_url '<i class="fa fa-facebook"></i>' %}
+                                </button>
+                                <button class="btn btn-info me-2">
+                                    {% post_to_twitter "New Song: {{ object.title }}. Check it out!" object_or_url '<i class="fa fa-twitter"></i>' %}
+                                </button>
+                                <button class="btn btn-info">
+                                    {% send_email object.title "New Song: {{ object.title }}. Check it out!" object_or_url '<i class="fa fa-envelope-o" aria-hidden="true"></i>' %}
+                                </button>
                             </div>
-                        {% endif %}
-                    </div>
-                    <div class="mb-4 text-muted">
-                        <span>Post Type: <strong>{{ object.post_type }} |</strong></span>
-                        <span>Created by: <strong>{{ object.created_by }} |</strong></span>
-                        <span>Date: <strong>{{ object.created_at|date:"M. d, Y" }}</strong></span>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-start">
-                        <button class="btn btn-outline-success btn-sm me-2">
-                            <i class="bi bi-hand-thumbs-up"></i> <span>75</span> Upvotes
-                        </button>
-                        <button class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-hand-thumbs-down"></i> <span>10</span> Downvotes
-                        </button>
-                    </div>
-                    <hr />
-                    <div class="mb-5">{{ object.content | safe }}</div>
-                    <div class="mb-4">
-                        <h5>Tags:</h5>
-                        {% for tag in object.tags.all %}
-                            <span class="badge bg-secondary fs-6 fw-light">{{ tag.name }}</span>
-                        {% empty %}
-                            <span class="text-muted">No tags</span>
-                        {% endfor %}
-                    </div>
-                    <div class="card mt-5">
-                        <div class="card-header">
-                            <h5>Comments</h5>
                         </div>
-                        <div class="card-body">
-                            <p>No comments yet. Be the first to comment!</p>
+                        <div class="card mt-5">
+                            <div class="card-header">
+                                <h5>Comments</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>No comments yet. Be the first to comment!</p>
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-12 p-3 py-0">
+                    <div class="w-100 p-3 bg_white">
+                        <h3>Recent Interests</h3>
+                        <ul class="mu-sidebar-catg">
+                            {% for post_interest in post_interests %}
+                                <li class="p-2 btn btn-outline-light w-100 text-start rounded-2 shadow-sm">
+                                    <a href="">{{ post_interest.user.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>

@@ -319,6 +319,22 @@
             function removeErrors() {
                 $(".form_errors").text("");
             }
+
+
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+            function showAlert(response) {
+                swal(capitalizeFirstLetter(response.msg_type), response.msg, response.msg_type);
+            }
+
+            function scrollToBottom(containerName) {
+                var elem = document.querySelector(containerName);
+                if (elem) {
+                    elem.scrollTop = elem.scrollHeight;
+                }
+            }
         </script>
 
         {% block scripts %}

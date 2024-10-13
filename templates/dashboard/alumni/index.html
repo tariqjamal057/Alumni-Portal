@@ -35,7 +35,7 @@
                     </form>
                 </div>
             </div>
-            <div class="row bg_white pt-3" id="alumni_post_list">
+            <div class="row bg_white pt-3" id="help_desk_post_list">
 
                 {% include 'dashboard/alumni/help_desk_post/list.html' %}
 
@@ -80,35 +80,27 @@
 {% block scripts %}
 
     <script>
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
-
-        function showAlert(response) {
-            swal(capitalizeFirstLetter(response.msg_type), response.msg, response.msg_type);
-        }
-
-        function help_desk_post_delete(id) {
+        function helpDeskPostDelete(id) {
             $.ajax({
-                type: "POST",
-                url: "alumni/help-desk/delete/" + id,
+                type: 'POST',
+                url: `alumni/help-desk/${id}/delete`,
                 headers: {
-                    "X-CSRFToken": $("[name=csrfmiddlewaretoken]").val()
+                    'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
                 },
                 data: {
-                    'id': id
+                    id: id
                 },
                 success: function(response) {
                     showAlert(response);
                     if (response.success === true) {
-                        $("#alumni_post_list").html(response.html);
+                        $('#help_desk_post_list').html(response.html);
                     }
                 },
                 error: function(xhr, status, error) {
-                    let errorResponse = xhr.responseJSON || {};
+                    const errorResponse = xhr.responseJSON || {};
                     showAlert({
-                        msg_type: errorResponse.msg_type || "error",
-                        msg: errorResponse.msg || "An unexpected error occurred"
+                        msg_type: errorResponse.msg_type || 'error',
+                        msg: errorResponse.msg || 'An unexpected error occurred'
                     });
                 },
             });

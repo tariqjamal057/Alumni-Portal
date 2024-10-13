@@ -190,18 +190,33 @@ urlpatterns += [
         name="alumni.help_desk.create",
     ),
     path(
-        "dashboard/alumni/help-desk/update/<int:pk>",
+        "dashboard/alumni/help-desk/<int:post_id>/update",
         alumni.UpdateHelpDeskPost.as_view(),
         name="alumni.help_desk.update",
     ),
     path(
-        "dashboard/alumni/help-desk/detail/<int:pk>",
+        "dashboard/alumni/help-desk/<int:post_id>/details",
         alumni.HelpDeskPostDetailView.as_view(),
         name="alumni.help_desk.detail",
     ),
     path(
-        "dashboard/alumni/help-desk/delete/<int:pk>",
+        "dashboard/alumni/help-desk/<int:post_id>/delete",
         alumni.DeleteHelpDeskPostView.as_view(),
         name="alumni.help_desk.delete",
+    ),
+    path(
+        "dashboard/alumni/help-desk/<int:post_id>/chat",
+        alumni.HelpDeskChatView.as_view(),
+        name="alumni.help_desk.chat",
+    ),
+    path(
+        "dashboard/alumni/help-desk/<int:post_id>/chat/get-messages",
+        alumni.GetHelpDestChatMessage.as_view(),
+        name="alumni.help_desk.get_message",
+    ),
+    path(
+        "dashboard/alumni/help-desk/<int:post_id>/chat/add-messages",
+        alumni.HelpDeskChatMessage.as_view(),
+        name="alumni.help_desk.get_message",
     ),
 ]

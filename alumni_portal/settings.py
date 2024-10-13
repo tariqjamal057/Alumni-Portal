@@ -10,9 +10,8 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
-from pathlib import Path
 
-from core.utils import parse_db_url
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -84,13 +83,14 @@ WSGI_APPLICATION = "alumni_portal.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {"default": parse_db_url(os.environ.get("DATABASE_URL"))}
-# MySQL-specific options
-DATABASES["default"]["OPTIONS"] = {
-    "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-    "charset": "utf8mb4",
-    "use_unicode": True,
-}
+DATABASES = {"default": dj_database_url.parse(os.environ.get("DATABASE_URL"))}
+# Add MySQL-specific options only if using MySQL
+if DATABASES["default"]["ENGINE"] == "django.db.backends.mysql":
+    DATABASES["default"]["OPTIONS"] = {
+        "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        "charset": "utf8mb4",
+        "use_unicode": True,
+    }
 
 
 # Password validation
