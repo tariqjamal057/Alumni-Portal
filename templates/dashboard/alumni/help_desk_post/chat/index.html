@@ -1,0 +1,132 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+    {{ post.title | title }} Chat
+
+{% endblock title %}
+
+{% block style %}
+
+    <style>
+        .user-list {
+            height: 75vh;
+        }
+
+        .chat-container {
+            height: 70vh;
+        }
+
+        .message {
+            max-width: 75%;
+        }
+
+        .user-item {
+            cursor: pointer;
+        }
+
+        .user-item:hover {
+            background-color: #f0f0f0 !important;
+            transition: 0.4s;
+        }
+    </style>
+
+{% endblock style %}
+
+{% block content %}
+
+    {% csrf_token %}
+    <section id="mu-course-content">
+        <div class="container">
+            <div class="my-2">
+                <h4 class="text-info">Chat for {{ post.title|title }}</h4>
+                <div class="row border-1 border border-opacity-50 shadow-lg rounded overflow-hidden">
+                    <div class="col-lg-3 col-12 border-end border-white border-opacity-100">
+                        <div class="w-100 p-1 py-3">
+                            <div class="w-100">
+                                <input type="search" class="form-control" />
+                            </div>
+                            <hr />
+                            <div class="user-list overflow-y-auto">
+                                {% for post_interest in post_interests %}
+                                    <div class="user-item d-flex align-items-start border-0 border-opacity-10 border-top border-bottom bg-white p-2"
+                                         onclick="getPostInterestMessage('{{ post_interest.post.id }}', '{{ post_interest.user.id }}')">
+                                        <img src="/uploads/{{ post_interest.user.profile_photo }}"
+                                             class="rounded-circle me-2"
+                                             alt="{{ post_interest.user.get_full_name }}"
+                                             width="50px"
+                                             height="50px" />
+                                        <span>{{ post_interest.user.get_full_name }}</span>
+                                    </div>
+                                {% empty %}
+                                    <p>No Users Found</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-9 col-12 border-start p-0 d-flex flex-column justify-content-between h-100"
+                         id="message-left-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+
+    <script>
+        function getPostInterestMessage(postId, userId) {
+            $.ajax({
+                type: 'POST',
+                url: `/dashboard/alumni/help-desk/${postId}/chat/get-messages`,
+                data: {
+                    user_id: userId
+                },
+                headers: {
+                    'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success(response) {
+                    $('#message-left-container').html(response.html);
+                    scrollToBottom('.chat-container');
+                },
+                error() {
+                    showAlert({
+                        msgType: 'error',
+                        msg: 'An unexpected error occurred'
+                    });
+                },
+            });
+        }
+
+        function addUserMessage(postId, postInterestId, userId) {
+
+            $.ajax({
+                type: 'POST',
+                url: `/dashboard/alumni/help-desk/${postId}/chat/add-messages`,
+                data: {
+                    post_interest_id: postInterestId,
+                    user_id: userId,
+                    message: $('[name=chat-message]').val()
+                },
+                headers: {
+                    'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success(response) {
+                    $('.chat-container').html(response.html);
+                    $('[name=chat-message]').val('');
+                    scrollToBottom('.chat-container');
+                },
+                error() {
+                    showAlert({
+                        msgType: 'error',
+                        msg: 'An unexpected error occurred'
+                    });
+                },
+            });
+        }
+    </script>
+
+{% endblock scripts %}

@@ -105,17 +105,23 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Sends an email to this User."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
-    def __str__(self):
+    def name(self):
+        name = None
         if self.first_name and self.last_name:
-            return "%s %s" % (self.first_name, self.last_name)
+            name = "%s %s" % (self.first_name, self.last_name)
         if self.first_name and not self.last_name:
-            return self.first_name
+            name = self.first_name
         elif self.last_name and not self.first_name:
-            return self.name
+            name = self.name
         elif not self.first_name and not self.last_name:
-            return self.username
+            name = self.username
         else:
-            return self.username
+            name = self.username
+
+        return name
+
+    def __str__(self):
+        return self.name()
 
 
 class PostEducationDetail(BaseModel):
