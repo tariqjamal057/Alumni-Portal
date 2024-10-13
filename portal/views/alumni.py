@@ -22,7 +22,7 @@ class AlumniDashboard(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        posts = HelpDesk.objects.filter(posted_by=self.request.user)
+        posts = HelpDesk.objects.filter(created_by=self.request.user)
 
         search_query = self.request.GET.get("s", "")
         if search_query:
@@ -52,7 +52,7 @@ class CreateHelpDeskPost(LoginRequiredMixin, CreateView, BasePublicContext):
     success_url = reverse_lazy("dashboard.alumni")
 
     def form_valid(self, form):
-        form.instance.posted_by = self.request.user
+        form.instance.created_by = self.request.user
         return super().form_valid(form)
 
 
@@ -62,6 +62,10 @@ class UpdateHelpDeskPost(LoginRequiredMixin, UpdateView, BasePublicContext):
     template_name = "dashboard/alumni/help_desk_post/create_and_update.html"
     success_url = reverse_lazy("dashboard.alumni")
 
+    def form_valid(self, form):
+        form.instance.updated_by = self.request.user
+        return super().form_valid(form)
+
 
 class HelpDeskPostDetailView(LoginRequiredMixin, DetailView):
     model = HelpDesk
@@ -69,13 +73,12 @@ class HelpDeskPostDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        post = get_object_or_404(HelpDesk, id=self.kwargs.get("pk"))
-        interest = HelpDeskInterestMessage.objects.filter(post=post).order_by("-id")
+        # interest = HelpDeskInterestMessage.objects.filter(post=post).order_by("-id")
         context.update(
             {
-                "alumni_interest": interest,
-                "recent_intetest": interest[:5],
-                "total_number_of_interest": interest.count(),
+                # "alumni_interest": interest,
+                # "recent_intetest": interest[:5],
+                # "total_number_of_interest": interest.count(),
                 "is_alumni": is_alumni(self.request.user),
             }
         )
@@ -86,9 +89,9 @@ class DeleteHelpDeskPostView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         data = {"success": False, "msg_type": "error"}
         try:
-            post = get_object_or_404(HelpDesk, id=kwargs.get("pk"), posted_by=request.user)
+            post = get_object_or_404(HelpDesk, id=kwargs.get("pk"), created_by=request.user)
             post.delete()
-            posts = HelpDesk.objects.filter(posted_by=request.user).order_by("-id")
+            posts = HelpDesk.objects.filter(created_by=request.user).order_by("-id")
             data.update(
                 {
                     "html": render_to_string(

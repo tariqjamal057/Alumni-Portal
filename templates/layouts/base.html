@@ -105,6 +105,32 @@
 
             .select2-container {
                 z-index: 9999;
+                width: 100% !important;
+            }
+
+
+            .select2-container--default .select2-selection--single {
+                background-color: #fff;
+                border: 1px solid #dee2e6 !important;
+                border-radius: 4px;
+                height: 36px !important;
+            }
+
+            .select2-container--default .select2-selection--multiple {
+                background-color: white;
+                border: 1px solid #dee2e6 !important;
+                border-radius: 4px;
+                cursor: text;
+                padding-bottom: 5px;
+                padding-right: 5px;
+                position: relative;
+                height: 36px !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                color: #444;
+                line-height: 28px;
+                padding-top: 1% !important;
             }
 
             .select2-container--default .select2-results__option--highlighted[aria-selected] {
@@ -295,9 +321,9 @@
             }
         </script>
 
-        {% block javascript %}
+        {% block scripts %}
 
-        {% endblock javascript %}
+        {% endblock scripts %}
 
     </body>
 </html>

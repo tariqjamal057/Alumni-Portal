@@ -141,7 +141,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR2, "uploads")
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-AUTH_USER_MODEL = "portal.models.User"
+AUTH_USER_MODEL = "portal.User"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -163,5 +163,6 @@ EMAIL_PORT = os.environ.get("EMAIL_PORT")
 EMAIL_USE_TLS = os.environ.get("EMAIL_USE_TLS")
 
 # login logout redirection urls
+LOGIN_URL = os.environ.get("LOGIN_REDIRECT_URL")
 LOGIN_REDIRECT_URL = os.environ.get("LOGIN_REDIRECT_URL")
 LOGOUT_REDIRECT_URL = os.environ.get("LOGOUT_REDIRECT_URL")

@@ -14,6 +14,8 @@ class TechHelpPost(BaseModel, PostUpVoteDownVote):
         "TechHelpPostComment", related_name="tech_help_post_comments"
     )
     tags = models.ManyToManyField(Tag, related_name="tech_help_post_tags")
+    upvotes = models.ManyToManyField("User", related_name="tech_help_upvote", blank=True)
+    downvotes = models.ManyToManyField("User", related_name="tech_help_downvote", blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="tech_help_created_by"
     )

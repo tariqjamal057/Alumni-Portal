@@ -7,10 +7,11 @@ class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        abstract = True
+
 
 class PostUpVoteDownVote:
-    upvotes = models.ManyToManyField("User", related_name="post_upvotes", blank=True)
-    downvotes = models.ManyToManyField("User", related_name="post_downvotes", blank=True)
 
     def upvote(self, user):
         if user in self.downvotes.all():

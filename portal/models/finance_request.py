@@ -24,6 +24,8 @@ class FinanceRequest(BaseModel, PostUpVoteDownVote):
         "FinanceRequestComment", related_name="finance_request_comments"
     )
     tags = models.ManyToManyField(Tag, related_name="finance_request_tags")
+    upvotes = models.ManyToManyField("User", related_name="finance_upvote", blank=True)
+    downvotes = models.ManyToManyField("User", related_name="finance_downvote", blank=True)
     created_by = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="finance_request_created_by"
     )

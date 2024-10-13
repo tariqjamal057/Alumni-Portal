@@ -61,14 +61,23 @@ class FinanceHelpForm(ModelForm):
 
 class Help_Desk_Form(ModelForm):
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields["post_type"].empty_label = "Select post type"
+
     class Meta:
         model = HelpDesk
-        fields = ["title", "content", "post_type"]
+        fields = ["title", "content", "post_type", "tags"]
         widgets = {
             "title": forms.TextInput(
-                attrs={"placeholder": "enter title", "class": "form-control", "id": "title"}
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter Post Title",
+                }
             ),
-            "post_type": forms.Select(attrs={"class": "form-control", "id": "post_type"}),
+            "post_type": forms.Select(attrs={"class": "form-control"}),
+            "tags": forms.SelectMultiple(attrs={"class": "form-control"}),
         }
 
 
