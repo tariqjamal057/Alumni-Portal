@@ -1,4 +1,5 @@
 {% load static %}
+{% load custom_tags %}
 
 <section id="mu-menu">
     <nav class="navbar navbar-expand-lg navbar-while bg-white shadow-sm">
@@ -36,7 +37,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{% url 'mentor_help_page' %}">Alumni as mentor</a>
                                 </li>
-                                {% if is_alumni %}
+                                {% if request.user|is_alumni %}
                                     <li>
                                         <a class="dropdown-item" href="{% url 'finance_request' %}">Alumni as sponser</a>
                                     </li>
@@ -63,7 +64,7 @@
                                id="userDropdown"
                                role="button"
                                data-bs-toggle="dropdown"
-                               aria-expanded="false">{{ user }}</a>
+                               aria-expanded="false">{{ user.name }}</a>
                             <ul class="dropdown-menu custom_dropdown" aria-labelledby="userDropdown">
                                 <li>
                                     <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>

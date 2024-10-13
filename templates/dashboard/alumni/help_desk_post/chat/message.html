@@ -1,0 +1,18 @@
+{% for message in messages %}
+    <div class="d-flex
+                {% if message.user.id == request.user.id %}
+                    justify-content-end
+                {% else %}
+                    justify-content-start
+                {% endif %}">
+        <div class="message rounded p-2 rounded mb-2 text-start
+                    {% if message.user.id == request.user.id %}
+                        bg-white justify-content-end
+                    {% else %}
+                        bg-secondary bg-opacity-10 justify-content-start
+                    {% endif %}">
+            <p class="mb-1">{{ message.message }}</p>
+            <small class="text-muted">{{ message.date }}</small>
+        </div>
+    </div>
+{% endfor %}
