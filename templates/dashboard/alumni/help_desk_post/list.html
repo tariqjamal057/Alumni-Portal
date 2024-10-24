@@ -33,16 +33,20 @@
                 <div class="d-flex justify-content-between">
                     <!-- Upvote and Downvote Section -->
                     <div>
-                        <p class="mb-0 d-inline me-3">
-                            <i class="fa fa-thumbs-up"></i> 0 Upvotes
+                        <p class="mb-0 d-inline me-3"
+                           onclick="addVote('{{ post.id }}', 'upvotes')"
+                           role="button">
+                            <i class="fa fa-thumbs-up"></i> {{ post.upvote_count }} Upvotes
                         </p>
-                        <p class="mb-0 d-inline">
-                            <i class="fa fa-thumbs-down"></i> 0 Downvotes
+                        <p class="mb-0 d-inline"
+                           onclick="addVote('{{ post.id }}', 'downvotes')"
+                           role="button">
+                            <i class="fa fa-thumbs-down"></i> {{ post.downvote_count }} Downvotes
                         </p>
                     </div>
                     <!-- Comment Section -->
                     <p class="mb-0">
-                        <i class="fa fa-comment"></i> 0 Comments
+                        <i class="fa fa-comment"></i> {{ post.comment_count }} Comments
                     </p>
                 </div>
             </div>

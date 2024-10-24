@@ -8,6 +8,7 @@
 
 {% block content %}
 
+    {% csrf_token %}
     <section id="mu-course-content">
         <div class="container">
             <div class="row">
@@ -22,9 +23,6 @@
                                        class="btn btn-sm btn-primary me-1">
                                         <i class="fa fa-edit"></i>
                                     </a>
-                                    <a class="btn btn-sm btn-danger ms-1">
-                                        <i class="fa fa-trash"></i>
-                                    </a>
                                 </div>
                             {% endif %}
                         </div>
@@ -35,10 +33,10 @@
                         </div>
                         <div class="d-flex align-items-center justify-content-start">
                             <button class="btn btn-outline-success btn-sm me-2">
-                                <i class="bi bi-hand-thumbs-up"></i> <span>75</span> Upvotes
+                                <i class="bi bi-hand-thumbs-up"></i> <span>{{ object.upvote_count }}</span> Upvotes
                             </button>
                             <button class="btn btn-outline-danger btn-sm">
-                                <i class="bi bi-hand-thumbs-down"></i> <span>10</span> Downvotes
+                                <i class="bi bi-hand-thumbs-down"></i> <span>{{ object.downvote_count }}</span> Downvotes
                             </button>
                         </div>
                         <hr />
@@ -74,12 +72,35 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="card mt-5">
+                        <div class="card">
                             <div class="card-header">
                                 <h5>Comments</h5>
                             </div>
-                            <div class="card-body">
-                                <p>No comments yet. Be the first to comment!</p>
+                            <div class="card-body comment-container">
+
+                                {% include 'dashboard/alumni/help_desk_post/comment.html' %}
+
+                            </div>
+                            <div class="card-footer py-3 border-0 bg-light">
+                                <div class="d-flex flex-start w-100">
+                                    <img class="rounded-circle shadow-1-strong me-3 border border-opacity-10"
+                                         src="{% static 'uploads/' %}{{ request.user.profile_photo }}"
+                                         alt="avatar"
+                                         width="40"
+                                         height="40" />
+                                    <div class="input-group">
+                                        <input type="text"
+                                               class="form-control"
+                                               name="comment-text"
+                                               placeholder="Type a message..."
+                                               aria-label="Message" />
+                                        <button class="btn btn-outline-info"
+                                                type="button"
+                                                onclick="addComment('{{ object.id }}')">
+                                            <i class="fa fa-send"></i>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -101,3 +122,33 @@
     </section>
 
 {% endblock content %}
+
+{% block scripts %}
+
+    <script>
+        function addComment(postId) {
+            $.ajax({
+                type: 'POST',
+                url: `/dashboard/alumni/help-desk/${postId}/comment/add`,
+                data: {
+                    text: $('[name=comment-text]').val()
+                },
+                headers: {
+                    'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success(response) {
+                    $('.comment-container').html(response.html);
+                    $('[name=comment-text]').val('');
+                    scrollToBottom('.comment-container');
+                },
+                error() {
+                    showAlert({
+                        msgType: 'error',
+                        msg: 'An unexpected error occurred'
+                    });
+                },
+            });
+        }
+    </script>
+
+{% endblock scripts %}

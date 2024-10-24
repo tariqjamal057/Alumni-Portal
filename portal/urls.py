@@ -186,37 +186,52 @@ urlpatterns += [
     path("dashboard/alumni", alumni.AlumniDashboard.as_view(), name="dashboard.alumni"),
     path(
         "dashboard/alumni/help-desk/create",
-        alumni.CreateHelpDeskPost.as_view(),
+        alumni.CreatePost.as_view(),
         name="alumni.help_desk.create",
     ),
     path(
         "dashboard/alumni/help-desk/<int:post_id>/update",
-        alumni.UpdateHelpDeskPost.as_view(),
+        alumni.UpdatePost.as_view(),
         name="alumni.help_desk.update",
     ),
     path(
         "dashboard/alumni/help-desk/<int:post_id>/details",
-        alumni.HelpDeskPostDetailView.as_view(),
+        alumni.PostDetail.as_view(),
         name="alumni.help_desk.detail",
     ),
     path(
         "dashboard/alumni/help-desk/<int:post_id>/delete",
-        alumni.DeleteHelpDeskPostView.as_view(),
+        alumni.DeletePost.as_view(),
         name="alumni.help_desk.delete",
     ),
     path(
         "dashboard/alumni/help-desk/<int:post_id>/chat",
-        alumni.HelpDeskChatView.as_view(),
+        alumni.UserChat.as_view(),
         name="alumni.help_desk.chat",
     ),
     path(
-        "dashboard/alumni/help-desk/<int:post_id>/chat/get-messages",
-        alumni.GetHelpDestChatMessage.as_view(),
-        name="alumni.help_desk.get_message",
+        "dashboard/alumni/help-desk/<int:post_id>/chat/messages",
+        alumni.GetMessage.as_view(),
+        name="alumni.help_desk.chat.get_message",
     ),
     path(
-        "dashboard/alumni/help-desk/<int:post_id>/chat/add-messages",
-        alumni.HelpDeskChatMessage.as_view(),
-        name="alumni.help_desk.get_message",
+        "dashboard/alumni/help-desk/<int:post_id>/chat/messages/add",
+        alumni.AddMessage.as_view(),
+        name="alumni.help_desk.chat.add_message",
+    ),
+    path(
+        "dashboard/alumni/help-desk/<int:post_id>/chat/messages/refresh",
+        alumni.RefreshMessage.as_view(),
+        name="alumni.help_desk.chat.message_refresh",
+    ),
+    path(
+        "dashboard/alumni/help-desk/<int:post_id>/comment/add",
+        alumni.AddComment.as_view(),
+        name="alumni.help_desk.add_comment",
+    ),
+    path(
+        "dashboard/alumni/help-desk/<int:post_id>/vote/<str:vote_type>",
+        alumni.Addvote.as_view(),
+        name="alumni.help_desk.add_vote",
     ),
 ]

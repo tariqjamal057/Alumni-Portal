@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.template.loader import render_to_string
@@ -11,7 +11,12 @@ from django.views.generic import DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 
 from portal.form import Help_Desk_Form
-from portal.models import HelpDesk, HelpDeskInterest, HelpDeskInterestMessage
+from portal.models import (
+    HelpDesk,
+    HelpDeskComment,
+    HelpDeskInterest,
+    HelpDeskInterestMessage,
+)
 from portal.models.help_desk import PostType
 from portal.models.user import User
 
@@ -22,7 +27,11 @@ class AlumniDashboard(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        posts = HelpDesk.objects.filter(created_by=self.request.user)
+        posts = HelpDesk.objects.filter(created_by=self.request.user).annotate(
+            comment_count=Count("comments", distinct=True),
+            upvote_count=Count("upvotes", distinct=True),
+            downvote_count=Count("downvotes", distinct=True),
+        )
 
         search_query = self.request.GET.get("s", "")
         if search_query:
@@ -45,7 +54,7 @@ class AlumniDashboard(LoginRequiredMixin, TemplateView):
         return context
 
 
-class CreateHelpDeskPost(LoginRequiredMixin, CreateView):
+class CreatePost(LoginRequiredMixin, CreateView):
     template_name = "dashboard/alumni/help_desk_post/create_and_update.html"
     form_class = Help_Desk_Form
     success_url = reverse_lazy("dashboard.alumni")
@@ -55,7 +64,7 @@ class CreateHelpDeskPost(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class UpdateHelpDeskPost(LoginRequiredMixin, UpdateView):
+class UpdatePost(LoginRequiredMixin, UpdateView):
     model = HelpDesk
     form_class = Help_Desk_Form
     template_name = "dashboard/alumni/help_desk_post/create_and_update.html"
@@ -67,21 +76,34 @@ class UpdateHelpDeskPost(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class HelpDeskPostDetailView(LoginRequiredMixin, DetailView):
+class PostDetail(LoginRequiredMixin, DetailView):
     model = HelpDesk
     template_name = "dashboard/alumni/help_desk_post/detail.html"
     pk_url_kwarg = "post_id"
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+
+        queryset = queryset.annotate(
+            comment_count=Count("comments", distinct=True),
+            upvote_count=Count("upvotes", distinct=True),
+            downvote_count=Count("downvotes", distinct=True),
+        )
+
+        return super().get_object(queryset)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post_interests = HelpDeskInterest.objects.filter(post=context["object"]).order_by("-id")[
             :5
         ]
-        context.update({"post_interests": post_interests})
+        comments = HelpDeskComment.objects.filter(help_desk=context["object"]).order_by("-id")
+        context.update({"post_interests": post_interests, "comments": comments})
         return context
 
 
-class DeleteHelpDeskPostView(LoginRequiredMixin, View):
+class DeletePost(LoginRequiredMixin, View):
     pk_url_kwarg = "post_id"
 
     def post(self, request, *args, **kwargs):
@@ -89,7 +111,16 @@ class DeleteHelpDeskPostView(LoginRequiredMixin, View):
         try:
             post = get_object_or_404(HelpDesk, id=kwargs.get("post_id"), created_by=request.user)
             post.delete()
-            posts = HelpDesk.objects.filter(created_by=request.user).order_by("-id")
+            posts = (
+                HelpDesk.objects.filter(created_by=request.user)
+                .annotate(
+                    comment_count=Count("comments"),
+                    upvote_count=Count("upvotes"),
+                    downvote_count=Count("downvotes"),
+                )
+                .order_by("-id")
+            )
+            print(posts)
             data.update(
                 {
                     "html": render_to_string(
@@ -108,7 +139,7 @@ class DeleteHelpDeskPostView(LoginRequiredMixin, View):
         return JsonResponse(data)
 
 
-class HelpDeskChatView(LoginRequiredMixin, View):
+class UserChat(LoginRequiredMixin, View):
     template_name = "dashboard/alumni/help_desk_post/chat/index.html"
 
     def get(self, request, *args, **kwargs):
@@ -119,7 +150,7 @@ class HelpDeskChatView(LoginRequiredMixin, View):
         )
 
 
-class GetHelpDestChatMessage(LoginRequiredMixin, View):
+class GetMessage(LoginRequiredMixin, View):
     template_name = "dashboard/alumni/help_desk_post/chat/message_container.html"
 
     def post(self, request, *args, **kwargs):
@@ -141,7 +172,7 @@ class GetHelpDestChatMessage(LoginRequiredMixin, View):
         )
 
 
-class HelpDeskChatMessage(LoginRequiredMixin, View):
+class AddMessage(LoginRequiredMixin, View):
     template_name = "dashboard/alumni/help_desk_post/chat/message.html"
 
     def post(self, request, *args, **kwargs):
@@ -150,7 +181,7 @@ class HelpDeskChatMessage(LoginRequiredMixin, View):
         )
         HelpDeskInterestMessage.objects.create(
             post_interest=post_interest,
-            user_id=request.POST.get("user_id"),
+            user_id=request.user.id,
             message=request.POST.get("message"),
         )
         post_messages = HelpDeskInterestMessage.objects.filter(post_interest=post_interest)
@@ -161,3 +192,52 @@ class HelpDeskChatMessage(LoginRequiredMixin, View):
                 )
             }
         )
+
+
+class RefreshMessage(LoginRequiredMixin, View):
+    template_name = "dashboard/alumni/help_desk_post/chat/message.html"
+
+    def post(self, request, *args, **kwargs):
+        post_interest = get_object_or_404(
+            HelpDeskInterest, id=request.POST.get("post_interest_id")
+        )
+        post_messages = HelpDeskInterestMessage.objects.filter(post_interest=post_interest)
+        return JsonResponse(
+            {
+                "html": render_to_string(
+                    self.template_name, {"messages": post_messages, "request": request}
+                )
+            }
+        )
+
+
+class AddComment(LoginRequiredMixin, View):
+    template_name = "dashboard/alumni/help_desk_post/comment.html"
+
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(HelpDesk, id=kwargs.get("post_id"))
+        user = get_object_or_404(User, id=request.user.id)
+        post_comment = HelpDeskComment.objects.create(
+            help_desk=post, user=user, text=request.POST.get("text"), created_by=request.user
+        )
+        post.comments.add(post_comment)
+        comments = HelpDeskComment.objects.filter(help_desk=post).order_by("-id")
+        return JsonResponse(
+            {
+                "html": render_to_string(
+                    self.template_name, {"comments": comments, "request": request}
+                )
+            }
+        )
+
+
+class Addvote(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        post = get_object_or_404(HelpDesk, id=kwargs.get("post_id"))
+        vote_type = kwargs.get("vote_type")
+        # Remove user from the opposite vote type
+        opposite_vote_type = "upvotes" if vote_type == "downvotes" else "downvotes"
+        getattr(post, opposite_vote_type).remove(request.user)
+        # Add user to the requested vote type
+        getattr(post, vote_type).add(request.user)
+        return JsonResponse({"success": True})
