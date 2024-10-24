@@ -332,6 +332,7 @@
             function scrollToBottom(containerName) {
                 var elem = document.querySelector(containerName);
                 if (elem) {
+                    elem.style.scrollBehavior = 'smooth';
                     elem.scrollTop = elem.scrollHeight;
                 }
             }

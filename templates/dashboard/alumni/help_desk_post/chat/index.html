@@ -46,7 +46,7 @@
                     <div class="col-lg-3 col-12 border-end border-white border-opacity-100">
                         <div class="w-100 p-1 py-3">
                             <div class="w-100">
-                                <input type="search" class="form-control" />
+                                <input type="search" class="form-control" placeholder="search users.." />
                             </div>
                             <hr />
                             <div class="user-list overflow-y-auto">
@@ -81,7 +81,7 @@
         function getPostInterestMessage(postId, userId) {
             $.ajax({
                 type: 'POST',
-                url: `/dashboard/alumni/help-desk/${postId}/chat/get-messages`,
+                url: `/dashboard/alumni/help-desk/${postId}/chat/messages`,
                 data: {
                     user_id: userId
                 },
@@ -101,14 +101,12 @@
             });
         }
 
-        function addUserMessage(postId, postInterestId, userId) {
-
+        function addUserMessage(postId, postInterestId) {
             $.ajax({
                 type: 'POST',
-                url: `/dashboard/alumni/help-desk/${postId}/chat/add-messages`,
+                url: `/dashboard/alumni/help-desk/${postId}/chat/messages/add`,
                 data: {
                     post_interest_id: postInterestId,
-                    user_id: userId,
                     message: $('[name=chat-message]').val()
                 },
                 headers: {
@@ -117,6 +115,29 @@
                 success(response) {
                     $('.chat-container').html(response.html);
                     $('[name=chat-message]').val('');
+                    scrollToBottom('.chat-container');
+                },
+                error() {
+                    showAlert({
+                        msgType: 'error',
+                        msg: 'An unexpected error occurred'
+                    });
+                },
+            });
+        }
+
+        function reloadMessage(postId, postInterestId) {
+            $.ajax({
+                type: 'POST',
+                url: `/dashboard/alumni/help-desk/${postId}/chat/messages/refresh`,
+                data: {
+                    post_interest_id: postInterestId,
+                },
+                headers: {
+                    'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success(response) {
+                    $('.chat-container').html(response.html);
                     scrollToBottom('.chat-container');
                 },
                 error() {

@@ -1,14 +1,23 @@
 {% load static %}
 
-<div class="chat-header d-flex align-items-center bg-white p-2 border-bottom border-light shadow-sm">
-    <img src="/uploads/{{ post_interest.user.profile_photo }}"
-         class="rounded-circle me-2"
-         alt="User Profile"
-         width="50px"
-         height="50px" />
+<div class="chat-header d-flex align-items-center justify-content-between bg-white p-2 border-bottom border-light shadow-sm">
+    <div class="d-flex align-items-center">
+        <img src="{% static 'uploads/' %}{{ post_interest.user.profile_photo }}"
+             class="rounded-circle me-2"
+             alt="User Profile"
+             width="50px"
+             height="50px" />
+        <div>
+            <h6 class="mb-0">{{ post_interest.user.name }}</h6>
+            <small class="text-muted">Last seen today at 10:30 AM</small>
+        </div>
+    </div>
     <div>
-        <h6 class="mb-0">{{ post_interest.user.name }}</h6>
-        <small class="text-muted">Last seen today at 10:30 AM</small>
+        <button class="btn btn-info"
+                onclick="reloadMessage('{{ post_interest.post.id }}', '{{ post_interest.id }}')">
+            <i class="fa fa-refresh text-white">
+            </i>
+        </button>
     </div>
 </div>
 <div class="chat-container border-start p-3 overflow-y-auto">
@@ -25,7 +34,7 @@
                aria-label="Message" />
         <button class="btn btn-outline-info"
                 type="button"
-                onclick="addUserMessage('{{ post_interest.post.id }}', '{{ post_interest.id }}', '{{ request.user.id }}')">
+                onclick="addUserMessage('{{ post_interest.post.id }}', '{{ post_interest.id }}')">
             <i class="fa fa-send"></i>
         </button>
     </div>

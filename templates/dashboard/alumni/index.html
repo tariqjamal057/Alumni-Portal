@@ -105,6 +105,25 @@
                 },
             });
         }
+
+        function addVote(postId, vote_type) {
+            $.ajax({
+                type: 'POST',
+                url: `/dashboard/alumni/help-desk/${postId}/vote/${vote_type}`,
+                headers: {
+                    'X-CSRFToken': $('[name=csrfmiddlewaretoken]').val()
+                },
+                success(response) {
+                    // Need to handle success scenario
+                },
+                error() {
+                    showAlert({
+                        msgType: 'error',
+                        msg: 'An unexpected error occurred'
+                    });
+                },
+            });
+        }
     </script>
 
 {% endblock scripts %}
