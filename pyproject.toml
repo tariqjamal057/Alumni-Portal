@@ -13,7 +13,6 @@ django-crispy-forms = "^2.3"
 django-import-export = "^4.1.1"
 pillow = "^10.4.0"
 django-tinymce = "^4.1.0"
-mysqlclient = "^2.2.4"
 django-social-share = "^2.3.0"
 dj-database-url = "^2.2.0"
 gunicorn = "^23.0.0"
@@ -51,3 +50,7 @@ format_css=true
 format_js=true
 indent_size=4
 max_line_length=120
+
+[virtualenvs]
+create = true
+in-project = true

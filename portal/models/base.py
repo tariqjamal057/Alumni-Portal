@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class BaseModel(models.Model):
     """Base model for all models."""
